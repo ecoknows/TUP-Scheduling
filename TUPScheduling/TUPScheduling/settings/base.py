@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'wagtail.search',
     'wagtail.admin',
     'wagtail.core',
+    'wagtail.contrib.modeladmin',
 
     'modelcluster',
     'taggit',
@@ -92,8 +93,8 @@ DATABASES = {
     'default': {
       'ENGINE': 'django.db.backends.postgresql_psycopg2',
       'NAME': 'tupscheduling',
-      'USER': 'ecovillaraza',
-      'PASSWORD': '09084741500',
+      'USER': 'tup',
+      'PASSWORD': '1234',
       'HOST': 'localhost',
       'PORT': '5432'
     },
