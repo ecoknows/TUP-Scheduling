@@ -1,6 +1,11 @@
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin, ModelAdminGroup, modeladmin_register)
-from .models import Subjects, CourseCurriculum
+from .models import (
+	Subjects,
+	CourseCurriculum,
+	Professors,
+	Students
+)
 
 from wagtail.core import hooks
 
@@ -21,8 +26,30 @@ class CourseCurriculumAdmin(ModelAdmin):
 class AdminGroup(ModelAdminGroup):
 	menu_label = 'Admin'
 	menu_icon = 'user'
-	menu_order = 000
+	menu_order = 100
 	items = (SubjectsAdmin, CourseCurriculumAdmin)
 
 modeladmin_register(AdminGroup)
+
+class StudentsAdmin(ModelAdmin):
+	model = Students
+	menu_label = 'Students'
+	# list_display = ('name', 'preferred_time', 'regular_or_part_time', 'department')
+	# list_filter = ('name',)
+	# search_fields = ('name', )
+
+class ProfessorsAdmin(ModelAdmin):
+	model = Professors
+	menu_label = 'Professors'
+	# list_display = ('course_name', 'course_date')
+	# search_fields = ('course_name', 'course_date')
+	# list_filter = ('course_date',)
+
+class UsersGroup(ModelAdminGroup):
+	menu_label = 'User'
+	menu_icon = 'user'
+	menu_order = 100
+	items = (StudentsAdmin, ProfessorsAdmin)
+
+modeladmin_register(UsersGroup)
 
