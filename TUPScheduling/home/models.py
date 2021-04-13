@@ -90,7 +90,11 @@ class CourseCurriculum(ClusterableModel):
             'course_name'
         ]
 
+class Students(models.Model):
+    pass
 
+class Professors(models.Model):
+    pass
 
 class HomePage(Page):
     pass
