@@ -11,7 +11,6 @@ class SubjectsAdmin(ModelAdmin):
 	list_filter = ('units','lab_or_lec', 'sem', 'hours')
 	search_fields = ('subject_code', 'description', 'units', 'lab_or_lec', 'sem', 'hours')
 
-
 class CourseCurriculumAdmin(ModelAdmin):
 	model = CourseCurriculum
 	menu_label = 'Course Curriculum'
