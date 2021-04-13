@@ -7,8 +7,9 @@ from wagtail.admin.edit_handlers import (
 )
 from modelcluster.fields import ParentalManyToManyField
 from modelcluster.models import ClusterableModel
+from wagtail.snippets.models import register_snippet
 
-
+@register_snippet
 class Subjects(ClusterableModel):
     subject_code = models.CharField(
         max_length=200,
@@ -62,8 +63,7 @@ class Subjects(ClusterableModel):
             'subject_code'
         ]
     
-
-
+@register_snippet
 class CourseCurriculum(ClusterableModel):
     course_name = models.CharField(
         max_length=300,
@@ -90,11 +90,17 @@ class CourseCurriculum(ClusterableModel):
             'course_name'
         ]
 
+@register_snippet
 class Students(models.Model):
     pass
 
+@register_snippet
 class Professors(models.Model):
     pass
 
 class HomePage(Page):
+    max_count = 1
+    pass
+
+class LoginPage(Page):
     pass
