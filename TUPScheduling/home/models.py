@@ -1,16 +1,33 @@
 from django.db import models
 from django import forms
 
-from wagtail.core.models import Page
+from wagtail.core.models import Page, Orderable
 from wagtail.admin.edit_handlers import (
     FieldPanel,
+    MultiFieldPanel,
+    InlinePanel,
 )
-from modelcluster.fields import ParentalManyToManyField
+from wagtail.snippets.edit_handlers import SnippetChooserPanel
+from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.snippets.models import register_snippet
+from wagtail.search import index
+
+class SubjectsOrderable(Orderable):
+    model = ParentalKey("home.Subjects", related_name="subject_parental_key")
+    subject = models.ForeignKey(
+        "home.Subjects",
+        null=True,
+        on_delete=models.CASCADE,
+    )
+
+    panels = [
+        SnippetChooserPanel("subject"),
+    ]
+
 
 @register_snippet
-class Subjects(ClusterableModel):
+class Subjects(ClusterableModel, index.Indexed):
     subject_code = models.CharField(
         max_length=200,
         null=True,
@@ -35,13 +52,11 @@ class Subjects(ClusterableModel):
         choices=[('First','First'),('Second', 'Second')]
     )
 
-    prerequisites = ParentalManyToManyField(
-        'home.Subjects',
-        blank=True,
-    )
-
     hours = models.FloatField(default=1)
 
+    search_fields = [
+        index.SearchField('subject_code'),
+    ]
 
     panels = [
         FieldPanel('subject_code'),
@@ -50,8 +65,13 @@ class Subjects(ClusterableModel):
         FieldPanel('lab_or_lec', widget=forms.RadioSelect),
         FieldPanel('sem', widget=forms.RadioSelect),
         FieldPanel('hours'),
-        FieldPanel('prerequisites',widget=forms.CheckboxSelectMultiple),
+        MultiFieldPanel([
+            InlinePanel('subject_parental_key', label='Subject', min_num=0, max_num=4)
+        ], heading = 'Prerequisite')
     ]
+
+
+
 
     def __str__(self):
         return self.subject_code
@@ -72,15 +92,15 @@ class CourseCurriculum(ClusterableModel):
     )
     course_date = models.DateField()
 
-    subjects = ParentalManyToManyField(
-        'home.Subjects',
-        blank=True,
-    )
+    # subjects = ParentalManyToManyField(
+    #     'home.Subjects',
+    #     blank=True,
+    # )
 
     panels = [
         FieldPanel('course_name'),
         FieldPanel('course_date'),
-        FieldPanel('subjects',widget=forms.CheckboxSelectMultiple),
+        # FieldPanel('subjects',widget=forms.CheckboxSelectMultiple),
     ]
 
     class Meta:
