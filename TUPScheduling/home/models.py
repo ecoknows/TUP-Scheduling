@@ -20,7 +20,10 @@ import datetime
 
 
 class SubjectsOrderable(Orderable):
-    model = ParentalKey("home.Subjects", related_name="subject_parental_key")
+    subject_model = ParentalKey(
+        "home.Subjects", related_name="subject_parental_key")
+    professor_model = ParentalKey("home.Professors",
+                                  related_name="professor_parental_key")
     subject = models.ForeignKey(
         "home.Subjects",
         null=True,
@@ -117,11 +120,6 @@ class CourseCurriculum(ClusterableModel):
 
 
 @register_snippet
-class Students(models.Model):
-    pass
-
-
-@register_snippet
 class Professors(ClusterableModel, index.Indexed):
     global start_time
 
@@ -198,12 +196,16 @@ class Professors(ClusterableModel, index.Indexed):
         ),
         MultiFieldPanel(
             [
-                FieldPanel('preferred_start_time'),
+                FieldPanel('preferred_start_time',),
                 FieldPanel('preferred_end_time'),
             ],
             heading='Preferred Time',
         ),
         FieldPanel('status', widget=forms.RadioSelect),
+        MultiFieldPanel([
+            InlinePanel('professor_parental_key',
+                        label='Subject', min_num=1, max_num=4)
+        ], heading='Preferred Subjects')
     ]
 
     def __str__(self):
@@ -215,6 +217,56 @@ class Professors(ClusterableModel, index.Indexed):
         ordering = [
             'last_name'
         ]
+
+
+@register_snippet
+class Sections(models.Model):
+    pass
+
+
+@register_snippet
+class Rooms(models.Model):
+    pass
+
+
+@register_snippet
+class Departments(models.Model):
+    pass
+
+
+@register_snippet
+class Colleges(models.Model):
+    pass
+
+
+@register_snippet
+class StudentsAccount(models.Model):
+    pass
+
+
+@register_snippet
+class ProfessorsAccount(models.Model):
+    pass
+
+
+@register_snippet
+class AdminsAccount(models.Model):
+    pass
+
+
+@register_snippet
+class SectionsSchedule(models.Model):
+    pass
+
+
+@register_snippet
+class ProfessorsSchedule(models.Model):
+    pass
+
+
+@register_snippet
+class RoomsSchedule(models.Model):
+    pass
 
 
 class HomePage(Page):
