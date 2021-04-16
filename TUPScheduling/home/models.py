@@ -118,6 +118,45 @@ class Students(models.Model):
 class Professors(models.Model):
     pass
 
+@register_snippet
+class Department(models.Model):
+    
+    department_name = models.CharField(
+        max_length=100,
+        null=False,
+        blank=False,
+    )
+    class Meta:
+        verbose_name = 'Department'
+        verbose_name_plural = 'Departments'
+
+@register_snippet
+class Room(models.Model):
+    
+    room_number = models.CharField(
+        max_length=10,
+        null=False,
+        blank=False,
+        help_text='Ex. Rm. 202'
+    )
+
+    room_type = models.CharField(
+        max_length=20,
+        null=False,
+        blank=False,
+        choices=[('Laboratory','Laboratory'),('Lecture', 'Lecture')]
+    )
+    # Subjects
+    # Professor
+    # Section Class
+
+    class Meta:
+        verbose_name = 'Room'
+        verbose_name_plural = 'Rooms'
+
+
+
+
 class HomePage(Page):
     max_count = 1
     pass
