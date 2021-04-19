@@ -44,7 +44,7 @@ class ProfessorsAdmin(ModelAdmin):
     menu_label = 'Professors'
     list_display = ('full_name', 'preferred_time', 'status')
     list_filter = ('status',)
-    search_fields = ('first_name', 'middle_name', 'last_name', )
+    search_fields = ('first_name', 'middle_name', 'last_name', 'full_name',)
 
 
 class SectionsAdmin(ModelAdmin):
@@ -74,9 +74,9 @@ class DepartmentsAdmin(ModelAdmin):
 class CollegesAdmin(ModelAdmin):
     model = Colleges
     menu_label = 'Colleges'
-    # list_display =
-    # list_filter =
-    # search_fields =
+    list_display = ('college_name',)
+    list_filter = ('college_name',)
+    search_fields = ('college_name',)
 
 
 class AdminGroup(ModelAdminGroup):
