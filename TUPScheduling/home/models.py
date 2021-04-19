@@ -8,6 +8,7 @@ from wagtail.admin.edit_handlers import (
     FieldPanel,
     MultiFieldPanel,
     InlinePanel,
+    FieldRowPanel,
 )
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
@@ -169,6 +170,7 @@ class Professors(ClusterableModel, index.Indexed):
         null=True,
         help_text='At least 7:00',
         blank=True,
+        verbose_name='',
         validators=[validate_start_time],
     )
     preferred_end_time = models.TimeField(
@@ -178,6 +180,7 @@ class Professors(ClusterableModel, index.Indexed):
         help_text='At most 19:00',
         blank=True,
         validators=[validate_end_time],
+        verbose_name=''
     )
 
     def preferred_time(self):
@@ -198,10 +201,10 @@ class Professors(ClusterableModel, index.Indexed):
             ],
             heading="Full Name",
         ),
-        MultiFieldPanel(
+        FieldRowPanel(
             [
                 FieldPanel('preferred_start_time',),
-                FieldPanel('preferred_end_time'),
+                FieldPanel('preferred_end_time',),
             ],
             heading='Preferred Time',
         ),

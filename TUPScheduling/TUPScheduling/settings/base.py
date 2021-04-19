@@ -137,6 +137,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+WAGTAIL_TIME_FORMAT = '%I:%M %p'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
