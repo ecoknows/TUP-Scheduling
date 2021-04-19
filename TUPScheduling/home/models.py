@@ -159,6 +159,10 @@ class Professors(ClusterableModel, index.Indexed):
         null=True,
         help_text='Ex. Doe'
     )
+
+    def full_name(self):
+        return self.last_name + ", " + self.first_name + " " + self.middle_name[0] + "."
+
     preferred_start_time = models.TimeField(
         auto_now=False,
         auto_now_add=False,
@@ -175,15 +179,15 @@ class Professors(ClusterableModel, index.Indexed):
         blank=True,
         validators=[validate_end_time],
     )
+
+    def preferred_time(self):
+        return str(self.preferred_start_time) + " - " + str(self.preferred_end_time)
+
     status = models.CharField(
         max_length=200,
         default='Regular',
         choices=[('Regular', 'Regular'), ('Part-time', 'Part-time')]
     )
-
-    search_fields = [
-        index.SearchField('subject_code'),
-    ]
 
     panels = [
         MultiFieldPanel(
@@ -236,7 +240,25 @@ class Departments(models.Model):
 
 @register_snippet
 class Colleges(models.Model):
-    pass
+    college_name = models.CharField(
+        max_length=300,
+        null=True,
+    )
+
+    panels = [
+        FieldPanel('college_name'),
+        # MultiFieldPanel([
+        #     InlinePanel('department_parental_key',
+        #                 label='Subject', min_num=1, max_num=10)
+        # ], heading='Departments under this college')
+    ]
+
+    class Meta:
+        verbose_name = 'College'
+        verbose_name_plural = 'Colleges'
+        ordering = [
+            'college_name'
+        ]
 
 
 @register_snippet
