@@ -159,6 +159,10 @@ class Professors(ClusterableModel, index.Indexed):
         null=True,
         help_text='Ex. Doe'
     )
+
+    def full_name(self):
+        return self.last_name + ", " + self.first_name + " " + self.middle_name[0] + "."
+
     preferred_start_time = models.TimeField(
         auto_now=False,
         auto_now_add=False,
@@ -175,6 +179,10 @@ class Professors(ClusterableModel, index.Indexed):
         blank=True,
         validators=[validate_end_time],
     )
+
+    def preferred_time(self):
+        return str(self.preferred_start_time) + " - " + str(self.preferred_end_time)
+
     status = models.CharField(
         max_length=200,
         default='Regular',
