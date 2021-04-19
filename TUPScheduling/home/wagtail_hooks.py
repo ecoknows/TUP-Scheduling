@@ -42,8 +42,7 @@ class CourseCurriculumAdmin(ModelAdmin):
 class ProfessorsAdmin(ModelAdmin):
     model = Professors
     menu_label = 'Professors'
-    list_display = ('last_name', 'preferred_start_time', 'preferred_end_time',
-                    'status')
+    list_display = ('full_name', 'preferred_time', 'status')
     list_filter = ('status',)
     search_fields = ('first_name', 'middle_name', 'last_name', )
 
