@@ -189,10 +189,6 @@ class Professors(ClusterableModel, index.Indexed):
         choices=[('Regular', 'Regular'), ('Part-time', 'Part-time')]
     )
 
-    search_fields = [
-        index.SearchField('subject_code'),
-    ]
-
     panels = [
         MultiFieldPanel(
             [
@@ -244,7 +240,25 @@ class Departments(models.Model):
 
 @register_snippet
 class Colleges(models.Model):
-    pass
+    college_name = models.CharField(
+        max_length=300,
+        null=True,
+    )
+
+    panels = [
+        FieldPanel('college_name'),
+        # MultiFieldPanel([
+        #     InlinePanel('department_parental_key',
+        #                 label='Subject', min_num=1, max_num=10)
+        # ], heading='Departments under this college')
+    ]
+
+    class Meta:
+        verbose_name = 'College'
+        verbose_name_plural = 'Colleges'
+        ordering = [
+            'college_name'
+        ]
 
 
 @register_snippet
