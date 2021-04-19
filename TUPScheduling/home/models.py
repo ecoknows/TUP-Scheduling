@@ -19,6 +19,21 @@ from modelcluster.models import ClusterableModel
 import datetime
 
 
+class RoomOrderable(Orderable):
+    room_model = ParentalKey(
+        "home.Departments",
+        related_name="room_parental_key",
+    )
+    room = models.ForeignKey(
+        "home.Rooms", 
+        on_delete=models.CASCADE,
+    )
+
+    panels = [
+        SnippetChooserPanel("room"),
+    ]
+
+
 class SubjectsOrderable(Orderable):
     subject_model = ParentalKey(
         "home.Subjects", related_name="subject_parental_key")
@@ -230,12 +245,59 @@ class Sections(models.Model):
 
 @register_snippet
 class Rooms(models.Model):
-    pass
+    Room_Name = models.CharField(
+        max_length=20,
+        null=True,
+        help_text='Ex. CS33'
+    )
 
+    Room_Type = models.CharField(
+        max_length=50,
+        default='Laboratory',
+        choices=[('Laboratory', 'Laboratory'), ('Lecture', 'Lecture')]
+    )
+
+    panels = [
+        FieldPanel('Room_Name'),
+        FieldPanel('Room_Type'),        
+    ]
+
+    def __str__(self): return self.Room_Name + "  " + self.Room_Type
+
+    class Meta:
+        verbose_name = 'Rooms'
+        verbose_name_plural = 'Rooms'
+        ordering = [
+            'Room_Name'
+        ]
 
 @register_snippet
-class Departments(models.Model):
-    pass
+class Departments(ClusterableModel, index.Indexed):
+
+    Department_Name = models.CharField(
+        max_length=100,
+        null=True,
+        help_text='Department of Mathematics'
+    )
+
+    panels = [
+        FieldPanel('Department_Name'),
+        MultiFieldPanel(
+            [
+                InlinePanel("room_parental_key", label="Room", min_num=1,help_text="Add Rooms to Department")
+            ],
+            heading="Rooms"
+        ),        
+    ]
+
+    def __str__(self): return self.Department_Name
+    
+    class Meta:
+        verbose_name = 'Department'
+        verbose_name_plural = 'Departments'
+        ordering = [
+            'Department_Name'
+        ]
 
 
 @register_snippet
