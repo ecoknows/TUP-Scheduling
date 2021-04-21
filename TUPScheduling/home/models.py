@@ -21,6 +21,19 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 import datetime
 
+class ProfessorOrderable(Orderable):
+    room_model = ParentalKey(
+        "home.Departments",
+        related_name="professor_parental_key",
+    )
+    professor = models.ForeignKey(
+        "home.Professors", 
+        on_delete=models.CASCADE,
+    )
+
+    panels = [
+        SnippetChooserPanel("professor"),
+    ]
 
 class RoomOrderable(Orderable):
     room_model = ParentalKey(
@@ -285,7 +298,6 @@ class Professors(ClusterableModel, index.Indexed):
             'last_name'
         ]
 
-
 @register_snippet
 class Sections(models.Model, index.Indexed):
     section_name = models.CharField(
@@ -356,9 +368,6 @@ class Sections(models.Model, index.Indexed):
             'section_name'
         ]
 
-
-
-
 @register_snippet
 class Rooms(models.Model, index.Indexed):
     Room_Name = models.CharField(
@@ -369,7 +378,7 @@ class Rooms(models.Model, index.Indexed):
 
     Room_Type = models.CharField(
         max_length=50,
-        default='Laboratory',
+        default='Lecture',
         choices=[('Laboratory', 'Laboratory'), ('Lecture', 'Lecture')]
     )
 
@@ -402,12 +411,21 @@ class Departments(ClusterableModel, index.Indexed):
 
     panels = [
         FieldPanel('Department_Name'),
-        MultiFieldPanel(
+        MultiFieldPanel([
+            MultiFieldPanel(
             [
                 InlinePanel("room_parental_key", label="Room", min_num=1,help_text="Add Rooms to Department")
             ],
             heading="Rooms"
-        ),        
+            ),       
+            MultiFieldPanel(
+                [
+                    InlinePanel("professor_parental_key", label="Professors", min_num=1,help_text="Add Professors to Department")
+                ],
+                heading="Professors"
+            ),
+        ],heading="Properties"),
+        
     ]
     search_fields = [
         index.SearchField('Department_Name'),
