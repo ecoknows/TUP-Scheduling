@@ -8,8 +8,13 @@ from wagtail.admin.edit_handlers import (
     FieldPanel,
     MultiFieldPanel,
     InlinePanel,
-    FieldRowPanel
+    FieldRowPanel,
+    ObjectList,
+    TabbedInterface,
 )
+
+from wagtail.images.edit_handlers import ImageChooserPanel
+
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
 from wagtail.search import index
@@ -500,8 +505,4 @@ class RoomsSchedule(models.Model):
 
 class HomePage(Page):
     max_count = 1
-    pass
-
-
-class LoginPage(Page):
     pass
