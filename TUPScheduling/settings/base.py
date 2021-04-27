@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
@@ -92,16 +93,12 @@ WSGI_APPLICATION = 'TUPScheduling.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tup',
+        'NAME': 'tup_scheduling_db',
         'USER': 'renegado',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
         'PORT': '5432'
-    },
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    # }
+    }
 }
 
 
