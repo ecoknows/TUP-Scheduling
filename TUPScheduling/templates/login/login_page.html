@@ -66,9 +66,9 @@
 
     
 
-    <div style="flex: 1.3;">
-        {% image self.carousel_image fill-772x667 as carousel_image %}
-        <img src='{{carousel_image.url}}' class="w-full h-full" alt='Right Background Picture'/>
+    <div style="flex: 1.3; overflow: hidden;">
+        {% image self.carousel_image min-772x667 as carousel_image %}
+        <img src='{{carousel_image.url}}' class="w-full" alt='Right Background Picture' style="object-fit: contain;"/>
     </div>
 
 
