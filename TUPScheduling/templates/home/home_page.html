@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
-<section class="flex h-screen p-8 mx-auto space-x-4" style="max-width: 1950px">
+<section class="flex justify-center h-screen p-8 mx-auto space-x-4" style="max-width: 1950px">
 	
-	<div class="flex-1 ">
+	<div>
 		<header class="flex bg-yellow-400">
 			<div class="flex-1 py-2">
 				<h1 class="text-lg text-center">Room 301 (Lab)</h1>
@@ -12,13 +12,22 @@
 		{% include 'includes/main-table.html' %}
 	</div>
 
-	<div class="flex flex-col bg-green-200" style="width: 250px;">
+	<div class="flex flex-col bg-green-200">
 		<header class="py-2 bg-green-500">
 			<h1 class="text-lg text-center"> Section </h1>
 		</header>
 
 		{% include 'includes/side-picker.html' %}
 
+	</div>
+
+	<div class='flex flex-col bg-blue-200'>
+		<header class="py-2 bg-blue-300">
+			<h1 class="text-lg text-center"> Proffesor </h1>
+		</header>
+
+		{% include 'includes/professor.html' %}
+		
 	</div>
 
 	<div class='flex flex-col bg-blue-200' style="width: 250px;">
