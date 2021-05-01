@@ -1,0 +1,35 @@
+
+<section class="flex-1 bg-yellow-200">
+
+	<header class="flex">
+
+		<div class="flex-1 py-2">
+			<h1 class="text-xl text-center">Time</h1>
+		</div>
+
+		{% for day in self.day %}
+			<div class="flex-1 py-2">
+				<h1 class='text-xl text-center'>{{day}}</h1>
+			</div>
+		{% endfor %}
+	</header>
+
+
+	{% for time in self.time %}
+		<div class="flex">
+
+			<div class="flex-1 py-4">
+				<h1 class="text-lg text-center">{{time}}</h1>
+			</div>
+
+			{% for day in self.day %}
+				<div class="flex-1 py-4 tile">
+					
+				</div>
+			{% endfor %}
+
+		</div>
+	{% endfor %}
+
+
+</section>
