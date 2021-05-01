@@ -6,10 +6,11 @@
 
     <body class="{% block body_class %}{% endblock %}">
         {% wagtailuserbar %}
-
         {% block content %}
         {% endblock %}
-
         {# Global javascript #}
+
     </body>
+    
+    <script src='{% static "js/draggable.js" %}'></script>
 </html>

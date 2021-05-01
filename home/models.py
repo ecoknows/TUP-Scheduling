@@ -25,6 +25,15 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 import datetime
+from .__init__ import _DAY, _TIME
+
+
+class HomePage(Page):
+    max_count = 1
+    table_count = 5
+    day = _DAY
+    time = _TIME
+
 
 class ProfessorOrderable(Orderable):
     room_model = ParentalKey(
@@ -32,7 +41,7 @@ class ProfessorOrderable(Orderable):
         related_name="professor_parental_key",
     )
     professor = models.ForeignKey(
-        "home.Professors", 
+        "home.Professors",
         on_delete=models.CASCADE,
     )
 
@@ -40,13 +49,14 @@ class ProfessorOrderable(Orderable):
         SnippetChooserPanel("professor"),
     ]
 
+
 class RoomOrderable(Orderable):
     room_model = ParentalKey(
         "home.Departments",
         related_name="room_parental_key",
     )
     room = models.ForeignKey(
-        "home.Rooms", 
+        "home.Rooms",
         on_delete=models.CASCADE,
     )
 
@@ -61,8 +71,7 @@ class SubjectsOrderable(Orderable):
     professor_model = ParentalKey("home.Professors",
                                   related_name="professor_parental_key", null=True)
     course_curriculum_model = ParentalKey("home.CourseCurriculum",
-                                  related_name="course_curriculum_parental_key", null=True)
-
+                                          related_name="course_curriculum_parental_key", null=True)
 
     subject = models.ForeignKey(
         "home.Subjects",
@@ -145,28 +154,28 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
 
     college = models.ForeignKey(
         "home.Colleges",
-        null = True,
+        null=True,
         on_delete=models.CASCADE,
         help_text='Ex. COS or College of Science'
     )
 
     department = models.ForeignKey(
         "home.Departments",
-        null = True,
+        null=True,
         on_delete=models.CASCADE,
         help_text='Ex. Computer Studies'
     )
     starting_year = models.PositiveIntegerField(
-            validators=[ MinValueValidator(1900), MaxValueValidator(3000)],
-            help_text="Use the following format: <YYYY> ex: 2012",
-            null=True,
-        )
-    
+        validators=[MinValueValidator(1900), MaxValueValidator(3000)],
+        help_text="Use the following format: <YYYY> ex: 2012",
+        null=True,
+    )
+
     ending_year = models.PositiveIntegerField(
-            validators=[ MinValueValidator(1900), MaxValueValidator(3000)],
-            help_text="Use the following format: <YYYY> ex: 2012",
-            null=True,
-        )
+        validators=[MinValueValidator(1900), MaxValueValidator(3000)],
+        help_text="Use the following format: <YYYY> ex: 2012",
+        null=True,
+    )
 
     search_fields = [
         index.SearchField('course_name'),
@@ -182,7 +191,7 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
                 FieldPanel('ending_year'),
             ], heading='YEAR'),
         ], heading='Course Curriculumn Primary Information'),
-        
+
         MultiFieldPanel([
             InlinePanel('course_curriculum_parental_key',
                         label='Subject', min_num=0, max_num=10)
@@ -191,7 +200,7 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
 
     def __str__(self):
         return self.course_name
-    
+
     class Meta:
         verbose_name = 'Course Curriculum'
         verbose_name_plural = 'Course Curriculum'
@@ -303,6 +312,7 @@ class Professors(ClusterableModel, index.Indexed):
             'last_name'
         ]
 
+
 @register_snippet
 class Sections(models.Model, index.Indexed):
     section_name = models.CharField(
@@ -314,8 +324,9 @@ class Sections(models.Model, index.Indexed):
     year_level = models.CharField(
         max_length=200,
         default='First',
-        choices=[('1st Year', '1st Year'), ('2nd Year', '2nd Year'), ('3rd Year','3rd Year'), ('4th Year','4th Year')]
-    )   
+        choices=[('1st Year', '1st Year'), ('2nd Year', '2nd Year'),
+                 ('3rd Year', '3rd Year'), ('4th Year', '4th Year')]
+    )
 
     sem = models.CharField(
         max_length=200,
@@ -325,25 +336,24 @@ class Sections(models.Model, index.Indexed):
 
     course_curriculum = models.ForeignKey(
         "home.CourseCurriculum",
-        null = True,
+        null=True,
         on_delete=models.CASCADE,
         help_text='Ex. Computer Science'
     )
 
     college = models.ForeignKey(
         "home.Colleges",
-        null = True,
+        null=True,
         on_delete=models.CASCADE,
         help_text='Ex. COS or College of Science'
     )
 
     department = models.ForeignKey(
         "home.Departments",
-        null = True,
+        null=True,
         on_delete=models.CASCADE,
         help_text='Ex. Computer Studies'
     )
-
 
     search_fields = [
         index.SearchField('section_name'),
@@ -362,16 +372,17 @@ class Sections(models.Model, index.Indexed):
         SnippetChooserPanel('college'),
         SnippetChooserPanel('department'),
     ]
-    
+
     def __str__(self):
         return self.section_name
-    
+
     class Meta:
         verbose_name = 'Section'
         verbose_name_plural = 'Sections'
         ordering = [
             'section_name'
         ]
+
 
 @register_snippet
 class Rooms(models.Model, index.Indexed):
@@ -393,7 +404,7 @@ class Rooms(models.Model, index.Indexed):
 
     panels = [
         FieldPanel('Room_Name'),
-        FieldPanel('Room_Type'),        
+        FieldPanel('Room_Type'),
     ]
 
     def __str__(self): return self.Room_Name + "  " + self.Room_Type
@@ -404,6 +415,7 @@ class Rooms(models.Model, index.Indexed):
         ordering = [
             'Room_Name'
         ]
+
 
 @register_snippet
 class Departments(ClusterableModel, index.Indexed):
@@ -418,26 +430,28 @@ class Departments(ClusterableModel, index.Indexed):
         FieldPanel('Department_Name'),
         MultiFieldPanel([
             MultiFieldPanel(
-            [
-                InlinePanel("room_parental_key", label="Room", min_num=1,help_text="Add Rooms to Department")
-            ],
-            heading="Rooms"
-            ),       
+                [
+                    InlinePanel("room_parental_key", label="Room",
+                                min_num=1, help_text="Add Rooms to Department")
+                ],
+                heading="Rooms"
+            ),
             MultiFieldPanel(
                 [
-                    InlinePanel("professor_parental_key", label="Professors", min_num=1,help_text="Add Professors to Department")
+                    InlinePanel("professor_parental_key", label="Professors",
+                                min_num=1, help_text="Add Professors to Department")
                 ],
                 heading="Professors"
             ),
-        ],heading="Properties"),
-        
+        ], heading="Properties"),
+
     ]
     search_fields = [
         index.SearchField('Department_Name'),
     ]
 
     def __str__(self): return self.Department_Name
-    
+
     class Meta:
         verbose_name = 'Department'
         verbose_name_plural = 'Departments'
@@ -463,7 +477,6 @@ class Colleges(models.Model):
 
     def __str__(self):
         return self.college_name
-    
 
     class Meta:
         verbose_name = 'College'
@@ -500,9 +513,4 @@ class ProfessorsSchedule(models.Model):
 
 @register_snippet
 class RoomsSchedule(models.Model):
-    pass
-
-
-class HomePage(Page):
-    max_count = 1
     pass
