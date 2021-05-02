@@ -1,7 +1,6 @@
 
 <style>
 	.draggable{
-		position: absolute;
 		border: 1px solid #d3d3d3;
 	}
 
@@ -38,7 +37,8 @@
 
 			{% for day in self.day %}
 				<div class="flex-1 py-4 tile">
-					
+					<div class='tile-container'>
+					</div>
 				</div>
 			{% endfor %}
 
@@ -69,7 +69,6 @@
 
 		{% for day in self.day %}
 			<div class="flex-1 py-4 tile">
-				
 			</div>
 		{% endfor %}
 
