@@ -48,6 +48,7 @@ function draggable(draggable_name,tile_name,paper_container, is_main_table){
       this.pos4 = e.clientY;
       // set the element's new position:
       this.draggbablePaper.style.position = 'absolute'
+      this.draggbablePaper.style.zIndex = 1
       this.draggbablePaper.style.top = (this.draggbablePaper.offsetTop - this.pos2) + "px";
       this.draggbablePaper.style.left = (this.draggbablePaper.offsetLeft - this.pos1) + "px";
     }
