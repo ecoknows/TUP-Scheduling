@@ -1,0 +1,77 @@
+
+<style>
+	.draggable{
+		position: absolute;
+		border: 1px solid #d3d3d3;
+	}
+
+	#paper-head {
+		padding: 10px;
+		cursor: move;
+		background-color: #2196F3;
+		color: #fff;
+	}
+</style>
+
+<section class="flex-1 bg-yellow-200">
+
+	<header class="flex">
+
+		<div class="flex-1 py-2"  style="width: 200px;">
+			<h1 class="text-xl text-center">Time</h1>
+		</div>
+
+		{% for day in self.day %}
+			<div class="flex-1 py-2"  style="width: 200px;">
+				<h1 class='text-xl text-center'>{{day}}</h1>
+			</div>
+		{% endfor %}
+	</header>
+
+
+	{% for time in self.time %}
+		<div class="flex">
+
+			<div class="flex-1 py-4">
+				<h1 class="text-lg text-center">{{time}}</h1>
+			</div>
+
+			{% for day in self.day %}
+				<div class="flex-1 py-4 tile">
+					
+				</div>
+			{% endfor %}
+
+		</div>
+	{% endfor %}
+
+	<div class="flex">
+
+		<div class="flex-1 py-4">
+			<h1 class="text-lg text-center"></h1>
+		</div>
+
+		{% for day in self.day %}
+			<div class="flex-1 py-4 tile">
+				
+			</div>
+		{% endfor %}
+
+	</div>
+
+
+
+	<div class="flex">
+
+		<div class="flex-1 py-4">
+			<h1 class="text-lg text-center"></h1>
+		</div>
+
+		{% for day in self.day %}
+			<div class="flex-1 py-4 tile">
+				
+			</div>
+		{% endfor %}
+
+	</div>
+</section>
