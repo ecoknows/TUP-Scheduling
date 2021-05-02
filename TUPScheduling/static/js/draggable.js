@@ -1,7 +1,7 @@
 // var tiles = document.getElementsByClassName('tile')
 // var section_tile = document.getElementsByClassName('section-tile');
 
-function draggable(draggable_name,tile_name,paper_container ,is_tiling){
+function draggable(draggable_name,tile_name,paper_container){
   let tiles = document.getElementsByClassName(tile_name);
   class DraggableElement{
     constructor(draggbablePaper){
@@ -80,25 +80,22 @@ function draggable(draggable_name,tile_name,paper_container ,is_tiling){
             this.draggbablePaper.style.left = null
 
             
-            if(is_tiling){
-
-              //RESET STARTING TILE 
-              if(this.starting_title_index){
-                for(let i = 0; i < this.paper_hours*5; i+=5){
-                  if(tiles[this.starting_title_index+i]?.occupied)
-                    tiles[this.starting_title_index+i].occupied = null;
-                }
-                this.starting_title_index = -1;
+            //RESET STARTING TILE   
+            if(this.starting_title_index){
+              for(let i = 0; i < this.paper_hours*5; i+=5){
+                if(tiles[this.starting_title_index+i]?.occupied)
+                  tiles[this.starting_title_index+i].occupied = null;
               }
-
-
-              let x = 0;
-              while(x < this.paper_hours*5){
-                tiles[i+x].occupied = true;
-                x+=5;
-              }
-              this.starting_title_index = i; 
+              this.starting_title_index = -1;
             }
+
+
+            let x = 0;
+            while(x < this.paper_hours*5){
+              tiles[i+x].occupied = true;
+              x+=5;
+            }
+            this.starting_title_index = i; 
   
             return;
           }
@@ -116,7 +113,7 @@ function draggable(draggable_name,tile_name,paper_container ,is_tiling){
         this.draggbablePaper.style.top = null
         this.draggbablePaper.style.left = null
 
-        if(this.starting_title_index && is_tiling){
+        if(this.starting_title_index){
           for(let i = 0; i < this.paper_hours*5; i+=5){
             if(tiles[this.starting_title_index+i]?.occupied)
               tiles[this.starting_title_index+i].occupied = null;
@@ -131,7 +128,7 @@ function draggable(draggable_name,tile_name,paper_container ,is_tiling){
       // NOT COLLIDE RESET ALL 
       this.draggbablePaper.style.left = this.placementPositionLeft; 
       this.draggbablePaper.style.top = this.placementPositionTop;
-      if(!this.starting_title_index  && is_tiling ){
+      if(!this.starting_title_index ){
         this.draggbablePaper.style.position = null
       }
   
@@ -170,5 +167,5 @@ function draggable(draggable_name,tile_name,paper_container ,is_tiling){
 
 
 
-draggable('draggable-paper','tile','section-container' ,true);
-draggable('draggable-professor','section-tile','professor-container',false);
+draggable('draggable-paper','tile','section-container');
+draggable('draggable-professor','section-tile','professor-container');
