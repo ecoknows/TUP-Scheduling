@@ -1,7 +1,7 @@
 // var tiles = document.getElementsByClassName('tile')
 // var section_tile = document.getElementsByClassName('section-tile');
 
-function draggable(draggable_name,tile_name,paper_container ,is_tiling){
+function draggable(draggable_name,tile_name,paper_container, is_main_table){
   let tiles = document.getElementsByClassName(tile_name);
   class DraggableElement{
     constructor(draggbablePaper){
@@ -10,7 +10,7 @@ function draggable(draggable_name,tile_name,paper_container ,is_tiling){
       this.pos3 = 0;
       this.pos4 = 0;
       this.paper_hours = 3;
-      this.starting_tile = -1;
+      this.starting_tile_index = null;
       this.draggbablePaper = draggbablePaper;
       this.placementPositionTop =  draggbablePaper.style.top;
       this.placementPositionLeft =  draggbablePaper.style.left;
@@ -37,6 +37,7 @@ function draggable(draggable_name,tile_name,paper_container ,is_tiling){
       // call a function whenever the cursor moves:
       document.onmousemove = this.elementDrag.bind(this);
     }
+    
     elementDrag(e){
       e = e || window.event;
       e.preventDefault();
@@ -47,6 +48,7 @@ function draggable(draggable_name,tile_name,paper_container ,is_tiling){
       this.pos4 = e.clientY;
       // set the element's new position:
       this.draggbablePaper.style.position = 'absolute'
+      this.draggbablePaper.style.zIndex = 1
       this.draggbablePaper.style.top = (this.draggbablePaper.offsetTop - this.pos2) + "px";
       this.draggbablePaper.style.left = (this.draggbablePaper.offsetLeft - this.pos1) + "px";
     }
@@ -58,6 +60,43 @@ function draggable(draggable_name,tile_name,paper_container ,is_tiling){
         right: element.x + element.width,
         top: element.y
       }
+    }
+
+
+    resetStartingTile(){
+      //RESET STARTING TILE   
+      if(is_main_table){
+
+        if(this.starting_tile_index != null){
+          for(let i = 0; i < this.paper_hours*5; i+=5){
+            if(tiles[this.starting_tile_index+i]?.occupied)
+              tiles[this.starting_tile_index+i].occupied = null;
+          }
+          this.starting_tile_index = null;
+        }
+      }else{
+        if(this.starting_tile_index  != null){
+          tiles[this.starting_tile_index].occupied = null
+          this.starting_tile_index = null;
+        }
+      }
+
+    }
+    
+    occupyingLogic(index){
+      this.resetStartingTile();
+      if(is_main_table){
+
+        let x = 0;     
+        while(x < this.paper_hours*5){
+          tiles[index+x].occupied = true;
+          x+=5;
+        }  
+      }else{
+        tiles[index].occupied = true;
+      }
+
+      this.starting_tile_index = index; 
     }
   
   
@@ -78,27 +117,11 @@ function draggable(draggable_name,tile_name,paper_container ,is_tiling){
             container.appendChild(this.draggbablePaper);
             this.draggbablePaper.style.top = null
             this.draggbablePaper.style.left = null
-
-            
-            if(is_tiling){
-
-              //RESET STARTING TILE 
-              if(this.starting_title_index){
-                for(let i = 0; i < this.paper_hours*5; i+=5){
-                  if(tiles[this.starting_title_index+i]?.occupied)
-                    tiles[this.starting_title_index+i].occupied = null;
-                }
-                this.starting_title_index = -1;
-              }
-
-
-              let x = 0;
-              while(x < this.paper_hours*5){
-                tiles[i+x].occupied = true;
-                x+=5;
-              }
-              this.starting_title_index = i; 
+            if(this.draggbablePaper.querySelector('#professor-name')){
+              this.draggbablePaper.querySelector('#professor-name').className = null
             }
+
+            this.occupyingLogic(i);
   
             return;
           }
@@ -115,23 +138,20 @@ function draggable(draggable_name,tile_name,paper_container ,is_tiling){
         paperSection.appendChild(this.draggbablePaper);
         this.draggbablePaper.style.top = null
         this.draggbablePaper.style.left = null
-
-        if(this.starting_title_index && is_tiling){
-          for(let i = 0; i < this.paper_hours*5; i+=5){
-            if(tiles[this.starting_title_index+i]?.occupied)
-              tiles[this.starting_title_index+i].occupied = null;
-          }
-          this.starting_title_index = -1;
+        if(this.draggbablePaper.querySelector('#professor-name') && !is_main_table ){
+          this.draggbablePaper.querySelector('#professor-name').className = 'hidden'
         }
+
         this.draggbablePaper.style.position = null
 
+        this.resetStartingTile();
         return;
       }
 
       // NOT COLLIDE RESET ALL 
       this.draggbablePaper.style.left = this.placementPositionLeft; 
       this.draggbablePaper.style.top = this.placementPositionTop;
-      if(!this.starting_title_index  && is_tiling ){
+      if(this.starting_tile_index == null){
         this.draggbablePaper.style.position = null
       }
   
@@ -170,5 +190,5 @@ function draggable(draggable_name,tile_name,paper_container ,is_tiling){
 
 
 
-draggable('draggable-paper','tile','section-container' ,true);
-draggable('draggable-professor','section-tile','professor-container',false);
+draggable('draggable-paper','tile','section-container', true);
+draggable('draggable-professor','section-tile','professor-container', false);

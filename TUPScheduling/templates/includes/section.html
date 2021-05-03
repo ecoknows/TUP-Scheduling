@@ -1,52 +1,25 @@
 
 
-<section id='section-container' class="flex flex-col items-center flex-1 py-8" style="width: 240px">
+<section id='section-container' class="flex flex-col items-center flex-1 py-8 " style="width: 240px">
+	<div> 
+		{% for section in section_entries %}
+
+			<div  class="flex flex-col pb-2 draggable-paper section-tile" style="line-height: 1; width: 200px; height: 180px;">
+				<div id='paper-head' class="flex items-center justify-center" style="
+				background-color: #2196F3;
+				color: #fff;
+				"> 
+					<div id='origin'  style="width: fit-content;">
+						<h1 class="text-center"> {{section.section_name}} </h1>
+					</div>
+				</div>
+				<div class="bg-white tile-container ">
+				</div>
+				<div class="flex items-center justify-center flex-1 bg-white ">
+				</div>
+			</div>
+
+		{% endfor %}
 	
-	<div  class="flex flex-col bg-white draggable draggable-paper section-tile" style="line-height: 1; width: 200px; height: 180px;">
-		<div id='paper-head' class="flex items-center justify-center"> 
-			<div id='origin'  style="width: fit-content;">
-				<h1 class="text-center"> Subject A </h1>
-			</div>
-		</div>
-		<div class="bg-gray-700 tile-container">
-		</div>
-		<div class="flex items-center justify-center flex-1 ">
-			<h1>
-				Section A ( 3 hours )
-			</h1>
-		</div>
 	</div>
-
-	<div  class="flex flex-col bg-white draggable draggable-paper section-tile" style="line-height: 1; width: 200px; height: 180px;">
-		<div id='paper-head' class="flex items-center justify-center"> 
-			<div id='origin'  style="width: fit-content;">
-				<h1 class="text-center"> Subject B </h1>
-			</div>
-		</div>
-		<div class="bg-gray-700 tile-container">
-		</div>
-		<div class="flex items-center justify-center flex-1 ">
-			<h1>
-				Section B ( 3 hours )
-			</h1>
-		</div>
-	</div>
-
-
-	<div  class="flex flex-col bg-white draggable draggable-paper section-tile" style="line-height: 1; width: 200px; height: 180px;">
-		<div id='paper-head' class="flex items-center justify-center"> 
-			<div id='origin'  style="width: fit-content;">
-				<h1 class="text-center"> Subject C </h1>
-			</div>
-		</div>
-		<div class="bg-gray-700 tile-container">
-		</div>
-		<div class="flex items-center justify-center flex-1 ">
-			<h1>
-				Section C ( 3 hours )
-			</h1>
-		</div>
-	</div>
-
-	
 </section>

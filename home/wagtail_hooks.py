@@ -34,9 +34,11 @@ class SubjectsAdmin(ModelAdmin):
 class CourseCurriculumAdmin(ModelAdmin):
     model = CourseCurriculum
     menu_label = 'Course Curriculum'
-    list_display = ('course_name', 'college', 'department','starting_year', 'ending_year')
-    search_fields = ('course_name','college__college_name', 'department__Department_Name', 'starting_year', 'ending_year')
-    list_filter = ('college', 'department','starting_year','ending_year')
+    list_display = ('course_name', 'college', 'department',
+                    'starting_year', 'ending_year')
+    search_fields = ('course_name', 'college__college_name',
+                     'department__Department_Name', 'starting_year', 'ending_year')
+    list_filter = ('college', 'department', 'starting_year', 'ending_year')
 
 
 class ProfessorsAdmin(ModelAdmin):
@@ -56,7 +58,7 @@ class SectionsAdmin(ModelAdmin):
         'sem',
         'course_curriculum',
         'college',
-        'deparment',
+        'department',
     )
     list_filter = (
         'section_name',
