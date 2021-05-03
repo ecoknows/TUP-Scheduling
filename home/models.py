@@ -209,30 +209,42 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
         ]
 
 
+def timeConvert(miliTime):
+    hours = miliTime.strftime('%H')
+    minutes = miliTime.strftime('%M')
+    hours, minutes = int(hours), int(minutes)
+    setting = " A.M."
+    if hours > 12:
+        setting = " P.M."
+        hours -= 12
+    return(("%02d:%02d" + setting) % (hours, minutes))
+
+
 @register_snippet
 class Professors(ClusterableModel, index.Indexed):
     global start_time
 
     def validate_start_time(value):
-        print("YEAHAEHEHAEHA: ", value)
         global start_time
         start_time = value
         if value < datetime.time(7, 00, 00):
+            time = timeConvert(value)
             raise ValidationError(
-                _('%(value)s is invalid'),
-                params={'value': value},
+                _('%(time)s is invalid'),
+                params={'time': time},
             )
 
     def validate_end_time(value):
         print(start_time, value)
         if value > datetime.time(19, 00, 00):
+            time = timeConvert(value)
             raise ValidationError(
-                _('%(value)s is invalid'),
-                params={'value': value},
+                _('%(time)s is invalid'),
+                params={'time': time},
             )
         elif value <= start_time:
             raise ValidationError(
-                _('end time must be greater than start time'),
+                _('End time must be greater than start time'),
             )
 
     first_name = models.CharField(
@@ -258,21 +270,23 @@ class Professors(ClusterableModel, index.Indexed):
         auto_now=False,
         auto_now_add=False,
         null=True,
-        help_text='At least 7:00',
+        help_text='At least 7:00 A.M.',
         blank=True,
         validators=[validate_start_time],
+        default=' 7:00 AM',
     )
     preferred_end_time = models.TimeField(
         auto_now=False,
         auto_now_add=False,
         null=True,
-        help_text='At most 19:00',
+        help_text='At most 7:00 P.M.',
         blank=True,
         validators=[validate_end_time],
+        default=' 7:00 PM',
     )
 
     def preferred_time(self):
-        return str(self.preferred_start_time) + " - " + str(self.preferred_end_time)
+        return str(timeConvert(self.preferred_start_time)) + " - " + str(timeConvert(self.preferred_end_time))
 
     status = models.CharField(
         max_length=200,
