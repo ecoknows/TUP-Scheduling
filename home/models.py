@@ -100,7 +100,7 @@ class Subjects(ClusterableModel, index.Indexed):
 
     lab_or_lec = models.CharField(
         max_length=200,
-        default='Laboratory',
+        default='Lecture',
         choices=[('Laboratory', 'Laboratory'), ('Lecture', 'Lecture')]
     )
 
@@ -214,6 +214,7 @@ class Professors(ClusterableModel, index.Indexed):
     global start_time
 
     def validate_start_time(value):
+        print("YEAHAEHEHAEHA: ", value)
         global start_time
         start_time = value
         if value < datetime.time(7, 00, 00):
@@ -393,7 +394,7 @@ class Rooms(models.Model, index.Indexed):
     )
 
     Room_Type = models.CharField(
-        max_length=50,
+        max_length=200,
         default='Lecture',
         choices=[('Laboratory', 'Laboratory'), ('Lecture', 'Lecture')]
     )
@@ -404,7 +405,7 @@ class Rooms(models.Model, index.Indexed):
 
     panels = [
         FieldPanel('Room_Name'),
-        FieldPanel('Room_Type'),
+        FieldPanel('Room_Type', widget=forms.RadioSelect),
     ]
 
     def __str__(self): return self.Room_Name + "  " + self.Room_Type
@@ -428,23 +429,6 @@ class Departments(ClusterableModel, index.Indexed):
 
     panels = [
         FieldPanel('Department_Name'),
-        MultiFieldPanel([
-            MultiFieldPanel(
-                [
-                    InlinePanel("room_parental_key", label="Room",
-                                min_num=1, help_text="Add Rooms to Department")
-                ],
-                heading="Rooms"
-            ),
-            MultiFieldPanel(
-                [
-                    InlinePanel("professor_parental_key", label="Professors",
-                                min_num=1, help_text="Add Professors to Department")
-                ],
-                heading="Professors"
-            ),
-        ], heading="Properties"),
-
     ]
     search_fields = [
         index.SearchField('Department_Name'),
