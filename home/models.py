@@ -84,6 +84,37 @@ class SubjectsOrderable(Orderable):
     ]
 
 
+class CollegeOrderable(Orderable):
+    department_model = ParentalKey(
+        "home.Departments", related_name="department_parental_key", null=True)
+
+    college = models.ForeignKey(
+        "home.Colleges",
+        null=True,
+        on_delete=models.CASCADE,
+        blank=False,
+    )
+
+    panels = [
+        SnippetChooserPanel("college")
+    ]
+
+
+class DepartmentOrderable(Orderable):
+    college_model = ParentalKey(
+        "home.Colleges", related_name="college_parental_key", null=True)
+
+    department = models.ForeignKey(
+        "home.Departments",
+        null=True,
+        on_delete=models.CASCADE,
+    )
+
+    panels = [
+        SnippetChooserPanel("department")
+    ]
+
+
 @register_snippet
 class Subjects(ClusterableModel, index.Indexed):
     subject_code = models.CharField(
@@ -443,6 +474,8 @@ class Departments(ClusterableModel, index.Indexed):
 
     panels = [
         FieldPanel('Department_Name'),
+        InlinePanel('department_parental_key',
+                    label='College', min_num=0, max_num=1)
     ]
     search_fields = [
         index.SearchField('Department_Name'),
@@ -459,7 +492,7 @@ class Departments(ClusterableModel, index.Indexed):
 
 
 @register_snippet
-class Colleges(models.Model):
+class Colleges(ClusterableModel, index.Indexed):
     college_name = models.CharField(
         max_length=300,
         null=True,
@@ -467,10 +500,10 @@ class Colleges(models.Model):
 
     panels = [
         FieldPanel('college_name'),
-        # MultiFieldPanel([
-        #     InlinePanel('department_parental_key',
-        #                 label='Subject', min_num=1, max_num=10)
-        # ], heading='Departments under this college')
+        MultiFieldPanel([
+            InlinePanel('college_parental_key',
+                        label='Department', min_num=0, max_num=10)
+        ], heading='Departments under this college')
     ]
 
     def __str__(self):
