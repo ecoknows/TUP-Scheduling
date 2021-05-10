@@ -95,9 +95,19 @@ class RoomsAdmin(ModelAdmin):
 class DepartmentsAdmin(ModelAdmin):
     model = Departments
     menu_label = 'Departments'
-    # list_display =
-    # list_filter =
-    # search_fields =
+
+    list_display = (
+        'Department_Name',
+        # 'department_parental_key',
+    )
+    list_filter = (
+        'Department_Name',
+        # 'department_parental_key',
+    )
+    search_fields = (
+        'Department_Name',
+        # 'department_parental_key',
+    )
 
 
 class CollegesAdmin(ModelAdmin):
