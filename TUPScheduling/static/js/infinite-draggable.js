@@ -56,7 +56,6 @@ function infinite_draggable(draggable_name, tile_name, paper_container) {
                 this.clone_draggablePaper = this.draggbablePaper.cloneNode(true);
                 this.clone_draggablePaper.style.position = 'absolute'
                 paperSection.appendChild(this.clone_draggablePaper)
-                console.log('deymsan');
                 this.clone_draggablePaper.style.top = (this.draggbablePaper.offsetTop - this.pos2) + "px";
                 this.clone_draggablePaper.style.left = (this.draggbablePaper.offsetLeft - this.pos1) + "px";
             } else {
