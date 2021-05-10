@@ -1,7 +1,7 @@
 // var tiles = document.getElementsByClassName('tile')
 // var section_tile = document.getElementsByClassName('section-tile');
 
-function draggable(draggable_name,tile_name,paper_container, is_main_table){
+function draggable(draggable_name,tile_name,paper_container){
   let tiles = document.getElementsByClassName(tile_name);
   class DraggableElement{
     constructor(draggbablePaper){
@@ -48,7 +48,6 @@ function draggable(draggable_name,tile_name,paper_container, is_main_table){
       this.pos4 = e.clientY;
       // set the element's new position:
       this.draggbablePaper.style.position = 'absolute'
-      this.draggbablePaper.style.zIndex = 1
       this.draggbablePaper.style.top = (this.draggbablePaper.offsetTop - this.pos2) + "px";
       this.draggbablePaper.style.left = (this.draggbablePaper.offsetLeft - this.pos1) + "px";
     }
@@ -65,37 +64,23 @@ function draggable(draggable_name,tile_name,paper_container, is_main_table){
 
     resetStartingTile(){
       //RESET STARTING TILE   
-      if(is_main_table){
-
-        if(this.starting_tile_index != null){
-          for(let i = 0; i < this.paper_hours*5; i+=5){
-            if(tiles[this.starting_tile_index+i]?.occupied)
-              tiles[this.starting_tile_index+i].occupied = null;
-          }
-          this.starting_tile_index = null;
+      if(this.starting_tile_index != null){
+        for(let i = 0; i < this.paper_hours*5; i+=5){
+          if(tiles[this.starting_tile_index+i]?.occupied)
+            tiles[this.starting_tile_index+i].occupied = null;
         }
-      }else{
-        if(this.starting_tile_index  != null){
-          tiles[this.starting_tile_index].occupied = null
-          this.starting_tile_index = null;
-        }
+        this.starting_tile_index = null;
       }
-
     }
     
     occupyingLogic(index){
       this.resetStartingTile();
-      if(is_main_table){
-
-        let x = 0;     
-        while(x < this.paper_hours*5){
-          tiles[index+x].occupied = true;
-          x+=5;
-        }  
-      }else{
-        tiles[index].occupied = true;
+      let x = 0;     
+      while(x < this.paper_hours*5){
+        tiles[index+x].occupied = true;
+        x+=5;
       }
-
+    
       this.starting_tile_index = index; 
     }
   
@@ -117,9 +102,6 @@ function draggable(draggable_name,tile_name,paper_container, is_main_table){
             container.appendChild(this.draggbablePaper);
             this.draggbablePaper.style.top = null
             this.draggbablePaper.style.left = null
-            if(this.draggbablePaper.querySelector('#professor-name')){
-              this.draggbablePaper.querySelector('#professor-name').className = null
-            }
 
             this.occupyingLogic(i);
   
@@ -138,10 +120,6 @@ function draggable(draggable_name,tile_name,paper_container, is_main_table){
         paperSection.appendChild(this.draggbablePaper);
         this.draggbablePaper.style.top = null
         this.draggbablePaper.style.left = null
-        if(this.draggbablePaper.querySelector('#professor-name') && !is_main_table ){
-          this.draggbablePaper.querySelector('#professor-name').className = 'hidden'
-        }
-
         this.draggbablePaper.style.position = null
 
         this.resetStartingTile();
@@ -190,5 +168,5 @@ function draggable(draggable_name,tile_name,paper_container, is_main_table){
 
 
 
-draggable('draggable-paper','tile','section-container', true);
-draggable('draggable-professor','section-tile','professor-container', false);
+draggable('draggable-paper','tile','section-container');
+// draggable('draggable-professor','section-tile','professor-container', false);
