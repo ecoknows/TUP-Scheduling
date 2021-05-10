@@ -84,20 +84,20 @@ class SubjectsOrderable(Orderable):
     ]
 
 
-class CollegeOrderable(Orderable):
-    department_model = ParentalKey(
-        "home.Departments", related_name="department_parental_key", null=True)
+# class CollegeOrderable(Orderable):
+#     department_model = ParentalKey(
+#         "home.Departments", related_name="department_parental_key", null=True)
 
-    college = models.ForeignKey(
-        "home.Colleges",
-        null=True,
-        on_delete=models.CASCADE,
-        blank=False,
-    )
+#     college = models.ForeignKey(
+#         "home.Colleges",
+#         null=True,
+#         on_delete=models.CASCADE,
+#         blank=False,
+#     )
 
-    panels = [
-        SnippetChooserPanel("college")
-    ]
+#     panels = [
+#         SnippetChooserPanel("college")
+#     ]
 
 
 class DepartmentOrderable(Orderable):
@@ -474,8 +474,8 @@ class Departments(ClusterableModel, index.Indexed):
 
     panels = [
         FieldPanel('Department_Name'),
-        InlinePanel('department_parental_key',
-                    label='College', min_num=0, max_num=1)
+        # InlinePanel('department_parental_key',
+        #             label='College', min_num=0, max_num=1)
     ]
     search_fields = [
         index.SearchField('Department_Name'),

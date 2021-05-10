@@ -92,15 +92,15 @@ class DepartmentsAdmin(ModelAdmin):
 
     list_display = (
         'Department_Name',
-        'department_parental_key',
+        # 'department_parental_key',
     )
     list_filter = (
         'Department_Name',
-        'department_parental_key',
+        # 'department_parental_key',
     )
     search_fields = (
         'Department_Name',
-        'department_parental_key',
+        # 'department_parental_key',
     )
 
 
