@@ -34,6 +34,18 @@ class HomePage(Page):
     day = _DAY
     time = _TIME
 
+    def get_context(self, request):
+        context = super().get_context(request)
+
+        # professor_entries = Professors.objects.child_of(self).live()
+
+        # tag = request.GET.get('tag')
+        # if tag:
+        #     blog_entries = blog_entries.filter(tags__name=tag)
+        context['section_entries'] = Sections.objects.all()
+        context['professor_entries'] = Professors.objects.all()
+        return context
+
 
 class ProfessorOrderable(Orderable):
     room_model = ParentalKey(
