@@ -1,5 +1,6 @@
 from django.db import models
 from django import forms
+from django.db.models.fields import Field
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
@@ -96,6 +97,37 @@ class SubjectsOrderable(Orderable):
     ]
 
 
+# class CollegeOrderable(Orderable):
+#     department_model = ParentalKey(
+#         "home.Departments", related_name="department_parental_key", null=True)
+
+#     college = models.ForeignKey(
+#         "home.Colleges",
+#         null=True,
+#         on_delete=models.CASCADE,
+#         blank=False,
+#     )
+
+#     panels = [
+#         SnippetChooserPanel("college")
+#     ]
+
+
+class DepartmentOrderable(Orderable):
+    college_model = ParentalKey(
+        "home.Colleges", related_name="college_parental_key", null=True)
+
+    department = models.ForeignKey(
+        "home.Departments",
+        null=True,
+        on_delete=models.CASCADE,
+    )
+
+    panels = [
+        SnippetChooserPanel("department")
+    ]
+
+
 @register_snippet
 class Subjects(ClusterableModel, index.Indexed):
     subject_code = models.CharField(
@@ -112,7 +144,7 @@ class Subjects(ClusterableModel, index.Indexed):
 
     lab_or_lec = models.CharField(
         max_length=200,
-        default='Laboratory',
+        default='Lecture',
         choices=[('Laboratory', 'Laboratory'), ('Lecture', 'Lecture')]
     )
 
@@ -221,6 +253,17 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
         ]
 
 
+def timeConvert(miliTime):
+    hours = miliTime.strftime('%H')
+    minutes = miliTime.strftime('%M')
+    hours, minutes = int(hours), int(minutes)
+    setting = " A.M."
+    if hours > 12:
+        setting = " P.M."
+        hours -= 12
+    return(("%02d:%02d" + setting) % (hours, minutes))
+
+
 @register_snippet
 class Professors(ClusterableModel, index.Indexed):
     global start_time
@@ -229,21 +272,23 @@ class Professors(ClusterableModel, index.Indexed):
         global start_time
         start_time = value
         if value < datetime.time(7, 00, 00):
+            time = timeConvert(value)
             raise ValidationError(
-                _('%(value)s is invalid'),
-                params={'value': value},
+                _('%(time)s is invalid'),
+                params={'time': time},
             )
 
     def validate_end_time(value):
         print(start_time, value)
         if value > datetime.time(19, 00, 00):
+            time = timeConvert(value)
             raise ValidationError(
-                _('%(value)s is invalid'),
-                params={'value': value},
+                _('%(time)s is invalid'),
+                params={'time': time},
             )
         elif value <= start_time:
             raise ValidationError(
-                _('end time must be greater than start time'),
+                _('End time must be greater than start time'),
             )
 
     first_name = models.CharField(
@@ -269,26 +314,52 @@ class Professors(ClusterableModel, index.Indexed):
         auto_now=False,
         auto_now_add=False,
         null=True,
-        help_text='At least 7:00',
+        help_text='At least 7:00 A.M.',
         blank=True,
         validators=[validate_start_time],
+        default=' 7:00 AM',
     )
     preferred_end_time = models.TimeField(
         auto_now=False,
         auto_now_add=False,
         null=True,
-        help_text='At most 19:00',
+        help_text='At most 7:00 P.M.',
         blank=True,
         validators=[validate_end_time],
+        default=' 7:00 PM',
     )
 
     def preferred_time(self):
-        return str(self.preferred_start_time) + " - " + str(self.preferred_end_time)
+        return str(timeConvert(self.preferred_start_time)) + " - " + str(timeConvert(self.preferred_end_time))
 
     status = models.CharField(
         max_length=200,
         default='Regular',
         choices=[('Regular', 'Regular'), ('Part-time', 'Part-time')]
+    )
+
+    choose_college = models.ForeignKey(
+        'home.Colleges',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    def get_context(self, request):
+        context = super().get_context(request)
+
+        self.choose_department.limit_choices_to = {
+            'Choose_College_id': self.choose_college}
+
+        return context
+
+    choose_department = models.ForeignKey(
+        'home.Departments',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name='+',
     )
 
     panels = [
@@ -308,6 +379,8 @@ class Professors(ClusterableModel, index.Indexed):
             heading='Preferred Time',
         ),
         FieldPanel('status', widget=forms.RadioSelect),
+        FieldPanel('choose_college'),
+        FieldPanel('choose_department'),
         MultiFieldPanel([
             InlinePanel('professor_parental_key',
                         label='Subject', min_num=1, max_num=4)
@@ -327,6 +400,7 @@ class Professors(ClusterableModel, index.Indexed):
 
 @register_snippet
 class Sections(models.Model, index.Indexed):
+
     section_name = models.CharField(
         max_length=30,
         null=True,
@@ -405,7 +479,7 @@ class Rooms(models.Model, index.Indexed):
     )
 
     Room_Type = models.CharField(
-        max_length=50,
+        max_length=200,
         default='Lecture',
         choices=[('Laboratory', 'Laboratory'), ('Lecture', 'Lecture')]
     )
@@ -416,7 +490,7 @@ class Rooms(models.Model, index.Indexed):
 
     panels = [
         FieldPanel('Room_Name'),
-        FieldPanel('Room_Type'),
+        FieldPanel('Room_Type', widget=forms.RadioSelect),
     ]
 
     def __str__(self): return self.Room_Name + "  " + self.Room_Type
@@ -430,7 +504,44 @@ class Rooms(models.Model, index.Indexed):
 
 
 @register_snippet
+class Colleges(ClusterableModel, index.Indexed):
+    college_name = models.CharField(
+        max_length=300,
+        null=True,
+    )
+
+    panels = [
+        FieldPanel('college_name'),
+        MultiFieldPanel([
+            InlinePanel('college_parental_key',
+                        label='Department', min_num=0, max_num=10)
+        ], heading='Departments under this college')
+    ]
+
+    def __str__(self):
+        return self.college_name
+
+    class Meta:
+        verbose_name = 'College'
+        verbose_name_plural = 'Colleges'
+        ordering = [
+            'college_name'
+        ]
+
+
+@register_snippet
 class Departments(ClusterableModel, index.Indexed):
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        colleges = Colleges.objects.all()
+        college_list = []
+
+        for college in colleges:
+            college_list.append((college.college_name, college.college_name))
+        self.Department_name.choices = college_list
+
+        return context
 
     Department_Name = models.CharField(
         max_length=100,
@@ -438,25 +549,17 @@ class Departments(ClusterableModel, index.Indexed):
         help_text='Department of Mathematics'
     )
 
+    Choose_College = models.ForeignKey(
+        'home.Colleges',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
     panels = [
         FieldPanel('Department_Name'),
-        MultiFieldPanel([
-            MultiFieldPanel(
-                [
-                    InlinePanel("room_parental_key", label="Room",
-                                min_num=1, help_text="Add Rooms to Department")
-                ],
-                heading="Rooms"
-            ),
-            MultiFieldPanel(
-                [
-                    InlinePanel("professor_parental_key", label="Professors",
-                                min_num=1, help_text="Add Professors to Department")
-                ],
-                heading="Professors"
-            ),
-        ], heading="Properties"),
-
+        FieldPanel('Choose_College')
     ]
     search_fields = [
         index.SearchField('Department_Name'),
@@ -469,32 +572,6 @@ class Departments(ClusterableModel, index.Indexed):
         verbose_name_plural = 'Departments'
         ordering = [
             'Department_Name'
-        ]
-
-
-@register_snippet
-class Colleges(models.Model):
-    college_name = models.CharField(
-        max_length=300,
-        null=True,
-    )
-
-    panels = [
-        FieldPanel('college_name'),
-        # MultiFieldPanel([
-        #     InlinePanel('department_parental_key',
-        #                 label='Subject', min_num=1, max_num=10)
-        # ], heading='Departments under this college')
-    ]
-
-    def __str__(self):
-        return self.college_name
-
-    class Meta:
-        verbose_name = 'College'
-        verbose_name_plural = 'Colleges'
-        ordering = [
-            'college_name'
         ]
 
 

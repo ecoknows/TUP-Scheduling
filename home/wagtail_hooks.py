@@ -27,6 +27,7 @@ from django.templatetags.static import static
 def global_admin_css():
     return format_html('<link rel="stylesheet" href="{}">', static("css/admin.css"))
 
+
 class SubjectsAdmin(ModelAdmin):
     model = Subjects
     menu_label = 'Subjects'
@@ -95,9 +96,18 @@ class RoomsAdmin(ModelAdmin):
 class DepartmentsAdmin(ModelAdmin):
     model = Departments
     menu_label = 'Departments'
-    # list_display =
-    # list_filter =
-    # search_fields =
+
+    list_display = (
+        'Department_Name',
+        'Choose_College',
+    )
+    list_filter = (
+        'Choose_College',
+    )
+    search_fields = (
+        'Department_Name',
+        'Choose_College',
+    )
 
 
 class CollegesAdmin(ModelAdmin):
