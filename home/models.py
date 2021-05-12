@@ -253,6 +253,52 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
         ]
 
 
+@register_snippet
+class Departments(ClusterableModel, index.Indexed):
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        colleges = Colleges.objects.all()
+        college_list = []
+
+        for college in colleges:
+            college_list.append((college.college_name, college.college_name))
+        self.Department_name.choices = college_list
+
+        return context
+
+    Department_Name = models.CharField(
+        max_length=100,
+        null=True,
+        help_text='Department of Mathematics'
+    )
+
+    Choose_College = models.ForeignKey(
+        'home.Colleges',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    panels = [
+        FieldPanel('Department_Name'),
+        FieldPanel('Choose_College')
+    ]
+    search_fields = [
+        index.SearchField('Department_Name'),
+    ]
+
+    def __str__(self): return self.Department_Name
+
+    class Meta:
+        verbose_name = 'Department'
+        verbose_name_plural = 'Departments'
+        ordering = [
+            'Department_Name'
+        ]
+
+
 def timeConvert(miliTime):
     hours = miliTime.strftime('%H')
     minutes = miliTime.strftime('%M')
@@ -346,16 +392,11 @@ class Professors(ClusterableModel, index.Indexed):
         related_name='+'
     )
 
-    def get_context(self, request):
-        context = super().get_context(request)
-
-        self.choose_department.limit_choices_to = {
-            'Choose_College_id': self.choose_college}
-
-        return context
+    def limit():
+        return Departments
 
     choose_department = models.ForeignKey(
-        'home.Departments',
+        limit(),
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
@@ -379,7 +420,7 @@ class Professors(ClusterableModel, index.Indexed):
             heading='Preferred Time',
         ),
         FieldPanel('status', widget=forms.RadioSelect),
-        FieldPanel('choose_college'),
+        SnippetChooserPanel('choose_college'),
         FieldPanel('choose_department'),
         MultiFieldPanel([
             InlinePanel('professor_parental_key',
@@ -526,52 +567,6 @@ class Colleges(ClusterableModel, index.Indexed):
         verbose_name_plural = 'Colleges'
         ordering = [
             'college_name'
-        ]
-
-
-@register_snippet
-class Departments(ClusterableModel, index.Indexed):
-
-    def get_context(self, request):
-        context = super().get_context(request)
-        colleges = Colleges.objects.all()
-        college_list = []
-
-        for college in colleges:
-            college_list.append((college.college_name, college.college_name))
-        self.Department_name.choices = college_list
-
-        return context
-
-    Department_Name = models.CharField(
-        max_length=100,
-        null=True,
-        help_text='Department of Mathematics'
-    )
-
-    Choose_College = models.ForeignKey(
-        'home.Colleges',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+'
-    )
-
-    panels = [
-        FieldPanel('Department_Name'),
-        FieldPanel('Choose_College')
-    ]
-    search_fields = [
-        index.SearchField('Department_Name'),
-    ]
-
-    def __str__(self): return self.Department_Name
-
-    class Meta:
-        verbose_name = 'Department'
-        verbose_name_plural = 'Departments'
-        ordering = [
-            'Department_Name'
         ]
 
 
