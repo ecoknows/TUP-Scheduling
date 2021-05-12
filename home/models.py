@@ -12,6 +12,7 @@ from wagtail.admin.edit_handlers import (
     FieldRowPanel,
     ObjectList,
     TabbedInterface,
+    PageChooserPanel
 )
 
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -256,6 +257,10 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
 @register_snippet
 class Departments(ClusterableModel, index.Indexed):
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(Department_Name='asdksajd')
+
     def get_context(self, request):
         context = super().get_context(request)
         colleges = Colleges.objects.all()
@@ -308,6 +313,18 @@ def timeConvert(miliTime):
         setting = " P.M."
         hours -= 12
     return(("%02d:%02d" + setting) % (hours, minutes))
+
+
+class MyFieldPanel(FieldPanel):
+
+    # def __init__(self, field_name, choose_college,  *args, **kwargs):
+    #     # self.choose_college = choose_college
+    #     super().__init__(self, field_name, *args,)
+
+    def on_form_bound(self):
+        super().on_form_bound()
+        choices = Departments.objects.filter(Choose_College_id=10)
+        self.form.fields['choose_department'].queryset = choices
 
 
 @register_snippet
@@ -389,14 +406,11 @@ class Professors(ClusterableModel, index.Indexed):
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
-        related_name='+'
+        related_name='+',
     )
 
-    def limit():
-        return Departments
-
     choose_department = models.ForeignKey(
-        limit(),
+        'home.Departments',
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
@@ -421,7 +435,7 @@ class Professors(ClusterableModel, index.Indexed):
         ),
         FieldPanel('status', widget=forms.RadioSelect),
         SnippetChooserPanel('choose_college'),
-        FieldPanel('choose_department'),
+        MyFieldPanel(field_name='choose_department'),
         MultiFieldPanel([
             InlinePanel('professor_parental_key',
                         label='Subject', min_num=1, max_num=4)
