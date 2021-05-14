@@ -254,6 +254,17 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
         ]
 
 
+def timeConvert(miliTime):
+    hours = miliTime.strftime('%H')
+    minutes = miliTime.strftime('%M')
+    hours, minutes = int(hours), int(minutes)
+    setting = " A.M."
+    if hours > 12:
+        setting = " P.M."
+        hours -= 12
+    return(("%02d:%02d" + setting) % (hours, minutes))
+
+
 @register_snippet
 class Departments(ClusterableModel, index.Indexed):
 
@@ -555,6 +566,34 @@ class Rooms(models.Model, index.Indexed):
         verbose_name_plural = 'Rooms'
         ordering = [
             'Room_Name'
+        ]
+
+
+@register_snippet
+class Departments(ClusterableModel, index.Indexed):
+
+    Department_Name = models.CharField(
+        max_length=100,
+        null=True,
+        help_text='Department of Mathematics'
+    )
+
+    panels = [
+        FieldPanel('Department_Name'),
+        # InlinePanel('department_parental_key',
+        #             label='College', min_num=0, max_num=1)
+    ]
+    search_fields = [
+        index.SearchField('Department_Name'),
+    ]
+
+    def __str__(self): return self.Department_Name
+
+    class Meta:
+        verbose_name = 'Department'
+        verbose_name_plural = 'Departments'
+        ordering = [
+            'Department_Name'
         ]
 
 
