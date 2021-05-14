@@ -1,5 +1,6 @@
 from django.db import models
 from django import forms
+from django.db.models.fields import Field
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
@@ -11,6 +12,7 @@ from wagtail.admin.edit_handlers import (
     FieldRowPanel,
     ObjectList,
     TabbedInterface,
+    PageChooserPanel
 )
 
 from wagtail.images.edit_handlers import ImageChooserPanel
@@ -264,6 +266,79 @@ def timeConvert(miliTime):
 
 
 @register_snippet
+class Departments(ClusterableModel, index.Indexed):
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        return qs.filter(Department_Name='asdksajd')
+
+    def get_context(self, request):
+        context = super().get_context(request)
+        colleges = Colleges.objects.all()
+        college_list = []
+
+        for college in colleges:
+            college_list.append((college.college_name, college.college_name))
+        self.Department_name.choices = college_list
+
+        return context
+
+    Department_Name = models.CharField(
+        max_length=100,
+        null=True,
+        help_text='Department of Mathematics'
+    )
+
+    Choose_College = models.ForeignKey(
+        'home.Colleges',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+'
+    )
+
+    panels = [
+        FieldPanel('Department_Name'),
+        FieldPanel('Choose_College')
+    ]
+    search_fields = [
+        index.SearchField('Department_Name'),
+    ]
+
+    def __str__(self): return self.Department_Name
+
+    class Meta:
+        verbose_name = 'Department'
+        verbose_name_plural = 'Departments'
+        ordering = [
+            'Department_Name'
+        ]
+
+
+def timeConvert(miliTime):
+    hours = miliTime.strftime('%H')
+    minutes = miliTime.strftime('%M')
+    hours, minutes = int(hours), int(minutes)
+    setting = " A.M."
+    if hours > 12:
+        setting = " P.M."
+        hours -= 12
+    return(("%02d:%02d" + setting) % (hours, minutes))
+
+
+class MyFieldPanel(FieldPanel):
+
+    # def __init__(self, field_name, choose_college,  *args, **kwargs):
+    #     # self.choose_college = choose_college
+    #     super().__init__(self, field_name, *args,)
+
+    def on_form_bound(self):
+        super().on_form_bound()
+        choices = Departments.objects.filter(Choose_College_id=10)
+        self.form.fields['choose_department'].queryset = choices
+
+
+@register_snippet
 class Professors(ClusterableModel, index.Indexed):
     global start_time
 
@@ -337,6 +412,22 @@ class Professors(ClusterableModel, index.Indexed):
         choices=[('Regular', 'Regular'), ('Part-time', 'Part-time')]
     )
 
+    choose_college = models.ForeignKey(
+        'home.Colleges',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name='+',
+    )
+
+    choose_department = models.ForeignKey(
+        'home.Departments',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name='+',
+    )
+
     panels = [
         MultiFieldPanel(
             [
@@ -354,6 +445,8 @@ class Professors(ClusterableModel, index.Indexed):
             heading='Preferred Time',
         ),
         FieldPanel('status', widget=forms.RadioSelect),
+        SnippetChooserPanel('choose_college'),
+        MyFieldPanel(field_name='choose_department'),
         MultiFieldPanel([
             InlinePanel('professor_parental_key',
                         label='Subject', min_num=1, max_num=4)
@@ -373,6 +466,7 @@ class Professors(ClusterableModel, index.Indexed):
 
 @register_snippet
 class Sections(models.Model, index.Indexed):
+
     section_name = models.CharField(
         max_length=30,
         null=True,
