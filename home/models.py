@@ -1,6 +1,7 @@
 from django.db import models
 from django import forms
 from django.db.models.fields import Field
+from django.db.models.fields.related import ForeignKey
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
@@ -327,15 +328,16 @@ def timeConvert(miliTime):
 
 
 class MyFieldPanel(FieldPanel):
-
-    # def __init__(self, field_name, choose_college,  *args, **kwargs):
-    #     # self.choose_college = choose_college
-    #     super().__init__(self, field_name, *args,)
-
     def on_form_bound(self):
         super().on_form_bound()
         choices = Departments.objects.filter(Choose_College_id=10)
         self.form.fields['choose_department'].queryset = choices
+
+
+class MySnippetChooserPanel(SnippetChooserPanel):
+    def on_model_bound(self):
+        super().on_model_bound()
+        self.target_model = self.db_field.remote_field.model
 
 
 @register_snippet
@@ -445,8 +447,10 @@ class Professors(ClusterableModel, index.Indexed):
             heading='Preferred Time',
         ),
         FieldPanel('status', widget=forms.RadioSelect),
-        SnippetChooserPanel('choose_college'),
+
+        MySnippetChooserPanel('choose_college'),
         MyFieldPanel(field_name='choose_department'),
+
         MultiFieldPanel([
             InlinePanel('professor_parental_key',
                         label='Subject', min_num=1, max_num=4)
@@ -518,7 +522,7 @@ class Sections(models.Model, index.Indexed):
                 FieldPanel('year_level', widget=forms.RadioSelect),
                 FieldPanel('sem', widget=forms.RadioSelect),
             ],
-            heading="College Info",
+            heading="Section Info",
         ),
         SnippetChooserPanel('course_curriculum'),
         SnippetChooserPanel('college'),
