@@ -57,6 +57,9 @@ class ProfessorsAdmin(ModelAdmin):
 
 
 class SectionsAdmin(ModelAdmin):
+    index_template_name='costum/index.html'
+
+
     model = Sections
     menu_label = 'Sections'
     list_display = (

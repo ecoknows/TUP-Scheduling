@@ -268,6 +268,16 @@ def timeConvert(miliTime):
 @register_snippet
 class Departments(ClusterableModel, index.Indexed):
 
+    
+    
+    def __init__(self, *args, **kwargs):
+        super(Departments, self).__init__(*args, **kwargs)
+
+        
+    def get_queryset(self):
+        return super().get_queryset().filter(author='Roald Dahl')
+    
+
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(Department_Name='asdksajd')
@@ -305,7 +315,9 @@ class Departments(ClusterableModel, index.Indexed):
         index.SearchField('Department_Name'),
     ]
 
-    def __str__(self): return self.Department_Name
+    def __str__(self):
+        print('eco')
+        return self.Department_Name
 
     class Meta:
         verbose_name = 'Department'
@@ -326,17 +338,12 @@ def timeConvert(miliTime):
     return(("%02d:%02d" + setting) % (hours, minutes))
 
 
-class MyFieldPanel(FieldPanel):
+class MyFieldPanel(SnippetChooserPanel):
 
-    # def __init__(self, field_name, choose_college,  *args, **kwargs):
-    #     # self.choose_college = choose_college
-    #     super().__init__(self, field_name, *args,)
-
-    def on_form_bound(self):
+    def on_form_bound(self) -> None:
+        print('ecpo')
+        # self.form.fields["your_field_name"].queryset = self.model.objects.filter(client=request.client)
         super().on_form_bound()
-        choices = Departments.objects.filter(Choose_College_id=10)
-        self.form.fields['choose_department'].queryset = choices
-
 
 @register_snippet
 class Professors(ClusterableModel, index.Indexed):
@@ -445,8 +452,8 @@ class Professors(ClusterableModel, index.Indexed):
             heading='Preferred Time',
         ),
         FieldPanel('status', widget=forms.RadioSelect),
-        SnippetChooserPanel('choose_college'),
-        MyFieldPanel(field_name='choose_department'),
+        MyFieldPanel('choose_college'),
+        MyFieldPanel('choose_department'),
         MultiFieldPanel([
             InlinePanel('professor_parental_key',
                         label='Subject', min_num=1, max_num=4)
@@ -566,34 +573,6 @@ class Rooms(models.Model, index.Indexed):
         verbose_name_plural = 'Rooms'
         ordering = [
             'Room_Name'
-        ]
-
-
-@register_snippet
-class Departments(ClusterableModel, index.Indexed):
-
-    Department_Name = models.CharField(
-        max_length=100,
-        null=True,
-        help_text='Department of Mathematics'
-    )
-
-    panels = [
-        FieldPanel('Department_Name'),
-        # InlinePanel('department_parental_key',
-        #             label='College', min_num=0, max_num=1)
-    ]
-    search_fields = [
-        index.SearchField('Department_Name'),
-    ]
-
-    def __str__(self): return self.Department_Name
-
-    class Meta:
-        verbose_name = 'Department'
-        verbose_name_plural = 'Departments'
-        ordering = [
-            'Department_Name'
         ]
 
 
