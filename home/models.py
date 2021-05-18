@@ -267,17 +267,6 @@ def timeConvert(miliTime):
 
 @register_snippet
 class Departments(ClusterableModel, index.Indexed):
-
-    
-    
-    def __init__(self, *args, **kwargs):
-        super(Departments, self).__init__(*args, **kwargs)
-
-        
-    def get_queryset(self):
-        return super().get_queryset().filter(author='Roald Dahl')
-    
-
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(Department_Name='asdksajd')
@@ -315,10 +304,8 @@ class Departments(ClusterableModel, index.Indexed):
         index.SearchField('Department_Name'),
     ]
 
-    def __str__(self):
-        print('eco')
-        return self.Department_Name
-
+    def __str__(self): return self.Department_Name
+    
     class Meta:
         verbose_name = 'Department'
         verbose_name_plural = 'Departments'
@@ -341,10 +328,8 @@ def timeConvert(miliTime):
 class MyFieldPanel(SnippetChooserPanel):
 
     def on_form_bound(self) -> None:
-        print('ecpo')
-        # self.form.fields["your_field_name"].queryset = self.model.objects.filter(client=request.client)
         super().on_form_bound()
-
+        
 @register_snippet
 class Professors(ClusterableModel, index.Indexed):
     global start_time
@@ -525,7 +510,7 @@ class Sections(models.Model, index.Indexed):
                 FieldPanel('year_level', widget=forms.RadioSelect),
                 FieldPanel('sem', widget=forms.RadioSelect),
             ],
-            heading="College Info",
+            heading="Section Info",
         ),
         SnippetChooserPanel('course_curriculum'),
         SnippetChooserPanel('college'),
@@ -543,12 +528,83 @@ class Sections(models.Model, index.Indexed):
         ]
 
 
+# @register_snippet
+# class BulkSections(models.Model, index.Indexed):
+#     course_name = models.CharField(
+#         max_length=30,
+#         null=True,
+#         help_text='Ex. BSCS'
+#     )
+
+#     year_level = models.CharField(
+#         max_length=200,
+#         default='First',
+#         choices=[('1st Year', '1st Year'), ('2nd Year', '2nd Year'),
+#                  ('3rd Year', '3rd Year'), ('4th Year', '4th Year')]
+#     )
+
+#     sem = models.CharField(
+#         max_length=200,
+#         default='First',
+#         choices=[('First', 'First'), ('Second', 'Second')]
+#     )
+
+#     course_curriculum = models.ForeignKey(
+#         "home.CourseCurriculum",
+#         null=True,
+#         on_delete=models.CASCADE,
+#         help_text='Ex. Computer Science'
+#     )
+
+#     college = models.ForeignKey(
+#         "home.Colleges",
+#         null=True,
+#         on_delete=models.CASCADE,
+#         help_text='Ex. COS or College of Science'
+#     )
+
+#     department = models.ForeignKey(
+#         "home.Departments",
+#         null=True,
+#         on_delete=models.CASCADE,
+#         help_text='Ex. Computer Studies'
+#     )
+
+#     search_fields = [
+#         index.SearchField('section_name'),
+#     ]
+
+#     panels = [
+#         FieldPanel('section_name'),
+#         MultiFieldPanel(
+#             [
+#                 FieldPanel('year_level', widget=forms.RadioSelect),
+#                 FieldPanel('sem', widget=forms.RadioSelect),
+#             ],
+#             heading="Section Info",
+#         ),
+#         SnippetChooserPanel('course_curriculum'),
+#         SnippetChooserPanel('college'),
+#         SnippetChooserPanel('department'),
+#     ]
+
+#     def __str__(self):
+#         return self.section_name
+
+#     class Meta:
+#         verbose_name = 'Section'
+#         verbose_name_plural = 'Sections'
+#         ordering = [
+#             'section_name'
+#         ]
+
+
 @register_snippet
 class Rooms(models.Model, index.Indexed):
     Room_Name = models.CharField(
         max_length=20,
         null=True,
-        help_text='Ex. CS33'
+        help_text='Ex. Room101'
     )
 
     Room_Type = models.CharField(
