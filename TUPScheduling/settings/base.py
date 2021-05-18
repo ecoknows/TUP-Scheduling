@@ -149,7 +149,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-# WAGTAIL_TIME_FORMAT = '%I:%M %p'
+WAGTAIL_TIME_FORMAT = '%I:%M %p'
 
 TIME_INPUT_FORMATS = ('%I:%M %p',)
 

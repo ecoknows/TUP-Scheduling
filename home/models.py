@@ -1,6 +1,7 @@
 from django.db import models
 from django import forms
 from django.db.models.fields import Field
+from django.db.models.fields.related import ForeignKey
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
@@ -327,15 +328,16 @@ def timeConvert(miliTime):
 
 
 class MyFieldPanel(FieldPanel):
-
-    # def __init__(self, field_name, choose_college,  *args, **kwargs):
-    #     # self.choose_college = choose_college
-    #     super().__init__(self, field_name, *args,)
-
     def on_form_bound(self):
         super().on_form_bound()
         choices = Departments.objects.filter(Choose_College_id=10)
         self.form.fields['choose_department'].queryset = choices
+
+
+class MySnippetChooserPanel(SnippetChooserPanel):
+    def on_model_bound(self):
+        super().on_model_bound()
+        self.target_model = self.db_field.remote_field.model
 
 
 @register_snippet
@@ -445,8 +447,10 @@ class Professors(ClusterableModel, index.Indexed):
             heading='Preferred Time',
         ),
         FieldPanel('status', widget=forms.RadioSelect),
-        SnippetChooserPanel('choose_college'),
+
+        MySnippetChooserPanel('choose_college'),
         MyFieldPanel(field_name='choose_department'),
+
         MultiFieldPanel([
             InlinePanel('professor_parental_key',
                         label='Subject', min_num=1, max_num=4)
@@ -466,7 +470,6 @@ class Professors(ClusterableModel, index.Indexed):
 
 @register_snippet
 class Sections(models.Model, index.Indexed):
-
     section_name = models.CharField(
         max_length=30,
         null=True,
@@ -518,7 +521,7 @@ class Sections(models.Model, index.Indexed):
                 FieldPanel('year_level', widget=forms.RadioSelect),
                 FieldPanel('sem', widget=forms.RadioSelect),
             ],
-            heading="College Info",
+            heading="Section Info",
         ),
         SnippetChooserPanel('course_curriculum'),
         SnippetChooserPanel('college'),
@@ -536,12 +539,83 @@ class Sections(models.Model, index.Indexed):
         ]
 
 
+# @register_snippet
+# class BulkSections(models.Model, index.Indexed):
+#     course_name = models.CharField(
+#         max_length=30,
+#         null=True,
+#         help_text='Ex. BSCS'
+#     )
+
+#     year_level = models.CharField(
+#         max_length=200,
+#         default='First',
+#         choices=[('1st Year', '1st Year'), ('2nd Year', '2nd Year'),
+#                  ('3rd Year', '3rd Year'), ('4th Year', '4th Year')]
+#     )
+
+#     sem = models.CharField(
+#         max_length=200,
+#         default='First',
+#         choices=[('First', 'First'), ('Second', 'Second')]
+#     )
+
+#     course_curriculum = models.ForeignKey(
+#         "home.CourseCurriculum",
+#         null=True,
+#         on_delete=models.CASCADE,
+#         help_text='Ex. Computer Science'
+#     )
+
+#     college = models.ForeignKey(
+#         "home.Colleges",
+#         null=True,
+#         on_delete=models.CASCADE,
+#         help_text='Ex. COS or College of Science'
+#     )
+
+#     department = models.ForeignKey(
+#         "home.Departments",
+#         null=True,
+#         on_delete=models.CASCADE,
+#         help_text='Ex. Computer Studies'
+#     )
+
+#     search_fields = [
+#         index.SearchField('section_name'),
+#     ]
+
+#     panels = [
+#         FieldPanel('section_name'),
+#         MultiFieldPanel(
+#             [
+#                 FieldPanel('year_level', widget=forms.RadioSelect),
+#                 FieldPanel('sem', widget=forms.RadioSelect),
+#             ],
+#             heading="Section Info",
+#         ),
+#         SnippetChooserPanel('course_curriculum'),
+#         SnippetChooserPanel('college'),
+#         SnippetChooserPanel('department'),
+#     ]
+
+#     def __str__(self):
+#         return self.section_name
+
+#     class Meta:
+#         verbose_name = 'Section'
+#         verbose_name_plural = 'Sections'
+#         ordering = [
+#             'section_name'
+#         ]
+
+
 @register_snippet
 class Rooms(models.Model, index.Indexed):
     Room_Name = models.CharField(
         max_length=20,
         null=True,
-        help_text='Ex. CS33'
+        help_text='Ex. Room101'
     )
 
     Room_Type = models.CharField(
@@ -566,34 +640,6 @@ class Rooms(models.Model, index.Indexed):
         verbose_name_plural = 'Rooms'
         ordering = [
             'Room_Name'
-        ]
-
-
-@register_snippet
-class Departments(ClusterableModel, index.Indexed):
-
-    Department_Name = models.CharField(
-        max_length=100,
-        null=True,
-        help_text='Department of Mathematics'
-    )
-
-    panels = [
-        FieldPanel('Department_Name'),
-        # InlinePanel('department_parental_key',
-        #             label='College', min_num=0, max_num=1)
-    ]
-    search_fields = [
-        index.SearchField('Department_Name'),
-    ]
-
-    def __str__(self): return self.Department_Name
-
-    class Meta:
-        verbose_name = 'Department'
-        verbose_name_plural = 'Departments'
-        ordering = [
-            'Department_Name'
         ]
 
 
