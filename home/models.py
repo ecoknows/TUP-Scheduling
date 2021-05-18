@@ -1,6 +1,7 @@
 from django.db import models
 from django import forms
 from django.db.models.fields import Field
+from django.db.models.fields.related import ForeignKey
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
@@ -149,11 +150,11 @@ class Subjects(ClusterableModel, index.Indexed):
         choices=[('Laboratory', 'Laboratory'), ('Lecture', 'Lecture')]
     )
 
-    sem = models.CharField(
-        max_length=200,
-        default='First',
-        choices=[('First', 'First'), ('Second', 'Second')]
-    )
+    # sem = models.CharField(
+    #     max_length=200,
+    #     default='First',
+    #     choices=[('First', 'First'), ('Second', 'Second')]
+    # )
 
     hours = models.FloatField(default=1)
 
@@ -170,7 +171,7 @@ class Subjects(ClusterableModel, index.Indexed):
             FieldPanel('units'),
             FieldPanel('hours'),
             FieldPanel('lab_or_lec', widget=forms.RadioSelect),
-            FieldPanel('sem', widget=forms.RadioSelect),
+            # FieldPanel('sem', widget=forms.RadioSelect),
         ], heading='Subject Secondary Information'),
         MultiFieldPanel([
             InlinePanel('subject_parental_key',
@@ -458,7 +459,6 @@ class Professors(ClusterableModel, index.Indexed):
 
 @register_snippet
 class Sections(models.Model, index.Indexed):
-
     section_name = models.CharField(
         max_length=30,
         null=True,
