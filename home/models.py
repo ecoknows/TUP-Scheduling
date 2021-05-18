@@ -150,11 +150,11 @@ class Subjects(ClusterableModel, index.Indexed):
         choices=[('Laboratory', 'Laboratory'), ('Lecture', 'Lecture')]
     )
 
-    sem = models.CharField(
-        max_length=200,
-        default='First',
-        choices=[('First', 'First'), ('Second', 'Second')]
-    )
+    # sem = models.CharField(
+    #     max_length=200,
+    #     default='First',
+    #     choices=[('First', 'First'), ('Second', 'Second')]
+    # )
 
     hours = models.FloatField(default=1)
 
@@ -171,7 +171,7 @@ class Subjects(ClusterableModel, index.Indexed):
             FieldPanel('units'),
             FieldPanel('hours'),
             FieldPanel('lab_or_lec', widget=forms.RadioSelect),
-            FieldPanel('sem', widget=forms.RadioSelect),
+            # FieldPanel('sem', widget=forms.RadioSelect),
         ], heading='Subject Secondary Information'),
         MultiFieldPanel([
             InlinePanel('subject_parental_key',
