@@ -1,7 +1,6 @@
 from django.db import models
 from django import forms
 from django.db.models.fields import Field
-from django.db.models.fields.related import ForeignKey
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
@@ -268,7 +267,6 @@ def timeConvert(miliTime):
 
 @register_snippet
 class Departments(ClusterableModel, index.Indexed):
-
     def get_queryset(self):
         qs = super().get_queryset()
         return qs.filter(Department_Name='asdksajd')
@@ -307,7 +305,7 @@ class Departments(ClusterableModel, index.Indexed):
     ]
 
     def __str__(self): return self.Department_Name
-
+    
     class Meta:
         verbose_name = 'Department'
         verbose_name_plural = 'Departments'
@@ -327,19 +325,11 @@ def timeConvert(miliTime):
     return(("%02d:%02d" + setting) % (hours, minutes))
 
 
-class MyFieldPanel(FieldPanel):
-    def on_form_bound(self):
+class MyFieldPanel(SnippetChooserPanel):
+
+    def on_form_bound(self) -> None:
         super().on_form_bound()
-        choices = Departments.objects.filter(Choose_College_id=10)
-        self.form.fields['choose_department'].queryset = choices
-
-
-class MySnippetChooserPanel(SnippetChooserPanel):
-    def on_model_bound(self):
-        super().on_model_bound()
-        self.target_model = self.db_field.remote_field.model
-
-
+        
 @register_snippet
 class Professors(ClusterableModel, index.Indexed):
     global start_time
@@ -447,10 +437,8 @@ class Professors(ClusterableModel, index.Indexed):
             heading='Preferred Time',
         ),
         FieldPanel('status', widget=forms.RadioSelect),
-
-        MySnippetChooserPanel('choose_college'),
-        MyFieldPanel(field_name='choose_department'),
-
+        MyFieldPanel('choose_college'),
+        MyFieldPanel('choose_department'),
         MultiFieldPanel([
             InlinePanel('professor_parental_key',
                         label='Subject', min_num=1, max_num=4)
@@ -470,6 +458,7 @@ class Professors(ClusterableModel, index.Indexed):
 
 @register_snippet
 class Sections(models.Model, index.Indexed):
+
     section_name = models.CharField(
         max_length=30,
         null=True,
