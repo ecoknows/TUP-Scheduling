@@ -1,7 +1,21 @@
+<style>
+	.parent{
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
 
+	.child{
+		width: 100%;
+		height: 100%;
+		overflow-y: scroll;
+		padding-right: 17px; /* Increase/decrease this value for cross-browser compatibility */
+		box-sizing: content-box; /* So the width will be 100% + 17px */
+	}
+</style>
 
-<section id='section-container' class="flex-1 py-8 " style="width: 200px;padding-left: 15%">
-	<div > 
+<section id='section-container' class="flex-1 py-8 parent" style="width: 200px;padding-left: 15%">
+	<div class="child"> 
 		{% for section in section_entries %}
 			<div  class="flex flex-col pb-2 draggable-paper section-tile" style="line-height: 1; width: 150px; height: 180px;">
 				<div id='paper-head' class="flex items-center justify-center" 
