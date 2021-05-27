@@ -47,15 +47,6 @@ class CourseCurriculumAdmin(ModelAdmin):
                      'department__Department_Name', 'curriculum_year')
     list_filter = ('department', 'curriculum_year')
 
-
-class ProfessorsAdmin(ModelAdmin):
-    model = Professors
-    menu_label = 'Professors'
-    list_display = ('full_name', 'preferred_time', 'status')
-    list_filter = ('status',)
-    search_fields = ('first_name', 'middle_name', 'last_name', 'full_name',)
-
-
 class SectionView(CreateView):
     def sample(self):
         if 'test' in self.request.GET:
