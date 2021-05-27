@@ -35,7 +35,7 @@ class BaseAccount(ClusterableModel, index.Indexed):
         help_text='Ex. John'
     )
     middle_name = models.CharField(
-        max_length=300,
+        max_length=1,
         null=True,
         help_text='Ex. Michael'
     )
@@ -49,6 +49,15 @@ class BaseAccount(ClusterableModel, index.Indexed):
         on_delete=models.SET_NULL,
         null=True,
     )
+    
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
+
+    def user_code(self):
+        user_pk = self.pk
+        year = year = str(self.created_at.year - 2000)
+
+        return 'TUPM' + '-' + year + '-' + user_pk
 
     basic_info_panel = [
         MultiFieldPanel([
