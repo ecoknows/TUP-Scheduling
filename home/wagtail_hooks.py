@@ -1,18 +1,19 @@
 from wagtail.contrib.modeladmin.options import (
-    ModelAdmin, ModelAdminGroup, modeladmin_register)
+    ModelAdmin,
+    ModelAdminGroup,
+    modeladmin_register
+)
 from .models import (
     Subjects,
     CourseCurriculum,
-    Professors,
     Sections,
     Rooms,
     Departments,
     Colleges,
 
-    StudentsAccount,
-    ProfessorsAccount,
-    AdminsAccount,
+)
 
+from schedule.models import (
     SectionsSchedule,
     ProfessorsSchedule,
     RoomsSchedule,
@@ -46,14 +47,6 @@ class CourseCurriculumAdmin(ModelAdmin):
     search_fields = ('course_name', 'college__college_name',
                      'department__Department_Name', 'starting_year', 'ending_year')
     list_filter = ('college', 'department', 'starting_year', 'ending_year')
-
-
-class ProfessorsAdmin(ModelAdmin):
-    model = Professors
-    menu_label = 'Professors'
-    list_display = ('full_name', 'preferred_time', 'status')
-    list_filter = ('status',)
-    search_fields = ('first_name', 'middle_name', 'last_name', 'full_name',)
 
 
 class SectionsAdmin(ModelAdmin):
@@ -124,46 +117,17 @@ class AdminGroup(ModelAdminGroup):
     menu_label = 'Admin'
     menu_icon = 'user'
     menu_order = 100
-    items = (SubjectsAdmin, CourseCurriculumAdmin, ProfessorsAdmin,
-             SectionsAdmin, RoomsAdmin, DepartmentsAdmin, CollegesAdmin)
+    items = (
+        SubjectsAdmin,
+        CourseCurriculumAdmin,
+        SectionsAdmin,
+        RoomsAdmin,
+        DepartmentsAdmin,
+        CollegesAdmin
+    )
 
 
 modeladmin_register(AdminGroup)
-
-
-class StudentsAccount(ModelAdmin):
-    model = StudentsAccount
-    menu_label = 'Students'
-    # list_display =
-    # list_filter =
-    # search_fields =
-
-
-class ProfessorsAccount(ModelAdmin):
-    model = ProfessorsAccount
-    menu_label = 'Professors'
-    # list_display =
-    # list_filter =
-    # search_fields =
-
-
-class AdminsAccount(ModelAdmin):
-    model = AdminsAccount
-    menu_label = 'Admins'
-    # list_display =
-    # list_filter =
-    # search_fields =
-
-
-class AccountsGroup(ModelAdminGroup):
-    menu_label = 'Accounts'
-    menu_icon = 'user'
-    menu_order = 100
-    items = (StudentsAccount, ProfessorsAccount, AdminsAccount)
-
-
-modeladmin_register(AccountsGroup)
-
 
 class SectionsSchedule(ModelAdmin):
     model = SectionsSchedule

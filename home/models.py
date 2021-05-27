@@ -29,6 +29,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 import datetime
 from .__init__ import _DAY, _TIME
+from accounts.models import Professors
 
 
 class HomePage(Page):
@@ -40,11 +41,6 @@ class HomePage(Page):
     def get_context(self, request):
         context = super().get_context(request)
 
-        # professor_entries = Professors.objects.child_of(self).live()
-
-        # tag = request.GET.get('tag')
-        # if tag:
-        #     blog_entries = blog_entries.filter(tags__name=tag)
         context['section_entries'] = Sections.objects.all()
         context['professor_entries'] = Professors.objects.all()
         return context
@@ -56,8 +52,9 @@ class ProfessorOrderable(Orderable):
         related_name="professor_parental_key",
     )
     professor = models.ForeignKey(
-        "home.Professors",
+        "accounts.Professors",
         on_delete=models.CASCADE,
+        null=True
     )
 
     panels = [
@@ -83,7 +80,7 @@ class RoomOrderable(Orderable):
 class SubjectsOrderable(Orderable):
     subject_model = ParentalKey(
         "home.Subjects", related_name="subject_parental_key", null=True)
-    professor_model = ParentalKey("home.Professors",
+    professor_model = ParentalKey("accounts.Professors",
                                   related_name="professor_parental_key", null=True)
     course_curriculum_model = ParentalKey("home.CourseCurriculum",
                                           related_name="course_curriculum_parental_key", null=True)
@@ -255,17 +252,6 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
         ]
 
 
-def timeConvert(miliTime):
-    hours = miliTime.strftime('%H')
-    minutes = miliTime.strftime('%M')
-    hours, minutes = int(hours), int(minutes)
-    setting = " A.M."
-    if hours > 12:
-        setting = " P.M."
-        hours -= 12
-    return(("%02d:%02d" + setting) % (hours, minutes))
-
-
 @register_snippet
 class Departments(ClusterableModel, index.Indexed):
     def get_queryset(self):
@@ -331,132 +317,6 @@ class MyFieldPanel(SnippetChooserPanel):
     def on_form_bound(self) -> None:
         super().on_form_bound()
         
-@register_snippet
-class Professors(ClusterableModel, index.Indexed):
-    global start_time
-
-    def validate_start_time(value):
-        global start_time
-        start_time = value
-        if value < datetime.time(7, 00, 00):
-            time = timeConvert(value)
-            raise ValidationError(
-                _('%(time)s is invalid'),
-                params={'time': time},
-            )
-
-    def validate_end_time(value):
-        print(start_time, value)
-        if value > datetime.time(19, 00, 00):
-            time = timeConvert(value)
-            raise ValidationError(
-                _('%(time)s is invalid'),
-                params={'time': time},
-            )
-        elif value <= start_time:
-            raise ValidationError(
-                _('End time must be greater than start time'),
-            )
-
-    first_name = models.CharField(
-        max_length=300,
-        null=True,
-        help_text='Ex. John'
-    )
-    middle_name = models.CharField(
-        max_length=300,
-        null=True,
-        help_text='Ex. Michael'
-    )
-    last_name = models.CharField(
-        max_length=300,
-        null=True,
-        help_text='Ex. Doe'
-    )
-
-    def full_name(self):
-        return self.last_name + ", " + self.first_name + " " + self.middle_name[0] + "."
-
-    preferred_start_time = models.TimeField(
-        auto_now=False,
-        auto_now_add=False,
-        null=True,
-        help_text='At least 7:00 A.M.',
-        blank=True,
-        validators=[validate_start_time],
-        default=' 7:00 AM',
-    )
-    preferred_end_time = models.TimeField(
-        auto_now=False,
-        auto_now_add=False,
-        null=True,
-        help_text='At most 7:00 P.M.',
-        blank=True,
-        validators=[validate_end_time],
-        default=' 7:00 PM',
-    )
-
-    def preferred_time(self):
-        return str(timeConvert(self.preferred_start_time)) + " - " + str(timeConvert(self.preferred_end_time))
-
-    status = models.CharField(
-        max_length=200,
-        default='Regular',
-        choices=[('Regular', 'Regular'), ('Part-time', 'Part-time')]
-    )
-
-    choose_college = models.ForeignKey(
-        'home.Colleges',
-        null=True,
-        blank=False,
-        on_delete=models.SET_NULL,
-        related_name='+',
-    )
-
-    choose_department = models.ForeignKey(
-        'home.Departments',
-        null=True,
-        blank=False,
-        on_delete=models.SET_NULL,
-        related_name='+',
-    )
-
-    panels = [
-        MultiFieldPanel(
-            [
-                FieldPanel('first_name'),
-                FieldPanel('middle_name'),
-                FieldPanel('last_name'),
-            ],
-            heading="Full Name",
-        ),
-        MultiFieldPanel(
-            [
-                FieldPanel('preferred_start_time',),
-                FieldPanel('preferred_end_time',),
-            ],
-            heading='Preferred Time',
-        ),
-        FieldPanel('status', widget=forms.RadioSelect),
-        MyFieldPanel('choose_college'),
-        MyFieldPanel('choose_department'),
-        MultiFieldPanel([
-            InlinePanel('professor_parental_key',
-                        label='Subject', min_num=1, max_num=4)
-        ], heading='Preferred Subjects')
-    ]
-
-    def __str__(self):
-        return self.last_name
-
-    class Meta:
-        verbose_name = 'Professor'
-        verbose_name_plural = 'Professors'
-        ordering = [
-            'last_name'
-        ]
-
-
 @register_snippet
 class Sections(models.Model, index.Indexed):
     section_name = models.CharField(
@@ -657,32 +517,3 @@ class Colleges(ClusterableModel, index.Indexed):
             'college_name'
         ]
 
-
-@register_snippet
-class StudentsAccount(models.Model):
-    pass
-
-
-@register_snippet
-class ProfessorsAccount(models.Model):
-    pass
-
-
-@register_snippet
-class AdminsAccount(models.Model):
-    pass
-
-
-@register_snippet
-class SectionsSchedule(models.Model):
-    pass
-
-
-@register_snippet
-class ProfessorsSchedule(models.Model):
-    pass
-
-
-@register_snippet
-class RoomsSchedule(models.Model):
-    pass
