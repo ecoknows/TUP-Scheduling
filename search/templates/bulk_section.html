@@ -53,15 +53,8 @@
 
     {% else %}
         {% include "wagtailadmin/shared/header.html" with title='Bulk' subtitle='Sections' icon=view.header_icon tabbed=1 merged=1 %}
-        
-        <form action="{{ view.create_url }}?test=1" method="post">
-         {% csrf_token %}
-            <label for="your_name">Your name: </label>
-            <input id="your_name" type="text" name="your_name" value="{{ current_name }}">
-            <input type="submit" value="OK">
-      </form>
-        <!-- <form action="{{ view.create_url }}?test=1" method="post">
-         {% csrf_token %}
+
+        <form action="http://localhost:8000/admin/home/sections/create/?test=1" method="POST" novalidate="">
          <input type="hidden" name="csrfmiddlewaretoken" value="Npiv0xYhqkeJjoNs8aIZSPubbRqdC0NgJloO7N3xF4g9axSA7VWGs2qWhVqcPS4f">
          <div class="tab-nav merged">
             <ul data-tab-nav="" role="tablist" data-current-tab="main">
@@ -522,8 +515,16 @@
                </li>
             </ul>
          </footer>
+<<<<<<< HEAD
       </form> -->
         
+=======
+      </form>
+        
+      <script>
+
+      </script>
+>>>>>>> feature/polish-cms
         
     {% endif %}
 {% endblock %}
