@@ -17,8 +17,6 @@ from schedule.models import (
     SectionsSchedule,
     ProfessorsSchedule,
     RoomsSchedule,
-
-    BulkSections,
 )
 
 from wagtail.core import hooks
