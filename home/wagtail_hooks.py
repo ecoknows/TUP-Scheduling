@@ -54,25 +54,17 @@ class SectionView(CreateView):
         else:
             return 0
 
-    # def dispatch(self, request, *args, **kwargs):
-    #     if self.is_pagemodel:
-    #         user = request.user
-    #         parents = self.permission_helper.get_valid_parent_pages(user)
-    #         parent_count = parents.count()
+    def form_valid(self, form):
+        print('fsadsad')
+        return super().form_valid(form)
 
-    #         # There's only one available parent for this page type for this
-    #         # user, so we send them along with that as the chosen parent page
-    #         if parent_count == 1:
-    #             parent = parents.get()
-    #             parent_pk = quote(parent.pk)
-    #             return redirect(self.url_helper.get_action_url(
-    #                 'add', self.app_label, self.model_name, parent_pk))
+    def form_invalid(self, form):
+        print('asdsadsa')
+        return super().form_invalid(form)
 
-    #         # The page can be added in multiple places, so redirect to the
-    #         # choose_parent view so that the parent can be specified
-    #         return redirect(self.url_helper.get_action_url('choose_parent'))
-    #     return super().dispatch(request, *args, **kwargs)
 
+    def __init__(self, model_admin):
+        super().__init__(model_admin)
 
 class SectionsAdmin(ModelAdmin):
     create_template_name = 'bulk_section.html'

@@ -16,6 +16,8 @@ from wagtail.admin.edit_handlers import (
 
 from django.core.exceptions import ValidationError
 
+import datetime
+
 def timeConvert(miliTime):
     hours = miliTime.strftime('%H')
     minutes = miliTime.strftime('%M')
@@ -57,7 +59,7 @@ class BaseAccount(ClusterableModel, index.Indexed):
         user_pk = self.pk
         year = year = str(self.created_at.year - 2000)
 
-        return 'TUPM' + '-' + year + '-' + user_pk
+        return 'TUPM' + '-' + year + '-' + str(user_pk)
 
     basic_info_panel = [
         MultiFieldPanel([
@@ -68,7 +70,7 @@ class BaseAccount(ClusterableModel, index.Indexed):
     ]
 
     def full_name(self):
-        return self.last_name + ", " + self.first_name + " " + self.middle_name[0] + "."
+        return self.last_name + ", " + self.first_name + " " + self.middle_name + "."
 
     class Meta:
         abstract = True
@@ -79,6 +81,9 @@ class Students(BaseAccount):
     panels = BaseAccount.basic_info_panel + [
         SnippetChooserPanel('section', heading='Pick what section'),
     ]
+
+    def __str__(self):
+        return self.full_name()
 
     class Meta:
         verbose_name='Student'
@@ -111,6 +116,7 @@ class Professors(BaseAccount):
             raise ValidationError(
                 _('End time must be greater than start time'),
             )
+            
 
     preferred_start_time = models.TimeField(
         auto_now=False,
@@ -179,7 +185,7 @@ class Professors(BaseAccount):
 
 
     def __str__(self):
-        return self.last_name
+        return self.full_name()
 
     class Meta:
         verbose_name = 'Professor'
