@@ -1,9 +1,9 @@
+from django.http import request
 from wagtail.contrib.modeladmin.options import (
-    ModelAdmin,
-    ModelAdminGroup,
-    modeladmin_register
-)
+    ModelAdmin, ModelAdminGroup, modeladmin_register)
+from wagtail.contrib.modeladmin.views import CreateView
 from .models import (
+    BulkSections,
     Subjects,
     CourseCurriculum,
     Sections,
@@ -17,6 +17,8 @@ from schedule.models import (
     SectionsSchedule,
     ProfessorsSchedule,
     RoomsSchedule,
+
+    BulkSections,
 )
 
 from wagtail.core import hooks
@@ -42,15 +44,59 @@ class SubjectsAdmin(ModelAdmin):
 class CourseCurriculumAdmin(ModelAdmin):
     model = CourseCurriculum
     menu_label = 'Course Curriculum'
-    list_display = ('course_name', 'college', 'department',
-                    'starting_year', 'ending_year')
+    list_display = ('course_name', 'department',
+                    'curriculum_year')
     search_fields = ('course_name', 'college__college_name',
-                     'department__Department_Name', 'starting_year', 'ending_year')
-    list_filter = ('college', 'department', 'starting_year', 'ending_year')
+                     'department__Department_Name', 'curriculum_year')
+    list_filter = ('department', 'curriculum_year')
+
+
+class ProfessorsAdmin(ModelAdmin):
+    model = Professors
+    menu_label = 'Professors'
+    list_display = ('full_name', 'preferred_time', 'status')
+    list_filter = ('status',)
+    search_fields = ('first_name', 'middle_name', 'last_name', 'full_name',)
+
+
+class SectionView(CreateView):
+    def sample(self):
+        if 'test' in self.request.GET:
+            return self.request.GET['test']
+        else:
+            return 0
+
+    def trial(self, text):
+        # section = Sections(section_name='BSCSAAA', year_level='1st Year',
+        #                    sem='first', course_curriculum_id=2, department_id=8)
+        # section.save()
+        print(text)
+
+        return
+    # def dispatch(self, request, *args, **kwargs):
+    #     if self.is_pagemodel:
+    #         user = request.user
+    #         parents = self.permission_helper.get_valid_parent_pages(user)
+    #         parent_count = parents.count()
+
+    #         # There's only one available parent for this page type for this
+    #         # user, so we send them along with that as the chosen parent page
+    #         if parent_count == 1:
+    #             parent = parents.get()
+    #             parent_pk = quote(parent.pk)
+    #             return redirect(self.url_helper.get_action_url(
+    #                 'add', self.app_label, self.model_name, parent_pk))
+
+    #         # The page can be added in multiple places, so redirect to the
+    #         # choose_parent view so that the parent can be specified
+    #         return redirect(self.url_helper.get_action_url('choose_parent'))
+    #     return super().dispatch(request, *args, **kwargs)
 
 
 class SectionsAdmin(ModelAdmin):
+    create_template_name = 'bulk_section.html'
     index_template_name = 'sections.html'
+    create_view_class = SectionView
 
     model = Sections
     menu_label = 'Sections'
@@ -59,15 +105,12 @@ class SectionsAdmin(ModelAdmin):
         'year_level',
         'sem',
         'course_curriculum',
-        'college',
         'department',
     )
     list_filter = (
-        'section_name',
         'year_level',
         'sem',
         'course_curriculum',
-        'college',
         'department',
     )
     search_fields = (
@@ -80,12 +123,37 @@ class SectionsAdmin(ModelAdmin):
     )
 
 
+class BulkSectionsAdmin(ModelAdmin):
+    model = BulkSections
+    menu_label = 'Bulk Section'
+    list_display = (
+        'course_curriculum__course_name',
+    )
+    list_filter = (
+        'course_curriculum__course_name',
+    )
+    search_fields = (
+        'course_curriculum__course_name',
+    )
+
+
+modeladmin_register(BulkSectionsAdmin)
+
+
 class RoomsAdmin(ModelAdmin):
     model = Rooms
     menu_label = 'Rooms'
-    # list_display =
-    # list_filter =
-    # search_fields =
+    list_display = (
+        'Room_Name',
+        'Room_Type',
+    )
+    list_filter = (
+        'Room_Type',
+    )
+    search_fields = (
+        'Room_Name',
+        'Room_Type',
+    )
 
 
 class DepartmentsAdmin(ModelAdmin):
@@ -109,7 +177,6 @@ class CollegesAdmin(ModelAdmin):
     model = Colleges
     menu_label = 'Colleges'
     list_display = ('college_name',)
-    list_filter = ('college_name',)
     search_fields = ('college_name',)
 
 
@@ -161,3 +228,9 @@ class SchedulesGroup(ModelAdminGroup):
 
 
 modeladmin_register(SchedulesGroup)
+
+
+@hooks.register("construct_main_menu")
+def hide_workflows(request, menu_items):
+    menu_items[:] = [
+        item for item in menu_items if item.name != "bulk-section"]
