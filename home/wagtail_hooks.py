@@ -3,6 +3,7 @@ from wagtail.contrib.modeladmin.options import (
     ModelAdmin, ModelAdminGroup, modeladmin_register)
 from wagtail.contrib.modeladmin.views import CreateView
 from .models import (
+    BulkSections,
     Subjects,
     CourseCurriculum,
     Professors,
@@ -18,6 +19,8 @@ from .models import (
     SectionsSchedule,
     ProfessorsSchedule,
     RoomsSchedule,
+
+    BulkSections,
 )
 
 from wagtail.core import hooks
@@ -65,6 +68,13 @@ class SectionView(CreateView):
         else:
             return 0
 
+    def trial(self, text):
+        # section = Sections(section_name='BSCSAAA', year_level='1st Year',
+        #                    sem='first', course_curriculum_id=2, department_id=8)
+        # section.save()
+        print(text)
+
+        return
     # def dispatch(self, request, *args, **kwargs):
     #     if self.is_pagemodel:
     #         user = request.user
@@ -100,7 +110,6 @@ class SectionsAdmin(ModelAdmin):
         'department',
     )
     list_filter = (
-        'section_name',
         'year_level',
         'sem',
         'course_curriculum',
@@ -116,12 +125,37 @@ class SectionsAdmin(ModelAdmin):
     )
 
 
+class BulkSectionsAdmin(ModelAdmin):
+    model = BulkSections
+    menu_label = 'Bulk Section'
+    list_display = (
+        'course_curriculum__course_name',
+    )
+    list_filter = (
+        'course_curriculum__course_name',
+    )
+    search_fields = (
+        'course_curriculum__course_name',
+    )
+
+
+modeladmin_register(BulkSectionsAdmin)
+
+
 class RoomsAdmin(ModelAdmin):
     model = Rooms
     menu_label = 'Rooms'
-    # list_display =
-    # list_filter =
-    # search_fields =
+    list_display = (
+        'Room_Name',
+        'Room_Type',
+    )
+    list_filter = (
+        'Room_Type',
+    )
+    search_fields = (
+        'Room_Name',
+        'Room_Type',
+    )
 
 
 class DepartmentsAdmin(ModelAdmin):
@@ -145,7 +179,6 @@ class CollegesAdmin(ModelAdmin):
     model = Colleges
     menu_label = 'Colleges'
     list_display = ('college_name',)
-    list_filter = ('college_name',)
     search_fields = ('college_name',)
 
 
@@ -226,3 +259,9 @@ class SchedulesGroup(ModelAdminGroup):
 
 
 modeladmin_register(SchedulesGroup)
+
+
+@hooks.register("construct_main_menu")
+def hide_workflows(request, menu_items):
+    menu_items[:] = [
+        item for item in menu_items if item.name != "bulk-section"]
