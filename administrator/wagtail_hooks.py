@@ -85,7 +85,6 @@ class SectionView(CreateView):
         super().__init__(model_admin)
 
 class SectionsAdmin(ModelAdmin):
-    create_template_name = 'bulk_section.html'
     index_template_name = 'sections.html'
     create_view_class = SectionView
 
