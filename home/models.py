@@ -29,6 +29,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 import datetime
 from .__init__ import _DAY, _TIME
+from accounts.models import Professors
 
 
 class HomePage(Page):
@@ -40,11 +41,6 @@ class HomePage(Page):
     def get_context(self, request):
         context = super().get_context(request)
 
-        # professor_entries = Professors.objects.child_of(self).live()
-
-        # tag = request.GET.get('tag')
-        # if tag:
-        #     blog_entries = blog_entries.filter(tags__name=tag)
         context['section_entries'] = Sections.objects.all()
         context['professor_entries'] = Professors.objects.all()
         context['room_entries'] = Rooms.objects.all()
@@ -57,8 +53,9 @@ class ProfessorOrderable(Orderable):
         related_name="professor_parental_key",
     )
     professor = models.ForeignKey(
-        "home.Professors",
+        "accounts.Professors",
         on_delete=models.CASCADE,
+        null=True
     )
 
     panels = [
@@ -84,7 +81,7 @@ class RoomOrderable(Orderable):
 class SubjectsOrderable(Orderable):
     subject_model = ParentalKey(
         "home.Subjects", related_name="subject_parental_key", null=True)
-    professor_model = ParentalKey("home.Professors",
+    professor_model = ParentalKey("accounts.Professors",
                                   related_name="professor_parental_key", null=True)
     course_curriculum_model1 = ParentalKey("home.CourseCurriculum",
                                            related_name="first_year_first_sem", null=True)
@@ -248,18 +245,49 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
         InlinePanel('second_year_second_sem',
                     label='Subject', min_num=1, max_num=10, heading="Second Sem"),
     ]
+
     third_year = [
-        InlinePanel('third_year_first_sem',
-                    label='Subject', min_num=1, max_num=10, heading="First Sem"),
-        InlinePanel('third_year_second_sem',
-                    label='Subject', min_num=1, max_num=10, heading="Second Sem"),
+        InlinePanel(
+            'third_year_first_sem',
+            label='Subject',
+            min_num=1, 
+            max_num=10, 
+            heading="First Sem"
+        ),
+        InlinePanel(
+            'third_year_second_sem',
+            label='Subject', 
+            min_num=1, 
+            max_num=10, 
+            heading="Second Sem"
+        ),
     ]
     fourth_year = [
-        InlinePanel('fourth_year_first_sem',
-                    label='Subject', min_num=1, max_num=10, heading="First Sem"),
-        InlinePanel('fourth_year_second_sem',
-                    label='Subject', min_num=1, max_num=10, heading="Second Sem"),
+        InlinePanel(
+            'fourth_year_first_sem',
+            label='Subject',
+            min_num=1,
+            max_num=10,
+            heading="First Sem"
+        ),
+        InlinePanel(
+            'fourth_year_second_sem',
+            label='Subject',
+            min_num=1,
+            max_num=10,
+            heading="Second Sem"
+        ),
     ]
+
+    edit_handler = TabbedInterface(
+        [
+            ObjectList(panels, heading='Main'),
+            ObjectList(first_year, heading='1st Year'),
+            ObjectList(second_year, heading='2nd Year'),
+            ObjectList(third_year, heading='3rd Year'),
+            ObjectList(fourth_year, heading='4th Year'),
+        ]
+    )
 
     edit_handler = TabbedInterface(
         [
@@ -280,17 +308,6 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
         ordering = [
             'course_name'
         ]
-
-
-def timeConvert(miliTime):
-    hours = miliTime.strftime('%H')
-    minutes = miliTime.strftime('%M')
-    hours, minutes = int(hours), int(minutes)
-    setting = " A.M."
-    if hours > 12:
-        setting = " P.M."
-        hours -= 12
-    return(("%02d:%02d" + setting) % (hours, minutes))
 
 
 @register_snippet
@@ -542,121 +559,128 @@ class Sections(models.Model, index.Indexed):
         ]
 
 
-# """Bulk Section"""
+"""Bulk Section"""
 
 
-# @register_snippet
-# class Sections(models.Model, index.Indexed):
-#     section_name = models.CharField(
-#         max_length=30,
-#         null=True,
-#         help_text='Ex. BSCS-3A-NS'
-#     )
-#     year_level = models.CharField(
-#         max_length=200,
-#         default='First',
-#         choices=[('1st Year', '1st Year'), ('2nd Year', '2nd Year'),
-#                  ('3rd Year', '3rd Year'), ('4th Year', '4th Year')]
-#     )
-#     course_name = models.CharField(
-#         max_length=30,
-#         null=True,
-#         help_text='Ex. BSCS'
-#     )
+@register_snippet
+class BulkSections(models.Model, index.Indexed):
+    sem = models.CharField(
+        max_length=200,
+        default='First',
+        choices=[('First', 'First'), ('Second', 'Second')]
+    )
 
-#     sem = models.CharField(
-#         max_length=200,
-#         default='First',
-#         choices=[('First', 'First'), ('Second', 'Second')]
-#     )
+    course_curriculum = models.ForeignKey(
+        "home.CourseCurriculum",
+        null=True,
+        on_delete=models.CASCADE,
+        help_text='Ex. Computer Science'
+    )
 
-#     course_curriculum = models.ForeignKey(
-#         "home.CourseCurriculum",
-#         null=True,
-#         on_delete=models.CASCADE,
-#         help_text='Ex. Computer Science'
-#     )
+    search_fields = [
+        index.SearchField('section_name'),
+    ]
 
-#     department = models.ForeignKey(
-#         "home.Departments",
-#         null=True,
-#         on_delete=models.CASCADE,
-#         help_text='Ex. Computer Studies'
-#     )
+    panels = [
+        FieldPanel('sem', widget=forms.RadioSelect),
+        SnippetChooserPanel('course_curriculum'),
+    ]
 
-#     search_fields = [
-#         index.SearchField('section_name'),
-#     ]
+    first_year = models.IntegerField(
+        blank=False, null=True, default=0)
+    second_year = models.IntegerField(
+        blank=False, null=True, default=0)
+    third_year = models.IntegerField(
+        blank=False, null=True, default=0)
+    fourth_year = models.IntegerField(
+        blank=False, null=True, default=0)
 
-#     panels = [
-#         FieldPanel('course_name'),
-#         FieldPanel('sem', widget=forms.RadioSelect),
-#         SnippetChooserPanel('course_curriculum'),
-#         SnippetChooserPanel('department'),
-#     ]
+    ns_first_year = models.IntegerField(
+        blank=False, null=True, default=0, verbose_name="First Year")
+    ns_second_year = models.IntegerField(
+        blank=False, null=True, default=0, verbose_name="Second Year")
+    ns_third_year = models.IntegerField(
+        blank=False, null=True, default=0, verbose_name="Third Year")
+    ns_fourth_year = models.IntegerField(
+        blank=False, null=True, default=0, verbose_name="Fourth Year")
 
-#     first_year = models.CharField(
-#         max_length=256, blank=False, null=True, default=0)
-#     second_year = models.CharField(
-#         max_length=256, blank=False, null=True, default=0)
-#     third_year = models.CharField(
-#         max_length=256, blank=False, null=True, default=0)
-#     fourth_year = models.CharField(
-#         max_length=256, blank=False, null=True, default=0)
+    sections = [
+        MultiFieldPanel([
+            FieldPanel('first_year', widget=forms.NumberInput(
+                attrs={'placeholder': '1st Year'})),
+            FieldPanel('second_year', widget=forms.NumberInput(
+                attrs={'placeholder': '2nd Year'})),
+            FieldPanel('third_year', widget=forms.NumberInput(
+                attrs={'placeholder': '3rd Year'})),
+            FieldPanel('fourth_year', widget=forms.NumberInput(
+                attrs={'placeholder': '4th Year'})),
+        ], heading='Stem'),
+        MultiFieldPanel([
+            FieldPanel('ns_first_year', widget=forms.NumberInput(
+                attrs={'placeholder': '1st Year'})),
+            FieldPanel('ns_second_year', widget=forms.NumberInput(
+                attrs={'placeholder': '2nd Year'})),
+            FieldPanel('ns_third_year', widget=forms.NumberInput(
+                attrs={'placeholder': '3rd Year'})),
+            FieldPanel('ns_fourth_year', widget=forms.NumberInput(
+                attrs={'placeholder': '4th Year'})),
+        ], heading='Non-Stem'),
+    ]
 
-#     ns_first_year = models.CharField(
-#         max_length=256, blank=False, null=True, default=0, verbose_name="First Year")
-#     ns_second_year = models.CharField(
-#         max_length=256, blank=False, null=True, default=0, verbose_name="Second Year")
-#     ns_third_year = models.CharField(
-#         max_length=256, blank=False, null=True, default=0, verbose_name="Third Year")
-#     ns_fourth_year = models.CharField(
-#         max_length=256, blank=False, null=True, default=0, verbose_name="Fourth Year")
+    edit_handler = TabbedInterface(
+        [
+            ObjectList(panels, heading='Main'),
+            ObjectList(sections, heading='Number of Sections'),
+        ]
+    )
 
-#     sections = [
-#         MultiFieldPanel([
-#             FieldPanel('first_year', widget=forms.NumberInput(
-#                 attrs={'placeholder': '1st Year'})),
-#             FieldPanel('second_year', widget=forms.NumberInput(
-#                 attrs={'placeholder': '2nd Year'})),
-#             FieldPanel('third_year', widget=forms.NumberInput(
-#                 attrs={'placeholder': '3rd Year'})),
-#             FieldPanel('fourth_year', widget=forms.NumberInput(
-#                 attrs={'placeholder': '4th Year'})),
-#         ], heading='Stem'),
-#         MultiFieldPanel([
-#             FieldPanel('ns_first_year', widget=forms.NumberInput(
-#                 attrs={'placeholder': '1st Year'})),
-#             FieldPanel('ns_second_year', widget=forms.NumberInput(
-#                 attrs={'placeholder': '2nd Year'})),
-#             FieldPanel('ns_third_year', widget=forms.NumberInput(
-#                 attrs={'placeholder': '3rd Year'})),
-#             FieldPanel('ns_fourth_year', widget=forms.NumberInput(
-#                 attrs={'placeholder': '4th Year'})),
-#         ], heading='Non-Stem'),
-#     ]
+    def __str__(self):
+        return self.course_curriculum.course_name
 
-#     edit_handler = TabbedInterface(
-#         [
-#             ObjectList(panels, heading='Main'),
-#             ObjectList(sections, heading='Number of Sections'),
-#         ]
-#     )
+    def save(self, *args, **kwargs):
+        Sections.objects.filter(
+            course_curriculum_id=self.course_curriculum.pk).delete()
 
-#     def save(self, *args, **kwargs):
+        for i in range(self.first_year):
+            section = Sections(
+                section_name=self.course_curriculum.course_name + "-1" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="1st Year", course_curriculum_id=self.course_curriculum.pk)
+            section.save()
+        for i in range(self.second_year):
+            section = Sections(
+                section_name=self.course_curriculum.course_name + "-2" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="2nd Year", course_curriculum_id=self.course_curriculum.pk)
+            section.save()
+        for i in range(self.third_year):
+            section = Sections(
+                section_name=self.course_curriculum.course_name + "-3" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="3rd Year", course_curriculum_id=self.course_curriculum.pk)
+            section.save()
+        for i in range(self.fourth_year):
+            section = Sections(
+                section_name=self.course_curriculum.course_name + "-4" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="4th Year", course_curriculum_id=self.course_curriculum.pk)
+            section.save()
 
-#         super().save(*args, **kwargs)  # Call the "real" save() method.
-#         print(Sections.objects.all())
+        for i in range(self.ns_first_year):
+            section = Sections(
+                section_name=self.course_curriculum.course_name + "-NS-1" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="1st Year", course_curriculum_id=self.course_curriculum.pk)
+            section.save()
+        for i in range(self.ns_second_year):
+            section = Sections(
+                section_name=self.course_curriculum.course_name + "-NS-2" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="2nd Year", course_curriculum_id=self.course_curriculum.pk)
+            section.save()
+        for i in range(self.ns_third_year):
+            section = Sections(
+                section_name=self.course_curriculum.course_name + "-NS-3" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="3rd Year", course_curriculum_id=self.course_curriculum.pk)
+            section.save()
+        for i in range(self.ns_fourth_year):
+            section = Sections(
+                section_name=self.course_curriculum.course_name + "-NS-4" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="4th Year", course_curriculum_id=self.course_curriculum.pk)
+            section.save()
 
-#     def __str__(self):
-#         return self.course_name
-
-#     class Meta:
-#         verbose_name = 'Section'
-#         verbose_name_plural = 'Sections'
-#         ordering = [
-#             'section_name'
-#         ]
+    class Meta:
+        verbose_name = 'Bulk Section'
+        verbose_name_plural = 'Bulk Section'
+        ordering = [
+            'course_curriculum__course_name'
+        ]
 
 
 @ register_snippet
@@ -713,22 +737,6 @@ class Colleges(ClusterableModel, index.Indexed):
         ordering = [
             'college_name'
         ]
-
-
-@ register_snippet
-class StudentsAccount(models.Model):
-    pass
-
-
-@ register_snippet
-class ProfessorsAccount(models.Model):
-    pass
-
-
-@ register_snippet
-class AdminsAccount(models.Model):
-    pass
-
 
 @ register_snippet
 class SectionsSchedule(models.Model):

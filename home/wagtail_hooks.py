@@ -3,18 +3,17 @@ from wagtail.contrib.modeladmin.options import (
     ModelAdmin, ModelAdminGroup, modeladmin_register)
 from wagtail.contrib.modeladmin.views import CreateView
 from .models import (
+    BulkSections,
     Subjects,
     CourseCurriculum,
-    Professors,
     Sections,
     Rooms,
     Departments,
     Colleges,
 
-    StudentsAccount,
-    ProfessorsAccount,
-    AdminsAccount,
+)
 
+from schedule.models import (
     SectionsSchedule,
     ProfessorsSchedule,
     RoomsSchedule,
@@ -49,15 +48,6 @@ class CourseCurriculumAdmin(ModelAdmin):
                      'department__Department_Name', 'curriculum_year')
     list_filter = ('department', 'curriculum_year')
 
-
-class ProfessorsAdmin(ModelAdmin):
-    model = Professors
-    menu_label = 'Professors'
-    list_display = ('full_name', 'preferred_time', 'status')
-    list_filter = ('status',)
-    search_fields = ('first_name', 'middle_name', 'last_name', 'full_name',)
-
-
 class SectionView(CreateView):
     def sample(self):
         if 'test' in self.request.GET:
@@ -65,6 +55,13 @@ class SectionView(CreateView):
         else:
             return 0
 
+    def trial(self, text):
+        # section = Sections(section_name='BSCSAAA', year_level='1st Year',
+        #                    sem='first', course_curriculum_id=2, department_id=8)
+        # section.save()
+        print(text)
+
+        return
     # def dispatch(self, request, *args, **kwargs):
     #     if self.is_pagemodel:
     #         user = request.user
@@ -84,6 +81,8 @@ class SectionView(CreateView):
     #         return redirect(self.url_helper.get_action_url('choose_parent'))
     #     return super().dispatch(request, *args, **kwargs)
 
+    def __init__(self, model_admin):
+        super().__init__(model_admin)
 
 class SectionsAdmin(ModelAdmin):
     create_template_name = 'bulk_section.html'
@@ -100,7 +99,6 @@ class SectionsAdmin(ModelAdmin):
         'department',
     )
     list_filter = (
-        'section_name',
         'year_level',
         'sem',
         'course_curriculum',
@@ -116,12 +114,37 @@ class SectionsAdmin(ModelAdmin):
     )
 
 
+class BulkSectionsAdmin(ModelAdmin):
+    model = BulkSections
+    menu_label = 'Bulk Section'
+    list_display = (
+        'course_curriculum__course_name',
+    )
+    list_filter = (
+        'course_curriculum__course_name',
+    )
+    search_fields = (
+        'course_curriculum__course_name',
+    )
+
+
+modeladmin_register(BulkSectionsAdmin)
+
+
 class RoomsAdmin(ModelAdmin):
     model = Rooms
     menu_label = 'Rooms'
-    # list_display =
-    # list_filter =
-    # search_fields =
+    list_display = (
+        'Room_Name',
+        'Room_Type',
+    )
+    list_filter = (
+        'Room_Type',
+    )
+    search_fields = (
+        'Room_Name',
+        'Room_Type',
+    )
 
 
 class DepartmentsAdmin(ModelAdmin):
@@ -145,7 +168,6 @@ class CollegesAdmin(ModelAdmin):
     model = Colleges
     menu_label = 'Colleges'
     list_display = ('college_name',)
-    list_filter = ('college_name',)
     search_fields = ('college_name',)
 
 
@@ -153,46 +175,17 @@ class AdminGroup(ModelAdminGroup):
     menu_label = 'Admin'
     menu_icon = 'user'
     menu_order = 100
-    items = (SubjectsAdmin, CourseCurriculumAdmin, ProfessorsAdmin,
-             SectionsAdmin, RoomsAdmin, DepartmentsAdmin, CollegesAdmin)
+    items = (
+        SubjectsAdmin,
+        CourseCurriculumAdmin,
+        SectionsAdmin,
+        RoomsAdmin,
+        DepartmentsAdmin,
+        CollegesAdmin
+    )
 
 
 modeladmin_register(AdminGroup)
-
-
-class StudentsAccount(ModelAdmin):
-    model = StudentsAccount
-    menu_label = 'Students'
-    # list_display =
-    # list_filter =
-    # search_fields =
-
-
-class ProfessorsAccount(ModelAdmin):
-    model = ProfessorsAccount
-    menu_label = 'Professors'
-    # list_display =
-    # list_filter =
-    # search_fields =
-
-
-class AdminsAccount(ModelAdmin):
-    model = AdminsAccount
-    menu_label = 'Admins'
-    # list_display =
-    # list_filter =
-    # search_fields =
-
-
-class AccountsGroup(ModelAdminGroup):
-    menu_label = 'Accounts'
-    menu_icon = 'user'
-    menu_order = 100
-    items = (StudentsAccount, ProfessorsAccount, AdminsAccount)
-
-
-modeladmin_register(AccountsGroup)
-
 
 class SectionsSchedule(ModelAdmin):
     model = SectionsSchedule
@@ -226,3 +219,9 @@ class SchedulesGroup(ModelAdminGroup):
 
 
 modeladmin_register(SchedulesGroup)
+
+
+@hooks.register("construct_main_menu")
+def hide_workflows(request, menu_items):
+    menu_items[:] = [
+        item for item in menu_items if item.name != "bulk-section"]
