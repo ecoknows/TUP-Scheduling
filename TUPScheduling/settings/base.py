@@ -121,8 +121,7 @@ DATABASES = {
     # }
 
     'default': {
-        'ENGINE':
-        'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'tup_scheduling_db',
         # 'USER': 'renegado',
         # 'PASSWORD': 'admin',
