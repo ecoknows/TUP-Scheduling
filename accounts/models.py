@@ -47,7 +47,7 @@ class BaseAccount(ClusterableModel, index.Indexed):
         help_text='Ex. Doe'
     )
     section = models.ForeignKey(
-        'home.Sections',
+        'administrator.Sections',
         on_delete=models.SET_NULL,
         null=True,
     )
@@ -148,7 +148,7 @@ class Professors(BaseAccount):
     )
 
     choose_department = models.ForeignKey(
-        'home.Departments',
+        'administrator.Departments',
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
