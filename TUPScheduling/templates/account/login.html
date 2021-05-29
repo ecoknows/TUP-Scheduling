@@ -1,86 +1,213 @@
 {% extends "base.html" %}
+{% load i18n account socialaccount static wagtailimages_tags %}
 
-{% load i18n %}
-{% load account socialaccount static wagtailimages_tags %}
 
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
+
+{% block body_style %}
+background-color: #C7C9CD;
+{% endblock %}
+
+{% block body_class %}
+h-screen
+p-4 lg:p-14 
+{% endblock %}
+
 
 {% block content %}
 
 
 {% get_providers as socialaccount_providers %}
 
+<section 
+    class="flex flex-col h-full mx-auto bg-white md:flex-row"  
+    style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 
-<section class="flex flex-row h-screen mx-auto">
+    <!--User Login-->
+    <div class="flex flex-row flex-1">
+        
+        <div class="flex flex-col w-10 pr-4 lg:pr-0">
+            <div class="flex items-end justify-end flex-1 mb-2 -mr-3">
+                <h1 class='font-sans text-xl' style="writing-mode: vertical-rl; transform: rotate(-180deg); color: #575757;">Ermita Manila</h1>
+            </div>
+            <div class="flex-1 h-1/2" style="border-right: solid 4px #C7C9CD;">
+            </div>
+        </div>
+        
+        <form style="color: #960404;" class="flex flex-col items-center justify-center flex-1 px-4"   method="POST" action="{% url 'account_login' %}">
+            
+            {% csrf_token %}
+            <div>
+                <h1 class="pt-12 font-sans font-bold text-center lg:text-2xl md:pt-0">TECHNOLOGICAL UNIVERSITY</h1>
+                <h1 class="font-sans font-bold text-center lg:text-2xl">OF THE PHILIPPINES</h1>
+    
+                <div class="w-full space-y-4 lg:mt-16">
+                    <div class="flex flex-row"  style="border: solid 4px #C4C5C8;">
+                        <div class="px-4 " style="border-right: solid 4px #C4C5C8; padding-top: 4px; padding-bottom: 4px;">
+                            <img src='{% static "img/login/user.webp" %}' style="width: 2rem;" alt="User Icon">
+                        </div>
+                        <input class="w-full"  name='login' required id='id_login' autocomplete="email" type='text'>
+                    </div>
+    
+                    <div class="flex flex-row"  style="border: solid 4px #C4C5C8;">
+                        <div class="px-4 " style="border-right: solid 4px #C4C5C8; padding-top: 4px; padding-bottom: 4px;">
+                            <img src='{% static "img/login/key.webp" %}' style="width: 2rem;" alt='Key Icon'>
+                        </div>
+                        <input class="w-full" name='password' required id='id_password' autocomplete="password" type='password'>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center justify-between py-10 md:flex-row">
+                    <a href="#" style='color:#575757;' class='font-sans text-lg font-medium'>Forgot password?</a>
+                    <button type="submit" style="background-color: #960404; color: white;" class="px-8 py-2" aria-label="Login Button">LOGIN</button>
+                </div>
+
+                <div class="flex flex-row items-center justify-center pb-10">
+                    <hr class="flex-1" style="border-top: 3.5px dotted #898B8F;">
+                    <h1 class="px-2 text-lg font-bold" style="color: #575757;">OR</h1>
+                    <hr class="flex-1" style="border-top: 3.5px dotted #898B8F;">
+                </div>
+                
+                
+                <div class="mb-8 md:mb-0">
+                    <button style="background-color: #960404; color: white;" class="flex flex-row items-center w-full pr-4 space-x-4 " aria-label="Login Gmail Button">
+                        <div style="background-color: #A42F2F;" class="px-4 py-2">
+                            <img src='{% static "img/login/gmail.webp" %}' style="width: 2rem;" alt='Gmail Icon'> 
+                        </div>
+                        <h1 class="font-sans font-bold text-md">LOGIN TO TUP GMAIL</h1>
+                    </button>
+                </div>
+            </div>
+            
+        </form>
+
+        <div class="w-10 ml-4 h-1/2 lg:pr-0" style="border-left: solid 4px #C7C9CD;">
+        </div>
+    </div>
 
     
-  <div class="flex flex-row flex-1 ">
-      
-      <div class="flex flex-col w-10 ">
-          <div class="flex items-end justify-end flex-1 mb-2 -mr-3">
-              <h1 class='font-sans text-xl' style="writing-mode: vertical-rl; transform: rotate(-180deg); color: #575757;">Ermita Manila</h1>
-          </div>
-          <div class="flex-1 h-1/2" style="border-right: solid 4px #C7C9CD;">
-          </div>
-      </div>
-      
-      <form style="color: #960404;" class="flex flex-col items-center justify-center flex-1 px-4 login"  method="POST" action="{% url 'account_login' %}">
-          <div>
-              <h1 class="font-sans text-2xl font-bold text-center">TECHNOLOGICAL UNIVERSITY</h1>
-              <h1 class="font-sans text-2xl font-bold text-center">OF THE PHILIPPINES</h1>
-  
-              {% csrf_token %}
-              
-              <div class="w-full mt-16 space-y-4">
-                  <div class="flex flex-row"  style="border: solid 4px #C4C5C8;">
-                      <div class="px-4 " style="border-right: solid 4px #C4C5C8; padding-top: 4px; padding-bottom: 4px;">
-                          <img src='{% static "img/login/user.webp" %}' style="width: 2rem;" alt="User Icon">
-                      </div>
-                      <input class="w-full px-4 text-black" name='login' required id='id_login' autocomplete="email" type='text'>
-                  </div>
-  
-                  <div class="flex flex-row"  style="border: solid 4px #C4C5C8;">
-                      <div class="px-4 " style="border-right: solid 4px #C4C5C8; padding-top: 4px; padding-bottom: 4px;">
-                          <img src='{% static "img/login/key.webp" %}' style="width: 2rem;" alt='Key Icon'>
-                      </div>
-                      <input class="w-full px-4 text-black" name='password' required id='id_password' autocomplete="password" type='password'>
-                  </div>
-              </div>
+    <!--Slideshow-->
+    <div class="order-first overflow-hidden slideshow-container md:pt-0 md:order-none" style="flex: 1.3">
+        <div class="h-full slideshow-inner">
+            <div class="bg-gray-700 mySlides">
+                <img class="w-full h-auto md:h-screen mix-blend-overlay" src='{% static "img/login/Tupfront1.webp" %}' alt="tup 1" style="object-fit: cover;">
+            </div>
+        
+            <div class="bg-gray-700 mySlides">
+                <img class="w-full h-auto md:h-screen mix-blend-overlay" src='{% static "img/login/Tupfront2.webp" %}' alt="tup 2" style="object-fit: cover;">
+            </div>
+        
+            <div class="bg-gray-700 mySlides">
+                <img class="w-full h-auto md:h-screen mix-blend-overlay" src='{% static "img/login/Tupfront3.webp" %}' alt="tup 3" style="object-fit: cover;">
+            </div>
+        </div>
+        
+        
+        <div class="relative flex items-center justify-between h-full mx-auto bottom-full">
+            <button class="p-4 ml-4 bg-gray-700 rounded-lg bg-opacity-80 focus:outline-none" onclick='plusSlides(-1)'>
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            <button class="p-4 mr-4 bg-gray-700 rounded-lg bg-opacity-80 focus:outline-none" onclick='plusSlides(1)'>
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+        
+    <br/>
+        
+        
+    <div>
+        <span class="dot" onclick='currentSlide(1)'></span>
+        <span class="dot" onclick='currentSlide(2)'></span>
+        <span class="dot" onclick='currentSlide(3)'></span>
+        <span class="dot" onclick='currentSlide(4)'></span>
+    </div>
 
-              <div class="flex flex-row items-center justify-between py-10">
-                  <a href="{% url 'account_reset_password' %}" style='color:#575757;' class='font-sans text-lg font-medium' >Forgot password?</a>
-                  <button  type="submit" style="background-color: #960404; color: white;" class="px-8 py-2" aria-label="Login Button">LOGIN</button>
-              </div>
-
-              <div class="flex flex-row items-center justify-center pb-10">
-                  <hr class="flex-1" style="border-top: 3.5px dotted #898B8F;">
-                  <h1 class="px-2 text-lg font-bold" style="color: #575757;">OR</h1>
-                  <hr class="flex-1" style="border-top: 3.5px dotted #898B8F;">
-              </div>
-              
-              
-              <button style="background-color: #960404; color: white;" class="flex flex-row items-center w-full pr-4 space-x-4" aria-label="Login Gmail Button">
-                  <div style="background-color: #A42F2F;" class="px-4 py-2">
-                      <img src='{% static "img/login/gmail.webp" %}' style="width: 2rem;" alt='Gmail Icon'>
-                  </div>
-                  <h1 class="font-sans font-bold text-md">LOGIN TO TUP GMAIL</h1>
-              </button>
-          </div>
-          
-      </form>
-
-      <div class="w-10 h-1/2" style="border-left: solid 4px #C7C9CD;">
-      </div>
-  </div>
-
-  
-
-  <div style="flex: 1.3; overflow: hidden;">
-      <img src='{% static "img/login/tup-bg.webp" %}' class="w-full" alt='Right Background Picture' style="object-fit: contain;"/>
-  </div>
-
-
+    
 </section>
+
+
 {% endblock %}
 
 
+{% block scripts %}
+
+<script>
+    
+    var slideIndex = 1;
+    var myTimer;
+    var slideshowContainer;
+
+    window.addEventListener("load",function() {
+        showSlides(slideIndex);
+        myTimer = setInterval(function(){plusSlides(1)}, 4000);
+    
+        //COMMENT OUT THE LINE BELOW TO KEEP ARROWS PART OF MOUSEENTER PAUSE/RESUME
+        slideshowContainer = document.getElementsByClassName('slideshow-inner')[0];
+    
+        //UNCOMMENT OUT THE LINE BELOW TO KEEP ARROWS PART OF MOUSEENTER PAUSE/RESUME
+        // slideshowContainer = document.getElementsByClassName('slideshow-container')[0];
+    
+        slideshowContainer.addEventListener('mouseenter', pause)
+        slideshowContainer.addEventListener('mouseleave', resume)
+    })
+
+    // NEXT AND PREVIOUS CONTROL
+    function plusSlides(n){
+        clearInterval(myTimer);
+        if (n < 0){
+            showSlides(slideIndex -= 1);
+        } else {
+            showSlides(slideIndex += 1); 
+        }
+        
+        //COMMENT OUT THE LINES BELOW TO KEEP ARROWS PART OF MOUSEENTER PAUSE/RESUME
+        
+        if (n === -1){
+            myTimer = setInterval(function(){plusSlides(n + 2)}, 4000);
+        } else {
+            myTimer = setInterval(function(){plusSlides(n + 1)}, 4000);
+        }
+    }
+
+    //Controls the current slide and resets interval if needed
+    function currentSlide(n){
+        clearInterval(myTimer);
+        myTimer = setInterval(function(){plusSlides(n + 1)}, 4000);
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n){
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("dot");
+        if (n > slides.length) {slideIndex = 1}
+        if (n < 1) {slideIndex = slides.length}
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex-1].style.display = "block";
+        dots[slideIndex-1].className += " active";
+    }
+
+    pause = () => {
+        clearInterval(myTimer);
+    }
+
+    resume = () =>{
+        clearInterval(myTimer);
+        myTimer = setInterval(function(){plusSlides(slideIndex)}, 4000);
+    }
+
+    
+
+</script>
+
+{% endblock %}
