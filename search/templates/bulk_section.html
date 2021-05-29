@@ -1,0 +1,530 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n wagtailadmin_tags modeladmin_tags %}
+
+{% block titletag %}{{ view.get_meta_title }}{% endblock %}
+
+{% block extra_css %}
+    {{ block.super }}
+
+    {% include "wagtailadmin/pages/_editor_css.html" %}
+    {{ edit_handler.form.media.css }}
+
+    {{ view.media.css }}
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+
+    {% include "wagtailadmin/pages/_editor_js.html" %}
+    {{ edit_handler.form.media.js }}
+    {{ edit_handler.html_declarations }}
+
+    {{ view.media.js }}
+    {% prepopulated_slugs %}
+{% endblock %}
+
+{% block content %}
+   
+
+    {% if view.sample == 0 %}
+        {% include "wagtailadmin/shared/header.html" with title=view.get_page_title subtitle=view.get_page_subtitle icon=view.header_icon tabbed=1 merged=1 %}
+        
+        <form action="{% block form_action %}{{ view.create_url }}{% endblock %}"{% if is_multipart %} enctype="multipart/form-data"{% endif %} method="POST" novalidate>
+            {% csrf_token %}
+
+            {% block form %}{{ edit_handler.render_form_content }}{% endblock %}
+
+            {% block footer %}
+                <footer class="footer">
+                    <ul>
+                    <li class="actions footer__container">
+                            {% block form_actions %}
+                                <div class="dropdown dropup dropdown-button match-width">
+                                    <button type="submit" class="button action-save button-longrunning" data-clicked-text="{% trans 'Saving…' %}">
+                                        {% icon name="spinner" %}<em>{% trans 'Save' %}</em>
+                                    </button>
+                                </div>
+                            {% endblock %}
+                        </li>
+                    </ul>
+                </footer>
+            {% endblock %}
+        </form>
+
+    {% else %}
+        {% include "wagtailadmin/shared/header.html" with title='Bulk' subtitle='Sections' icon=view.header_icon tabbed=1 merged=1 %}
+
+        <form action="http://localhost:8000/admin/home/sections/create/?test=1" method="POST" novalidate="">
+         <input type="hidden" name="csrfmiddlewaretoken" value="Npiv0xYhqkeJjoNs8aIZSPubbRqdC0NgJloO7N3xF4g9axSA7VWGs2qWhVqcPS4f">
+         <div class="tab-nav merged">
+            <ul data-tab-nav="" role="tablist" data-current-tab="main">
+               <li class=" active" role="tab" aria-controls="tab-main">
+                  <a href="#tab-main" class="active" data-tab="main">Main</a>
+               </li>
+               <li class="" role="tab" aria-controls="tab-number-of-sections">
+                  <a href="#tab-number-of-sections" class="" data-tab="number-of-sections">Number of Sections</a>
+               </li>
+            </ul>
+         </div>
+         <div class="tab-content">
+            <section id="tab-main" class=" active" role="tabpanel" aria-labelledby="tab-label-main" data-tab="main">
+               <ul class="objects">
+                  <li class="object required char_field">
+                     <div class="title-wrapper">
+                        <label for="id_course_name">
+                        Course name
+                        </label>
+                     </div>
+                     <div class="object-layout">
+                        <div class="object-layout_small-part">
+                           <div class="object-help help">
+                              <svg class="icon icon-help default" aria-hidden="true" focusable="false">
+                                 <use href="#icon-help"></use>
+                              </svg>
+                              Ex. BSCS
+                           </div>
+                        </div>
+                        <div class="object-layout_big-part">
+                           <div data-contentpath="course_name">
+                              <fieldset class="">
+                                 <legend>Course name</legend>
+                                 <ul class="fields">
+                                    <li class="">
+                                       <div class="field char_field text_input">
+                                          <div class="field-content">
+                                             <div class="input ">
+                                                <input type="text" name="course_name" maxlength="30" required id="id_course_name">
+                                                <span></span>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </fieldset>
+                              <div class="field-comment-control field-comment-control--object">
+                                 <button type="button" data-component="add-comment-button" data-comment-add="" class="u-hidden" aria-label="Add comment">
+                                    <svg class="icon icon-comment-add initial icon-default" aria-hidden="true" focusable="false">
+                                       <use href="#icon-comment-add"></use>
+                                    </svg>
+                                    <svg class="icon icon-comment-add initial icon-reversed" aria-hidden="true" focusable="false">
+                                       <use href="#icon-comment-add-reversed"></use>
+                                    </svg>
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="object required typed_choice_field">
+                     <div class="title-wrapper">
+                        <label for="id_sem_0">
+                        Sem
+                        </label>
+                     </div>
+                     <div class="object-layout">
+                        <div class="object-layout_big-part">
+                           <div data-contentpath="sem">
+                              <fieldset>
+                                 <legend>Sem</legend>
+                                 <ul class="fields">
+                                    <li>
+                                       <div class="field typed_choice_field radio_select ">
+                                          <div class="field-content">
+                                             <div class="input ">
+                                                <ul id="id_sem">
+                                                   <li><label for="id_sem_0"><input type="radio" name="sem" value="First" required id="id_sem_0" checked="">
+                                                      First</label>
+                                                   </li>
+                                                   <li><label for="id_sem_1"><input type="radio" name="sem" value="Second" required id="id_sem_1">
+                                                      Second</label>
+                                                   </li>
+                                                </ul>
+                                                <span></span>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </fieldset>
+                              <div class="field-comment-control field-comment-control--object">
+                                 <button type="button" data-component="add-comment-button" data-comment-add="" class="u-hidden" aria-label="Add comment">
+                                    <svg class="icon icon-comment-add initial icon-default" aria-hidden="true" focusable="false">
+                                       <use href="#icon-comment-add"></use>
+                                    </svg>
+                                    <svg class="icon icon-comment-add initial icon-reversed" aria-hidden="true" focusable="false">
+                                       <use href="#icon-comment-add-reversed"></use>
+                                    </svg>
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="object required model_choice_field">
+                     <div class="title-wrapper">
+                        <label for="id_course_curriculum">
+                        Course curriculum
+                        </label>
+                     </div>
+                     <div class="object-layout">
+                        <div class="object-layout_small-part">
+                           <div class="object-help help">
+                              <svg class="icon icon-help default" aria-hidden="true" focusable="false">
+                                 <use href="#icon-help"></use>
+                              </svg>
+                              Ex. Computer Science
+                           </div>
+                        </div>
+                        <div class="object-layout_big-part">
+                           <div data-contentpath="course_curriculum">
+                              <fieldset>
+                                 <legend>Course curriculum</legend>
+                                 <ul class="fields">
+                                    <li>
+                                       <div class="field model_choice_field admin_snippet_chooser ">
+                                          <div class="field-content">
+                                             <div class="input ">
+                                                <div id="id_course_curriculum-chooser" class="chooser snippet-chooser blank" data-chooser-url="/admin/snippets/choose/">
+                                                   <div class="chosen">
+                                                      <svg class="icon icon-snippet" aria-hidden="true" focusable="false">
+                                                         <use href="#icon-snippet"></use>
+                                                      </svg>
+                                                      <span class="title"></span>
+                                                      <ul class="actions">
+                                                         <li><button type="button" class="button action-choose button-small button-secondary">Choose another Course Curriculum</button></li>
+                                                         <li>
+                                                            <a href="" class="edit-link button button-small button-secondary" target="_blank" rel="noopener noreferrer">Edit this Course Curriculum</a>
+                                                         </li>
+                                                      </ul>
+                                                   </div>
+                                                   <div class="unchosen">
+                                                      <svg class="icon icon-snippet" aria-hidden="true" focusable="false">
+                                                         <use href="#icon-snippet"></use>
+                                                      </svg>
+                                                      <button type="button" class="button action-choose button-small button-secondary">Choose Course Curriculum</button>
+                                                   </div>
+                                                </div>
+                                                <input type="hidden" name="course_curriculum" required id="id_course_curriculum">
+                                                <script>createSnippetChooser("id_course_curriculum", "home/coursecurriculum");</script>
+                                                <span></span>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </fieldset>
+                              <div class="field-comment-control field-comment-control--object">
+                                 <button type="button" data-component="add-comment-button" data-comment-add="" class="u-hidden" aria-label="Add comment">
+                                    <svg class="icon icon-comment-add initial icon-default" aria-hidden="true" focusable="false">
+                                       <use href="#icon-comment-add"></use>
+                                    </svg>
+                                    <svg class="icon icon-comment-add initial icon-reversed" aria-hidden="true" focusable="false">
+                                       <use href="#icon-comment-add-reversed"></use>
+                                    </svg>
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="object required model_choice_field">
+                     <div class="title-wrapper">
+                        <label for="id_department">
+                        Department
+                        </label>
+                     </div>
+                     <div class="object-layout">
+                        <div class="object-layout_small-part">
+                           <div class="object-help help">
+                              <svg class="icon icon-help default" aria-hidden="true" focusable="false">
+                                 <use href="#icon-help"></use>
+                              </svg>
+                              Ex. Computer Studies
+                           </div>
+                        </div>
+                        <div class="object-layout_big-part">
+                           <div data-contentpath="department">
+                              <fieldset>
+                                 <legend>Department</legend>
+                                 <ul class="fields">
+                                    <li>
+                                       <div class="field model_choice_field admin_snippet_chooser ">
+                                          <div class="field-content">
+                                             <div class="input ">
+                                                <div id="id_department-chooser" class="chooser snippet-chooser blank" data-chooser-url="/admin/snippets/choose/">
+                                                   <div class="chosen">
+                                                      <svg class="icon icon-snippet" aria-hidden="true" focusable="false">
+                                                         <use href="#icon-snippet"></use>
+                                                      </svg>
+                                                      <span class="title"></span>
+                                                      <ul class="actions">
+                                                         <li><button type="button" class="button action-choose button-small button-secondary">Choose another Department</button></li>
+                                                         <li>
+                                                            <a href="" class="edit-link button button-small button-secondary" target="_blank" rel="noopener noreferrer">Edit this Department</a>
+                                                         </li>
+                                                      </ul>
+                                                   </div>
+                                                   <div class="unchosen">
+                                                      <svg class="icon icon-snippet" aria-hidden="true" focusable="false">
+                                                         <use href="#icon-snippet"></use>
+                                                      </svg>
+                                                      <button type="button" class="button action-choose button-small button-secondary">Choose Department</button>
+                                                   </div>
+                                                </div>
+                                                <input type="hidden" name="department" required id="id_department">
+                                                <script>createSnippetChooser("id_department", "home/departments");</script>
+                                                <span></span>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </fieldset>
+                              <div class="field-comment-control field-comment-control--object">
+                                 <button type="button" data-component="add-comment-button" data-comment-add="" class="u-hidden" aria-label="Add comment">
+                                    <svg class="icon icon-comment-add initial icon-default" aria-hidden="true" focusable="false">
+                                       <use href="#icon-comment-add"></use>
+                                    </svg>
+                                    <svg class="icon icon-comment-add initial icon-reversed" aria-hidden="true" focusable="false">
+                                       <use href="#icon-comment-add-reversed"></use>
+                                    </svg>
+                                 </button>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </li>
+               </ul>
+            </section>
+            <section id="tab-number-of-sections" class="" role="tabpanel" aria-labelledby="tab-label-number-of-sections" data-tab="number-of-sections">
+               <ul class="objects">
+                  <li class="object multi-field">
+                     <div class="title-wrapper">
+                        <label>
+                        Stem
+                        </label>
+                     </div>
+                     <div class="object-layout">
+                        <div class="object-layout_big-part">
+                           <fieldset>
+                              <legend>Stem</legend>
+                              <ul class="fields">
+                                 <li class="required char_field">
+                                    <div class="field char_field number_input " data-contentpath="first_year">
+                                       <label for="id_first_year">First year:</label>
+                                       <div class="field-content">
+                                          <div class="input ">
+                                             <input type="number" name="first_year" value="0" placeholder="1st Year" maxlength="256" required id="id_first_year">
+                                             <span></span>
+                                          </div>
+                                       </div>
+                                       <div class="field-comment-control">
+                                          <button type="button" data-component="add-comment-button" data-comment-add="" class="u-hidden" aria-label="Add comment">
+                                             <svg class="icon icon-comment-add initial icon-default" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add"></use>
+                                             </svg>
+                                             <svg class="icon icon-comment-add initial icon-reversed" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add-reversed"></use>
+                                             </svg>
+                                          </button>
+                                       </div>
+                                    </div>
+                                 </li>
+                                 <li class="required char_field">
+                                    <div class="field char_field number_input " data-contentpath="second_year">
+                                       <label for="id_second_year">Second year:</label>
+                                       <div class="field-content">
+                                          <div class="input ">
+                                             <input type="number" name="second_year" value="0" placeholder="2nd Year" maxlength="256" required id="id_second_year">
+                                             <span></span>
+                                          </div>
+                                       </div>
+                                       <div class="field-comment-control">
+                                          <button type="button" data-component="add-comment-button" data-comment-add="" class="u-hidden" aria-label="Add comment">
+                                             <svg class="icon icon-comment-add initial icon-default" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add"></use>
+                                             </svg>
+                                             <svg class="icon icon-comment-add initial icon-reversed" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add-reversed"></use>
+                                             </svg>
+                                          </button>
+                                       </div>
+                                    </div>
+                                 </li>
+                                 <li class="required char_field">
+                                    <div class="field char_field number_input " data-contentpath="third_year">
+                                       <label for="id_third_year">Third year:</label>
+                                       <div class="field-content">
+                                          <div class="input ">
+                                             <input type="number" name="third_year" value="0" placeholder="3rd Year" maxlength="256" required id="id_third_year">
+                                             <span></span>
+                                          </div>
+                                       </div>
+                                       <div class="field-comment-control">
+                                          <button type="button" data-component="add-comment-button" data-comment-add="" class="u-hidden" aria-label="Add comment">
+                                             <svg class="icon icon-comment-add initial icon-default" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add"></use>
+                                             </svg>
+                                             <svg class="icon icon-comment-add initial icon-reversed" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add-reversed"></use>
+                                             </svg>
+                                          </button>
+                                       </div>
+                                    </div>
+                                 </li>
+                                 <li class="required char_field">
+                                    <div class="field char_field number_input " data-contentpath="fourth_year">
+                                       <label for="id_fourth_year">Fourth year:</label>
+                                       <div class="field-content">
+                                          <div class="input ">
+                                             <input type="number" name="fourth_year" value="0" placeholder="4th Year" maxlength="256" required id="id_fourth_year">
+                                             <span></span>
+                                          </div>
+                                       </div>
+                                       <div class="field-comment-control">
+                                          <button type="button" data-component="add-comment-button" data-comment-add="" class="u-hidden" aria-label="Add comment">
+                                             <svg class="icon icon-comment-add initial icon-default" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add"></use>
+                                             </svg>
+                                             <svg class="icon icon-comment-add initial icon-reversed" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add-reversed"></use>
+                                             </svg>
+                                          </button>
+                                       </div>
+                                    </div>
+                                 </li>
+                              </ul>
+                           </fieldset>
+                        </div>
+                     </div>
+                  </li>
+                  <li class="object multi-field">
+                     <div class="title-wrapper">
+                        <label>
+                        Non-Stem
+                        </label>
+                     </div>
+                     <div class="object-layout">
+                        <div class="object-layout_big-part">
+                           <fieldset>
+                              <legend>Non-Stem</legend>
+                              <ul class="fields">
+                                 <li class="required char_field">
+                                    <div class="field char_field number_input " data-contentpath="ns_first_year">
+                                       <label for="id_ns_first_year">First Year:</label>
+                                       <div class="field-content">
+                                          <div class="input ">
+                                             <input type="number" name="ns_first_year" value="0" placeholder="1st Year" maxlength="256" required id="id_ns_first_year">
+                                             <span></span>
+                                          </div>
+                                       </div>
+                                       <div class="field-comment-control">
+                                          <button type="button" data-component="add-comment-button" data-comment-add="" class="u-hidden" aria-label="Add comment">
+                                             <svg class="icon icon-comment-add initial icon-default" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add"></use>
+                                             </svg>
+                                             <svg class="icon icon-comment-add initial icon-reversed" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add-reversed"></use>
+                                             </svg>
+                                          </button>
+                                       </div>
+                                    </div>
+                                 </li>
+                                 <li class="required char_field">
+                                    <div class="field char_field number_input " data-contentpath="ns_second_year">
+                                       <label for="id_ns_second_year">Second Year:</label>
+                                       <div class="field-content">
+                                          <div class="input ">
+                                             <input type="number" name="ns_second_year" value="0" placeholder="2nd Year" maxlength="256" required id="id_ns_second_year">
+                                             <span></span>
+                                          </div>
+                                       </div>
+                                       <div class="field-comment-control">
+                                          <button type="button" data-component="add-comment-button" data-comment-add="" class="u-hidden" aria-label="Add comment">
+                                             <svg class="icon icon-comment-add initial icon-default" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add"></use>
+                                             </svg>
+                                             <svg class="icon icon-comment-add initial icon-reversed" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add-reversed"></use>
+                                             </svg>
+                                          </button>
+                                       </div>
+                                    </div>
+                                 </li>
+                                 <li class="required char_field">
+                                    <div class="field char_field number_input " data-contentpath="ns_third_year">
+                                       <label for="id_ns_third_year">Third Year:</label>
+                                       <div class="field-content">
+                                          <div class="input ">
+                                             <input type="number" name="ns_third_year" value="0" placeholder="3rd Year" maxlength="256" required id="id_ns_third_year">
+                                             <span></span>
+                                          </div>
+                                       </div>
+                                       <div class="field-comment-control">
+                                          <button type="button" data-component="add-comment-button" data-comment-add="" class="u-hidden" aria-label="Add comment">
+                                             <svg class="icon icon-comment-add initial icon-default" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add"></use>
+                                             </svg>
+                                             <svg class="icon icon-comment-add initial icon-reversed" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add-reversed"></use>
+                                             </svg>
+                                          </button>
+                                       </div>
+                                    </div>
+                                 </li>
+                                 <li class="required char_field">
+                                    <div class="field char_field number_input " data-contentpath="ns_fourth_year">
+                                       <label for="id_ns_fourth_year">Fourth Year:</label>
+                                       <div class="field-content">
+                                          <div class="input ">
+                                             <input type="number" name="ns_fourth_year" value="0" placeholder="4th Year" maxlength="256" required id="id_ns_fourth_year">
+                                             <span></span>
+                                          </div>
+                                       </div>
+                                       <div class="field-comment-control">
+                                          <button type="button" data-component="add-comment-button" data-comment-add="" class="u-hidden" aria-label="Add comment">
+                                             <svg class="icon icon-comment-add initial icon-default" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add"></use>
+                                             </svg>
+                                             <svg class="icon icon-comment-add initial icon-reversed" aria-hidden="true" focusable="false">
+                                                <use href="#icon-comment-add-reversed"></use>
+                                             </svg>
+                                          </button>
+                                       </div>
+                                    </div>
+                                 </li>
+                              </ul>
+                           </fieldset>
+                        </div>
+                     </div>
+                  </li>
+               </ul>
+            </section>
+         </div>
+         <footer class="footer">
+            <ul>
+               <li class="actions footer__container">
+                  <div class="dropdown dropup dropdown-button match-width">
+                     <button type="submit" class="button action-save button-longrunning" data-clicked-text="Saving…">
+                        <svg class="icon icon-spinner" aria-hidden="true" focusable="false">
+                           <use href="#icon-spinner"></use>
+                        </svg>
+                        <em>Save</em>
+                     </button>
+                  </div>
+               </li>
+            </ul>
+         </footer>
+<<<<<<< HEAD
+      </form> -->
+        
+=======
+      </form>
+        
+      <script>
+
+      </script>
+>>>>>>> feature/polish-cms
+        
+    {% endif %}
+{% endblock %}

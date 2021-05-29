@@ -10,6 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('wagtailcore', '0060_fix_workflow_unique_constraint'),
+        ('accounts', '0001_initial'),
     ]
 
     operations = [
