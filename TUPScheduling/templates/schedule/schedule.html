@@ -2,8 +2,14 @@
 {% load static %}
 {% block content %}
 <section class="flex justify-center h-screen p-8 mx-auto space-x-4" style="max-width: 1000px">
-	
-	<div>
+	<form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="file1"> Upload a file</label>
+        <input type="file" id="file1" name="file">
+        <small>Only accepts CSV files</small>
+        <button type="submit">Upload</button>
+    </form>
+	<!-- <div>
 		<header class="flex bg-yellow-400">
 			<div class="flex-1 py-2">
 				<h1 class="text-lg text-center">Room 301 (Lab)</h1>
@@ -29,7 +35,7 @@
 
 		{% include 'includes/professor.html' %}
 		
-	</div>
+	</div> -->
 	
 </section>
 
