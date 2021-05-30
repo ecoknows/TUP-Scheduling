@@ -28,7 +28,6 @@ from modelcluster.models import ClusterableModel
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 import datetime
-from .__init__ import _DAY, _TIME
 from accounts.models import Professors
 
 
