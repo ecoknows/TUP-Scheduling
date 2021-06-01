@@ -86,6 +86,7 @@ function section_onmousedown( draggableSectionPaper){
         x+=6;
       } 
     }
+
     let i = 0;
 
     while(i < tiles.length){
@@ -117,13 +118,14 @@ function section_onmousedown( draggableSectionPaper){
       i++;
     }
 
+    draggableSection.style.position = null
     draggableSection.style.top = null
     draggableSection.style.left = null
-    if(checkCollision(convertedDragable,section_container)){
+    const convertedSectionContainer = convertDraggable(section_container.getBoundingClientRect());
+    if(checkCollision(convertedDragable,convertedSectionContainer)){
       let newSectionBody = document.createElement('div');
       newSectionBody.style.width = '100%';
       newSectionBody.style.height = '150px';
-      draggableSection.style.position = null
       draggableSection.is_dragged = false
       draggableSection.in_main_table = false
       draggableSection.tileAssigned = null;
