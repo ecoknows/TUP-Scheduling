@@ -155,6 +155,7 @@ function section_onmousedown( draggableSectionPaper){
       draggableSection.is_dragged = false
       draggableSection.in_main_table = false
       draggableSection.tileAssigned = null;
+      draggableSection.style.position = null
       newSectionBody.appendChild(draggableSection);
       section_container.querySelector('#section-wrapper').appendChild(newSectionBody);
     }

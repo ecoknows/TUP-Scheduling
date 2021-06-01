@@ -6,16 +6,16 @@
 	}
 </style>
 
-<section class="flex-1 bg-yellow-200">
+<section class="flex-1 border-4 border-collapse border-black ">
 
 	<header class="flex">
 
-		<div class="flex-1 py-2"  style="width: 120px;">
-			<h1 class="text-xl text-center">Time</h1>
+		<div class="flex-1 py-2 bg-red-700 border border-black"  style="width: 120px;">
+			<h1 class="text-xl text-center text-white">Time</h1>
 		</div>
 
 		{% for day in self.day %}
-			<div class="flex-1 py-2"  style="width: 120px;">
+			<div class="flex-1 py-2 border border-black"  style="width: 120px;">
 				<h1 class='text-xl text-center'>{{day}}</h1>
 			</div>
 		{% endfor %}
@@ -25,13 +25,13 @@
 	{% for time in self.time %}
 		<div class="flex" style="height: 50px;">
 
-			<div class="flex items-center justify-center flex-1">
+			<div class="flex items-center justify-center flex-1 border border-black">
 				<h1 class="text-lg text-center">{{time}}</h1>
 			</div>
 
 			{% for day in self.day %}
-				<div class="flex-1 tile">
-					<div class='border border-red-600 tile-container '>
+				<div class="flex-1 border border-black tile">
+					<div class='tile-container '>
 					</div>
 				</div>
 			{% endfor %}
