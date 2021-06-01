@@ -19,8 +19,6 @@ function section_onmousedown( draggableSectionPaper){
     draggableSection.is_dragged = true
   }
   
-  console.log('asdsafasdsa');
-
   
   // console.log((draggableSection.offsetTop - pos2) + "px");
   const elementDrag = e =>{
@@ -40,15 +38,18 @@ function section_onmousedown( draggableSectionPaper){
 
   
   function isOccupied(index){
-    let x = 0;
-    let status = true 
-    while(x < paper_hours*6){
-      if(draggableSection == tiles[index+x]?.occupied){
-        return true
+    let x = index;
+    let status = false 
+    while(x <= index+12){
+      if (tiles[x] == undefined){
+        return false
       }
-      if(tiles[index+x]?.occupied){
-        status = false
+      if(tiles[x]?.occupied == draggableSection || tiles[x]?.occupied == undefined ){
+        status = true
+      }else{
+        return false
       }
+      
       x+=6;
     }
     return status;
@@ -97,37 +98,36 @@ function section_onmousedown( draggableSectionPaper){
     let i = 0;
 
     while(i < tiles.length){
-      if(isOccupied(i)){
         const elementBoundingBox = tiles[i].getBoundingClientRect()
         const tile = convertDraggable(elementBoundingBox);
 
         if(checkCollision(convertedDragable,tile)){
+          if(isOccupied(i)){
 
-          let container = tiles[i].querySelector('.tile-container');
+            let container = tiles[i].querySelector('.tile-container');
 
-          if(!draggableSection.in_main_table){
-            draggableSection.parentElement.remove()
-            draggableSection.in_main_table=true
+            if(!draggableSection.in_main_table){
+              draggableSection.parentElement.remove()
+              draggableSection.in_main_table=true
+            }
+
+            container.appendChild(draggableSection);
+            draggableSection.style.top = null;
+            draggableSection.style.left = null;
+
+            if (draggableSection.tileAssigned != null){ 
+              let x = 0;     
+              while(x < paper_hours*6){
+                tiles[draggableSection.tileAssigned+x].occupied = undefined;
+                x+=6;
+              } 
+            }
+
+            occupyingLogic(i);
+            return;
           }
-
-          container.appendChild(draggableSection);
-          draggableSection.style.top = null;
-          draggableSection.style.left = null;
-
-          if (draggableSection.tileAssigned != null){ 
-            let x = 0;     
-            while(x < paper_hours*6){
-              tiles[draggableSection.tileAssigned+x].occupied = false;
-              x+=6;
-            } 
-          }
-
-          occupyingLogic(i);
-          return;
         }
         
- 
-      }
       i++;
     }
 
@@ -137,7 +137,7 @@ function section_onmousedown( draggableSectionPaper){
 
 
 
-    if(checkCollision(convertedDragable,convertedSectionContainer)){
+    if(checkCollision(convertedDragable,convertedSectionContainer) && draggableSection.in_main_table ){
       let newSectionBody = document.createElement('div');
       newSectionBody.style.width = '100%';
       newSectionBody.style.height = '150px';
