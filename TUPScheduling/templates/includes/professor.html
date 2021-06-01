@@ -10,17 +10,20 @@
           </h1>
         </div>
         {% for subject in professor.professor_parental_key.all %}
-        <div
-          class="flex flex-col bg-white draggable-professor"
-          style="line-height: 1; width: 150px; border: 1px solid #d3d3d3"
-          >
-          <div id="paper-head" class="flex items-center justify-center">
-              <div id="origin" style="width: fit-content">
-                <h1 id="professor-name" class="hidden">
-                    {{professor.first_name}} {{professor.last_name}}
-                </h1>
-                <h1 class="text-center">{{subject.subject.subject_code}}</h1>
-              </div>
+        <div onmousemove="professor_onmousemove(this)"  >
+            <div
+            id='draggable-professor'
+            class="flex flex-col bg-white "
+            style="line-height: 1; width: 150px; border: 1px solid #d3d3d3"
+            >
+            <div id="paper-head" class="flex items-center justify-center">
+                <div id="origin" style="width: fit-content">
+                  <h1 id="professor-name" class="hidden">
+                      {{professor.first_name}} {{professor.last_name}}
+                  </h1>
+                  <h1 class="text-center">{{subject.subject.subject_code}}</h1>
+                </div>
+            </div>
           </div>
         </div>
         {% endfor %}

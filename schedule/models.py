@@ -22,9 +22,11 @@ class RoomsSchedule(models.Model):
 
 
 class Schedule(Page):
+    max_count = 1
     table_count = 5
     day = _DAY
     time = _TIME
+    parent_page_types = ["home.HomePage"]
 
     
     def get_context(self, request):
