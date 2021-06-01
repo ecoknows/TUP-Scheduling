@@ -6,10 +6,10 @@
 	}
 </style>
 
-<section id='professor-section-container' class="h-full py-8 bg-blue-200 parent" style="width: 200px;padding-left: 15%">
+<section id='professor-section-container' class="h-full py-8 bg-blue-200 parent" style="width: 200px; padding-left: 15%;"  >
    <div class="child">
     {% for professor in professor_entries %}
-    <div id="professor-container" style="width: 150px; margin-bottom: 20px;">
+    <div id="professor-container" style="width: 120px; margin-bottom: 20px;">
         <div style="padding: 10px; background-color: #2196f3; color: #fff">
           <h1 class="text-center">
               {{professor.first_name}} {{professor.last_name}}
@@ -20,7 +20,7 @@
             id='draggable-professor'
             onmousedown="professor_onmousedown(this)" 
             class="flex flex-col bg-white "
-            style="line-height: 1; width: 150px; border: 1px solid #d3d3d3"
+            style="line-height: 1; width: 120px; border: 1px solid #d3d3d3"
             >
             <div id="paper-head" class="flex items-center justify-center">
                 <div id="origin" style="width: fit-content">
