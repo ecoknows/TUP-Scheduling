@@ -143,6 +143,7 @@ function section_onmousedown( draggableSectionPaper){
       newSectionBody.style.height = '150px';
       draggableSection.is_dragged = false
       draggableSection.in_main_table = false
+      draggableSection.style.position = null
       draggableSection.tileAssigned = null;
       newSectionBody.appendChild(draggableSection);
       section_container.querySelector('#section-wrapper').appendChild(newSectionBody);

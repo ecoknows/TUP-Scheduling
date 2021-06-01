@@ -2,11 +2,11 @@
 <style>
 	#professor-section-container{
 		overflow-y: scroll; 
-		-webkit-overflow-scrolling: touch; 
+		overflow-x: hidden;
 	}
 </style>
 
-<section id='professor-section-container' class="h-full py-8 parent" style="width: 200px;padding-left: 15%">
+<section id='professor-section-container' class="h-full py-8 bg-blue-200 parent" style="width: 200px;padding-left: 15%">
    <div class="child">
     {% for professor in professor_entries %}
     <div id="professor-container" style="width: 150px; margin-bottom: 20px;">
