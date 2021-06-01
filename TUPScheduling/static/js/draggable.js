@@ -33,16 +33,30 @@ function section_onmousedown( draggableSectionPaper){
     pos4 = e.clientY;
 
     draggableSection.style.position = 'absolute'
+    draggableSection.style.zIndex = 100;
     draggableSection.style.top = (draggableSection.offsetTop  - pos2) + "px";
     draggableSection.style.left = (draggableSection.offsetLeft - pos1) + "px";
   }
 
   
-  
+  function isOccupied(index){
+    let x = 0;
+    let status = true 
+    while(x < paper_hours*6){
+      if(draggableSection == tiles[index+x]?.occupied){
+        return true
+      }
+      if(tiles[index+x]?.occupied){
+        status = false
+      }
+      x+=6;
+    }
+    return status;
+  }
   function occupyingLogic(index){
     let x = 0;     
     while(x < paper_hours*6){
-      tiles[index+x].occupied = true;
+      tiles[index+x].occupied = draggableSection;
       x+=6;
     }
   
@@ -78,24 +92,17 @@ function section_onmousedown( draggableSectionPaper){
   function collision(){
   
     const convertedDragable = convertDraggable(draggableSection.querySelector('#origin').getBoundingClientRect());
-    
-    if (draggableSection.tileAssigned != null){ 
-      let x = 0;     
-      while(x < paper_hours*6){
-        tiles[draggableSection.tileAssigned+x].occupied = false;
-        x+=6;
-      } 
-    }
+    draggableSection.style.zIndex = 0;
 
     let i = 0;
 
     while(i < tiles.length){
-      if(!tiles[i].occupied){
+      if(isOccupied(i)){
         const elementBoundingBox = tiles[i].getBoundingClientRect()
         const tile = convertDraggable(elementBoundingBox);
 
         if(checkCollision(convertedDragable,tile)){
-          
+
           let container = tiles[i].querySelector('.tile-container');
 
           if(!draggableSection.in_main_table){
@@ -103,13 +110,19 @@ function section_onmousedown( draggableSectionPaper){
             draggableSection.in_main_table=true
           }
 
-
           container.appendChild(draggableSection);
-          draggableSection.style.top = null
-          draggableSection.style.left = null
+          draggableSection.style.top = null;
+          draggableSection.style.left = null;
+
+          if (draggableSection.tileAssigned != null){ 
+            let x = 0;     
+            while(x < paper_hours*6){
+              tiles[draggableSection.tileAssigned+x].occupied = false;
+              x+=6;
+            } 
+          }
 
           occupyingLogic(i);
-
           return;
         }
         
@@ -118,10 +131,12 @@ function section_onmousedown( draggableSectionPaper){
       i++;
     }
 
-    draggableSection.style.position = null
     draggableSection.style.top = null
     draggableSection.style.left = null
     const convertedSectionContainer = convertDraggable(section_container.getBoundingClientRect());
+
+
+
     if(checkCollision(convertedDragable,convertedSectionContainer)){
       let newSectionBody = document.createElement('div');
       newSectionBody.style.width = '100%';
