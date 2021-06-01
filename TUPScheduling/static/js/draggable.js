@@ -93,13 +93,13 @@ function section_onmousedown( draggableSectionPaper){
   function collision(){
   
     const convertedDragable = convertDraggable(draggableSection.querySelector('#origin').getBoundingClientRect());
-    draggableSection.style.zIndex = 0;
 
     let i = 0;
 
     while(i < tiles.length){
         const elementBoundingBox = tiles[i].getBoundingClientRect()
         const tile = convertDraggable(elementBoundingBox);
+        draggableSection.style.zIndex = 0;
 
         if(checkCollision(convertedDragable,tile)){
           if(isOccupied(i)){
@@ -133,17 +133,27 @@ function section_onmousedown( draggableSectionPaper){
 
     draggableSection.style.top = null
     draggableSection.style.left = null
+    if(!draggableSection.in_main_table){
+      draggableSection.style.position = null
+    }
     const convertedSectionContainer = convertDraggable(section_container.getBoundingClientRect());
 
 
 
     if(checkCollision(convertedDragable,convertedSectionContainer) && draggableSection.in_main_table ){
+
+      if (draggableSection.tileAssigned != null){ 
+        let x = 0;     
+        while(x < paper_hours*6){
+          tiles[draggableSection.tileAssigned+x].occupied = undefined;
+          x+=6;
+        } 
+      }
       let newSectionBody = document.createElement('div');
       newSectionBody.style.width = '100%';
       newSectionBody.style.height = '150px';
       draggableSection.is_dragged = false
       draggableSection.in_main_table = false
-      draggableSection.style.position = null
       draggableSection.tileAssigned = null;
       newSectionBody.appendChild(draggableSection);
       section_container.querySelector('#section-wrapper').appendChild(newSectionBody);
