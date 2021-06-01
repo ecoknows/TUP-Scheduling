@@ -1,6 +1,12 @@
 
+<style>
+	#professor-section-container{
+		overflow-y: scroll; 
+		-webkit-overflow-scrolling: touch; 
+	}
+</style>
 
-<section id='section-container' class="h-full py-8 parent" style="width: 200px;padding-left: 15%">
+<section id='professor-section-container' class="h-full py-8 parent" style="width: 200px;padding-left: 15%">
    <div class="child">
     {% for professor in professor_entries %}
     <div id="professor-container" style="width: 150px; margin-bottom: 20px;">
@@ -10,9 +16,9 @@
           </h1>
         </div>
         {% for subject in professor.professor_parental_key.all %}
-        <div onmousemove="professor_onmousemove(this)"  >
             <div
             id='draggable-professor'
+            onmousedown="professor_onmousedown(this)" 
             class="flex flex-col bg-white "
             style="line-height: 1; width: 150px; border: 1px solid #d3d3d3"
             >
@@ -25,9 +31,134 @@
                 </div>
             </div>
           </div>
-        </div>
         {% endfor %}
     </div>
+    <div id="professor-container" style="width: 150px; margin-bottom: 20px;">
+      <div style="padding: 10px; background-color: #2196f3; color: #fff">
+        <h1 class="text-center">
+            {{professor.first_name}} {{professor.last_name}}
+        </h1>
+      </div>
+      {% for subject in professor.professor_parental_key.all %}
+          <div
+          id='draggable-professor'
+          onmousedown="professor_onmousedown(this)" 
+          class="flex flex-col bg-white "
+          style="line-height: 1; width: 150px; border: 1px solid #d3d3d3"
+          >
+          <div id="paper-head" class="flex items-center justify-center">
+              <div id="origin" style="width: fit-content">
+                <h1 id="professor-name" class="hidden">
+                    {{professor.first_name}} {{professor.last_name}}
+                </h1>
+                <h1 class="text-center">{{subject.subject.subject_code}}</h1>
+              </div>
+          </div>
+        </div>
+      {% endfor %}
+  </div>
+  
+  <div id="professor-container" style="width: 150px; margin-bottom: 20px;">
+    <div style="padding: 10px; background-color: #2196f3; color: #fff">
+      <h1 class="text-center">
+          {{professor.first_name}} {{professor.last_name}}
+      </h1>
+    </div>
+    {% for subject in professor.professor_parental_key.all %}
+        <div
+        id='draggable-professor'
+        onmousedown="professor_onmousedown(this)" 
+        class="flex flex-col bg-white "
+        style="line-height: 1; width: 150px; border: 1px solid #d3d3d3"
+        >
+        <div id="paper-head" class="flex items-center justify-center">
+            <div id="origin" style="width: fit-content">
+              <h1 id="professor-name" class="hidden">
+                  {{professor.first_name}} {{professor.last_name}}
+              </h1>
+              <h1 class="text-center">{{subject.subject.subject_code}}</h1>
+            </div>
+        </div>
+      </div>
+    {% endfor %}
+</div>
+
+<div id="professor-container" style="width: 150px; margin-bottom: 20px;">
+  <div style="padding: 10px; background-color: #2196f3; color: #fff">
+    <h1 class="text-center">
+        {{professor.first_name}} {{professor.last_name}}
+    </h1>
+  </div>
+  {% for subject in professor.professor_parental_key.all %}
+      <div
+      id='draggable-professor'
+      onmousedown="professor_onmousedown(this)" 
+      class="flex flex-col bg-white "
+      style="line-height: 1; width: 150px; border: 1px solid #d3d3d3"
+      >
+      <div id="paper-head" class="flex items-center justify-center">
+          <div id="origin" style="width: fit-content">
+            <h1 id="professor-name" class="hidden">
+                {{professor.first_name}} {{professor.last_name}}
+            </h1>
+            <h1 class="text-center">{{subject.subject.subject_code}}</h1>
+          </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<div id="professor-container" style="width: 150px; margin-bottom: 20px;">
+  <div style="padding: 10px; background-color: #2196f3; color: #fff">
+    <h1 class="text-center">
+        {{professor.first_name}} {{professor.last_name}}
+    </h1>
+  </div>
+  {% for subject in professor.professor_parental_key.all %}
+      <div
+      id='draggable-professor'
+      onmousedown="professor_onmousedown(this)" 
+      class="flex flex-col bg-white "
+      style="line-height: 1; width: 150px; border: 1px solid #d3d3d3"
+      >
+      <div id="paper-head" class="flex items-center justify-center">
+          <div id="origin" style="width: fit-content">
+            <h1 id="professor-name" class="hidden">
+                {{professor.first_name}} {{professor.last_name}}
+            </h1>
+            <h1 class="text-center">{{subject.subject.subject_code}}</h1>
+          </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<div id="professor-container" style="width: 150px; margin-bottom: 20px;">
+  <div style="padding: 10px; background-color: #2196f3; color: #fff">
+    <h1 class="text-center">
+        {{professor.first_name}} {{professor.last_name}}
+    </h1>
+  </div>
+  {% for subject in professor.professor_parental_key.all %}
+      <div
+      id='draggable-professor'
+      onmousedown="professor_onmousedown(this)" 
+      class="flex flex-col bg-white "
+      style="line-height: 1; width: 150px; border: 1px solid #d3d3d3"
+      >
+      <div id="paper-head" class="flex items-center justify-center">
+          <div id="origin" style="width: fit-content">
+            <h1 id="professor-name" class="hidden">
+                {{professor.first_name}} {{professor.last_name}}
+            </h1>
+            <h1 class="text-center">{{subject.subject.subject_code}}</h1>
+          </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+    
     {% endfor %}
   </div>
 </section>

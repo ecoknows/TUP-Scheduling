@@ -1,45 +1,76 @@
+const tiles_section = document.getElementsByClassName('section-tile');
+const professor_container = document.getElementById('professor-section-container');
 
-let tiles_section = document.getElementsByClassName('section-tile');
-const professorContainer = document.getElementById('professor-container');
+function professor_onmousedown(dragableProfessor){
+    let pos1 = 0;
+    let pos2 = 0;
+    let pos3 = 0;
+    let pos4 = 0;
+    let event = window.event;
+    let paper_hours = 3;
 
-class DragProfessor{
-    constructor(draggableProfessor){
-        this.pos1 = 0;
-        this.pos2 = 0;
-        this.pos3 = 0;
-        this.pos4 = 0;
-        this.placementPositionTop = draggableProfessor.style.top;
-        this.placementPositionLeft = draggableProfessor.style.left;
-        this.draggableProfessor = draggableProfessor
-        this.draggableProfessor.onmousedown = this.eventMouseDown.bind(this);
-        this.tileAssigned = null;
+
+    dragableProfessor.style.position = 'absolute'
+
+    if(!dragableProfessor.is_placed){
+        let replaceDraggableProfessor = dragableProfessor.cloneNode(true);
+        replaceDraggableProfessor.style.position = null
+        dragableProfessor.parentElement.appendChild(replaceDraggableProfessor)
+        dragableProfessor.is_placed = true
     }
-
-    eventMouseDown(e){
-        e = e || window.event;
-        e.preventDefault();
-        this.pos3 = e.clientX;
-        this.pos4 = e.clientY;
-        this.draggableProfessor.style.position = 'absolute'
-        document.onmouseup = this.closeDragElement.bind(this);
-        document.onmousemove = this.elementDrag.bind(this);
-    }
-
-
-    elementDrag(e){
-        e = e || window.event;
-        e.preventDefault();
-        // calculate the new cursor position:
-        this.pos1 = this.pos3 - e.clientX;
-        this.pos2 = this.pos4 - e.clientY;
-        this.pos3 = e.clientX;
-        this.pos4 = e.clientY;
-        // set the element's new position:
-        this.draggableProfessor.style.top = (this.draggableProfessor.offsetTop - this.pos2) + "px";
-        this.draggableProfessor.style.left = (this.draggableProfessor.offsetLeft - this.pos1) + "px";
+    event.preventDefault();
+    pos3 = event.clientX;
+    pos4 = event.clientY;
+    
+    if(!dragableProfessor.is_dragged){
+      dragableProfessor.style.top = dragableProfessor.offsetTop - professor_container.scrollTop + 'px'
+      dragableProfessor.is_dragged = true
+    } else if(dragableProfessor.is_placed){
+        dragableProfessor.style.top = dragableProfessor.offsetTop - section_container.scrollTop + 'px'
     }
     
-    convertDraggable(element){
+  
+    
+    // console.log((dragableProfessor.offsetTop - pos2) + "px");
+    const elementDrag = e =>{
+      e = e || window.event;
+      e.preventDefault();
+      // calculate the new cursor position:
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+  
+      // set the element's new position:
+      // console.log(draggableOffsetTop, e.clientY,dragableProfessor.offsetTop-professor_container.scrollTop + 10);
+      dragableProfessor.style.top = (dragableProfessor.offsetTop  - pos2) + "px";
+      dragableProfessor.style.left = (dragableProfessor.offsetLeft - pos1) + "px";
+    }
+  
+    
+    
+    function occupyingLogic(index){
+      tiles_section[index].occupied = true;
+      dragableProfessor.tileAssigned = index; 
+    }
+  
+    
+    function checkCollision(paper, box){
+    
+      if(
+        paper.top > box.bottom || 
+        paper.right < box.left || 
+        paper.bottom < box.top || 
+        paper.left > box.right
+      ){
+        return false;
+      }else{
+        return true;
+      }
+  
+    }
+    
+    function convertDraggable(element){
       return{
         bottom : element.y + element.height,
         left: element.x,
@@ -47,86 +78,54 @@ class DragProfessor{
         top: element.y
       }
     }
-
-    occupyingLogic(index) {
-        tiles_section[index].occupied = true;
-        this.tileAssigned = index;
-    }
-
     
-    collision(){
-        const draggablePaper = this.convertDraggable(this.draggableProfessor.querySelector('#origin').getBoundingClientRect());
-        this.draggableProfessor.style.position = null
-        
-        if (this.tileAssigned != null){ 
-            tiles_section[this.tileAssigned].occupied = false;
-        }
-        
-        let i = 0;
-
-        while (i < tiles_section.length) {
-            if (!tiles_section[i].occupied) {
-                const elementBoundingBox = tiles_section[i].getBoundingClientRect()
-                const tile = this.convertDraggable(elementBoundingBox);
-
-                if (this.checkCollision(draggablePaper, tile)) {
-
-                    let container = tiles_section[i].querySelector('.tile-container');
-                    container.appendChild(this.draggableProfessor);
-                    this.draggableProfessor.style.top = null
-                    this.draggableProfessor.style.left = null
-
-                    if (this.draggableProfessor.querySelector('#professor-name')) {
-                        this.draggableProfessor.querySelector('#professor-name').className = null
-                    }
-
-                    this.occupyingLogic(i);
-
-                    return;
-                }
-
-
+    
+    function collision(){
+    
+      const convertedDragable = convertDraggable(dragableProfessor.querySelector('#origin').getBoundingClientRect());
+      dragableProfessor.style.position = null
+      if (dragableProfessor.tileAssigned != null){ 
+          tiles_section[dragableProfessor.tileAssigned].occupied = false;
+      }
+      let i = 0;
+  
+      while(i < tiles_section.length){
+        if(!tiles_section[i].occupied){
+          const elementBoundingBox = tiles_section[i].getBoundingClientRect()
+          const tile = convertDraggable(elementBoundingBox);
+  
+          if(checkCollision(convertedDragable,tile)){
+            
+            let container = tiles_section[i].querySelector('.tile-container');
+            container.appendChild(dragableProfessor);
+            dragableProfessor.style.top = null
+            dragableProfessor.style.left = null
+            if (dragableProfessor.querySelector('#professor-name')) {
+                dragableProfessor.querySelector('#professor-name').className = null
             }
-            i++;
+  
+            occupyingLogic(i);
+  
+            return;
+          }
+          
+   
         }
-
-        this.draggableProfessor.remove()
-        
+        i++;
+      }
+      
+        dragableProfessor.remove()
+  
     }
-
-
-
-    checkCollision(paper, box) {
-
-        if (
-            paper.top > box.bottom ||
-            paper.right < box.left ||
-            paper.bottom < box.top ||
-            paper.left > box.right
-        ) {
-            return false;
-        } else {
-            return true;
-        }
-
-    }
-
-
-    closeDragElement(){
+  
+    function closeDragElement() {
+      // stop moving when mouse button is released:
       document.onmouseup = null;
       document.onmousemove = null;
-      this.collision();
+      collision()
     }
-    
-
-
-}
-
-
-function professor_onmousemove(draggableProfessor){
-    let cloneDraggableProfessor = draggableProfessor.querySelector('#draggable-professor').cloneNode(true);
-    cloneDraggableProfessor.style.position = 'absolute'
-    cloneDraggableProfessor.style.top = draggableProfessor.offsetTop + 'px'
-    professorContainer.appendChild(cloneDraggableProfessor)
-    new DragProfessor(cloneDraggableProfessor)
+  
+    document.onmouseup = closeDragElement
+    document.onmousemove = elementDrag
+  
 }

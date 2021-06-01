@@ -23,14 +23,14 @@
 
 
 	{% for time in self.time %}
-		<div class="flex">
+		<div class="flex" style="height: 50px;">
 
-			<div class="flex-1 py-4">
+			<div class="flex-1">
 				<h1 class="text-lg text-center">{{time}}</h1>
 			</div>
 
 			{% for day in self.day %}
-				<div class="flex-1 py-4 tile">
+				<div class="flex-1 tile">
 					<div class='border border-red-600 tile-container '>
 					</div>
 				</div>
