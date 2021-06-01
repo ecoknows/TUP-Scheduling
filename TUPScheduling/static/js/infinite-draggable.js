@@ -101,7 +101,7 @@ function professor_onmousedown(dragableProfessor){
             dragableProfessor.style.top = null
             dragableProfessor.style.left = null
             if (dragableProfessor.querySelector('#professor-name')) {
-                dragableProfessor.querySelector('#professor-name').className = null
+                dragableProfessor.querySelector('#professor-name').className = 'text-center'
             }
   
             occupyingLogic(i);
