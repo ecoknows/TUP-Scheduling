@@ -33,10 +33,10 @@ class SubjectsAdmin(ModelAdmin):
     model = Subjects
     menu_label = 'Subjects'
     list_display = ('subject_code', 'description',
-                    'units', 'lab_or_lec', 'hours')
-    list_filter = ('units', 'lab_or_lec', 'hours')
+                    'units', 'lab_or_lec', 'hours', 'choose_department')
+    list_filter = ('lab_or_lec', 'choose_department')
     search_fields = ('subject_code', 'description',
-                     'units', 'lab_or_lec', 'hours')
+                     'units', 'lab_or_lec', 'hours', 'choose_department')
 
 
 class CourseCurriculumAdmin(ModelAdmin):

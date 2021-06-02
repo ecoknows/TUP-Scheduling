@@ -2,7 +2,7 @@ from django.db import models
 from django import forms
 from django.db.models.fields import Field
 from django.db.models.fields.related import ForeignKey
-from django.forms.widgets import NumberInput
+from django.forms.widgets import ChoiceWidget, NumberInput
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 
@@ -83,22 +83,22 @@ class SubjectsOrderable(Orderable):
         "home.Subjects", related_name="subject_parental_key", null=True)
     professor_model = ParentalKey("accounts.Professors",
                                   related_name="professor_parental_key", null=True)
-    course_curriculum_model1 = ParentalKey("home.CourseCurriculum",
-                                           related_name="first_year_first_sem", null=True)
-    course_curriculum_model2 = ParentalKey("home.CourseCurriculum",
-                                           related_name="first_year_second_sem", null=True)
-    course_curriculum_model3 = ParentalKey("home.CourseCurriculum",
-                                           related_name="second_year_first_sem", null=True)
-    course_curriculum_model4 = ParentalKey("home.CourseCurriculum",
-                                           related_name="second_year_second_sem", null=True)
-    course_curriculum_model5 = ParentalKey("home.CourseCurriculum",
-                                           related_name="third_year_first_sem", null=True)
-    course_curriculum_model6 = ParentalKey("home.CourseCurriculum",
-                                           related_name="third_year_second_sem", null=True)
-    course_curriculum_model7 = ParentalKey("home.CourseCurriculum",
-                                           related_name="fourth_year_first_sem", null=True)
-    course_curriculum_model8 = ParentalKey("home.CourseCurriculum",
-                                           related_name="fourth_year_second_sem", null=True)
+    first_year_first_sem = ParentalKey("home.CourseCurriculum",
+                                       related_name="first_year_first_sem", null=True)
+    first_year_second_sem = ParentalKey("home.CourseCurriculum",
+                                        related_name="first_year_second_sem", null=True)
+    second_year_first_sem = ParentalKey("home.CourseCurriculum",
+                                        related_name="second_year_first_sem", null=True)
+    second_year_second_sem = ParentalKey("home.CourseCurriculum",
+                                         related_name="second_year_second_sem", null=True)
+    third_year_first_sem = ParentalKey("home.CourseCurriculum",
+                                       related_name="third_year_first_sem", null=True)
+    third_year_second_sem = ParentalKey("home.CourseCurriculum",
+                                        related_name="third_year_second_sem", null=True)
+    fourth_year_first_sem = ParentalKey("home.CourseCurriculum",
+                                        related_name="fourth_year_first_sem", null=True)
+    fourth_year_second_sem = ParentalKey("home.CourseCurriculum",
+                                         related_name="fourth_year_second_sem", null=True)
 
     subject = models.ForeignKey(
         "home.Subjects",
@@ -159,7 +159,8 @@ class Subjects(ClusterableModel, index.Indexed):
     lab_or_lec = models.CharField(
         max_length=200,
         default='Lecture',
-        choices=[('Laboratory', 'Laboratory'), ('Lecture', 'Lecture')]
+        choices=[('Laboratory', 'Laboratory'), ('Lecture', 'Lecture')],
+        verbose_name='Type',
     )
 
     # sem = models.CharField(
@@ -169,6 +170,15 @@ class Subjects(ClusterableModel, index.Indexed):
     # )
 
     hours = models.FloatField(default=1)
+
+    choose_department = models.ForeignKey(
+        'home.Departments',
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name='+',
+        verbose_name='Department'
+    )
 
     search_fields = [
         index.SearchField('subject_code'),
@@ -185,10 +195,11 @@ class Subjects(ClusterableModel, index.Indexed):
             FieldPanel('lab_or_lec', widget=forms.RadioSelect),
             # FieldPanel('sem', widget=forms.RadioSelect),
         ], heading='Secondary Information'),
-        MultiFieldPanel([
-            InlinePanel('subject_parental_key',
-                        label='Subject', min_num=0, max_num=4)
-        ], heading='Prerequisite')
+        FieldPanel('choose_department'),
+        # MultiFieldPanel([
+        #     InlinePanel('subject_parental_key',
+        #                 label='Subject', min_num=0, max_num=4)
+        # ], heading='Prerequisite')
     ]
 
     def __str__(self):
@@ -207,7 +218,12 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
     course_name = models.CharField(
         max_length=300,
         null=True,
-        help_text='Ex. CS33'
+        help_text='Ex. BSCS - Bachelor of Science in Computer Science'
+    )
+    course_abbreviation = models.CharField(
+        max_length=300,
+        null=True,
+        help_text='Ex. BSCS'
     )
     department = models.ForeignKey(
         "home.Departments",
@@ -228,6 +244,7 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
     panels = [
         MultiFieldPanel([
             FieldPanel('course_name'),
+            FieldPanel('course_abbreviation'),
             SnippetChooserPanel('department'),
             FieldPanel('curriculum_year'),
         ], heading='Primary Information'),
@@ -235,15 +252,15 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
 
     first_year = [
         InlinePanel('first_year_first_sem',
-                    label='Subject', min_num=1, max_num=10, heading="First Sem"),
+                    label='Subject', min_num=1, max_num=15, heading="First Sem"),
         InlinePanel('first_year_second_sem',
-                    label='Subject', min_num=1, max_num=10, heading="Second Sem"),
+                    label='Subject', min_num=1, max_num=15, heading="Second Sem"),
     ]
     second_year = [
         InlinePanel('second_year_first_sem',
-                    label='Subject', min_num=1, max_num=10, heading="First Sem"),
+                    label='Subject', min_num=1, max_num=15, heading="First Sem"),
         InlinePanel('second_year_second_sem',
-                    label='Subject', min_num=1, max_num=10, heading="Second Sem"),
+                    label='Subject', min_num=1, max_num=15, heading="Second Sem"),
     ]
 
     third_year = [
@@ -251,14 +268,14 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
             'third_year_first_sem',
             label='Subject',
             min_num=1,
-            max_num=10,
+            max_num=15,
             heading="First Sem"
         ),
         InlinePanel(
             'third_year_second_sem',
             label='Subject',
             min_num=1,
-            max_num=10,
+            max_num=15,
             heading="Second Sem"
         ),
     ]
@@ -267,14 +284,14 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
             'fourth_year_first_sem',
             label='Subject',
             min_num=1,
-            max_num=10,
+            max_num=15,
             heading="First Sem"
         ),
         InlinePanel(
             'fourth_year_second_sem',
             label='Subject',
             min_num=1,
-            max_num=10,
+            max_num=15,
             heading="Second Sem"
         ),
     ]
@@ -502,7 +519,7 @@ class Sections(models.Model, index.Indexed):
     section_name = models.CharField(
         max_length=30,
         null=True,
-        help_text='Ex. BSCS-3A-NS'
+        help_text='Ex. BSCS-NS-3A'
     )
 
     year_level = models.CharField(
@@ -592,36 +609,15 @@ class BulkSections(models.Model, index.Indexed):
     fourth_year = models.IntegerField(
         blank=False, null=True, default=0)
 
-    ns_first_year = models.IntegerField(
-        blank=False, null=True, default=0, verbose_name="First Year")
-    ns_second_year = models.IntegerField(
-        blank=False, null=True, default=0, verbose_name="Second Year")
-    ns_third_year = models.IntegerField(
-        blank=False, null=True, default=0, verbose_name="Third Year")
-    ns_fourth_year = models.IntegerField(
-        blank=False, null=True, default=0, verbose_name="Fourth Year")
-
     sections = [
-        MultiFieldPanel([
-            FieldPanel('first_year', widget=forms.NumberInput(
-                attrs={'placeholder': '1st Year'})),
-            FieldPanel('second_year', widget=forms.NumberInput(
-                attrs={'placeholder': '2nd Year'})),
-            FieldPanel('third_year', widget=forms.NumberInput(
-                attrs={'placeholder': '3rd Year'})),
-            FieldPanel('fourth_year', widget=forms.NumberInput(
-                attrs={'placeholder': '4th Year'})),
-        ], heading='Stem'),
-        MultiFieldPanel([
-            FieldPanel('ns_first_year', widget=forms.NumberInput(
-                attrs={'placeholder': '1st Year'})),
-            FieldPanel('ns_second_year', widget=forms.NumberInput(
-                attrs={'placeholder': '2nd Year'})),
-            FieldPanel('ns_third_year', widget=forms.NumberInput(
-                attrs={'placeholder': '3rd Year'})),
-            FieldPanel('ns_fourth_year', widget=forms.NumberInput(
-                attrs={'placeholder': '4th Year'})),
-        ], heading='Non-Stem'),
+        FieldPanel('first_year', widget=forms.NumberInput(
+            attrs={'placeholder': '1st Year'})),
+        FieldPanel('second_year', widget=forms.NumberInput(
+            attrs={'placeholder': '2nd Year'})),
+        FieldPanel('third_year', widget=forms.NumberInput(
+            attrs={'placeholder': '3rd Year'})),
+        FieldPanel('fourth_year', widget=forms.NumberInput(
+            attrs={'placeholder': '4th Year'})),
     ]
 
     edit_handler = TabbedInterface(
@@ -635,41 +631,25 @@ class BulkSections(models.Model, index.Indexed):
         return self.course_curriculum.course_name
 
     def save(self, *args, **kwargs):
+        print("ETOOOO: ", self.course_curriculum.course_name)
         Sections.objects.filter(
             course_curriculum_id=self.course_curriculum.pk).delete()
 
         for i in range(self.first_year):
             section = Sections(
-                section_name=self.course_curriculum.course_name + "-1" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="1st Year", course_curriculum_id=self.course_curriculum.pk)
+                section_name=self.course_curriculum.course_abbreviation + "-1" + chr(i+65), sem=self.sem, year_level="1st Year", course_curriculum_id=self.course_curriculum.pk)
             section.save()
         for i in range(self.second_year):
             section = Sections(
-                section_name=self.course_curriculum.course_name + "-2" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="2nd Year", course_curriculum_id=self.course_curriculum.pk)
+                section_name=self.course_curriculum.course_abbreviation + "-2" + chr(i+65), sem=self.sem, year_level="2nd Year", course_curriculum_id=self.course_curriculum.pk)
             section.save()
         for i in range(self.third_year):
             section = Sections(
-                section_name=self.course_curriculum.course_name + "-3" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="3rd Year", course_curriculum_id=self.course_curriculum.pk)
+                section_name=self.course_curriculum.course_abbreviation + "-3" + chr(i+65), sem=self.sem, year_level="3rd Year", course_curriculum_id=self.course_curriculum.pk)
             section.save()
         for i in range(self.fourth_year):
             section = Sections(
-                section_name=self.course_curriculum.course_name + "-4" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="4th Year", course_curriculum_id=self.course_curriculum.pk)
-            section.save()
-
-        for i in range(self.ns_first_year):
-            section = Sections(
-                section_name=self.course_curriculum.course_name + "-NS-1" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="1st Year", course_curriculum_id=self.course_curriculum.pk)
-            section.save()
-        for i in range(self.ns_second_year):
-            section = Sections(
-                section_name=self.course_curriculum.course_name + "-NS-2" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="2nd Year", course_curriculum_id=self.course_curriculum.pk)
-            section.save()
-        for i in range(self.ns_third_year):
-            section = Sections(
-                section_name=self.course_curriculum.course_name + "-NS-3" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="3rd Year", course_curriculum_id=self.course_curriculum.pk)
-            section.save()
-        for i in range(self.ns_fourth_year):
-            section = Sections(
-                section_name=self.course_curriculum.course_name + "-NS-4" + chr(i+65), sem=self.sem, department_id=self.course_curriculum.department.pk, year_level="4th Year", course_curriculum_id=self.course_curriculum.pk)
+                section_name=self.course_curriculum.course_abbreviation + "-4" + chr(i+65), sem=self.sem, year_level="4th Year", course_curriculum_id=self.course_curriculum.pk)
             section.save()
 
     class Meta:
