@@ -48,6 +48,7 @@ class CourseCurriculumAdmin(ModelAdmin):
                      'department__Department_Name', 'curriculum_year')
     list_filter = ('department', 'curriculum_year')
 
+
 class SectionView(CreateView):
     def sample(self):
         if 'test' in self.request.GET:
@@ -84,6 +85,7 @@ class SectionView(CreateView):
     def __init__(self, model_admin):
         super().__init__(model_admin)
 
+
 class SectionsAdmin(ModelAdmin):
     create_template_name = 'bulk_section.html'
     index_template_name = 'sections.html'
@@ -96,13 +98,11 @@ class SectionsAdmin(ModelAdmin):
         'year_level',
         'sem',
         'course_curriculum',
-        'department',
     )
     list_filter = (
         'year_level',
         'sem',
         'course_curriculum',
-        'department',
     )
     search_fields = (
         'section_name',
@@ -110,7 +110,6 @@ class SectionsAdmin(ModelAdmin):
         'sem',
         'course_curriculum__course_name',
         'college__college_name',
-        'department__Department_Name',
     )
 
 
@@ -150,7 +149,6 @@ class RoomsAdmin(ModelAdmin):
 class DepartmentsAdmin(ModelAdmin):
     model = Departments
     menu_label = 'Departments'
-
     list_display = (
         'Department_Name',
         'Choose_College',
@@ -186,6 +184,7 @@ class AdminGroup(ModelAdminGroup):
 
 
 modeladmin_register(AdminGroup)
+
 
 class SectionsSchedule(ModelAdmin):
     model = SectionsSchedule

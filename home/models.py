@@ -250,15 +250,15 @@ class CourseCurriculum(ClusterableModel, index.Indexed):
         InlinePanel(
             'third_year_first_sem',
             label='Subject',
-            min_num=1, 
-            max_num=10, 
+            min_num=1,
+            max_num=10,
             heading="First Sem"
         ),
         InlinePanel(
             'third_year_second_sem',
-            label='Subject', 
-            min_num=1, 
-            max_num=10, 
+            label='Subject',
+            min_num=1,
+            max_num=10,
             heading="Second Sem"
         ),
     ]
@@ -338,7 +338,8 @@ class Departments(ClusterableModel, index.Indexed):
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
-        related_name='+'
+        related_name='+',
+        verbose_name="College"
     )
 
     panels = [
@@ -524,13 +525,6 @@ class Sections(models.Model, index.Indexed):
         help_text='Ex. Computer Science'
     )
 
-    department = models.ForeignKey(
-        "home.Departments",
-        null=True,
-        on_delete=models.CASCADE,
-        help_text='Ex. Computer Studies'
-    )
-
     search_fields = [
         index.SearchField('section_name'),
     ]
@@ -545,7 +539,6 @@ class Sections(models.Model, index.Indexed):
             heading="Section Info",
         ),
         SnippetChooserPanel('course_curriculum'),
-        SnippetChooserPanel('department'),
     ]
 
     def __str__(self):
@@ -741,6 +734,7 @@ class Colleges(ClusterableModel, index.Indexed):
         ordering = [
             'college_name'
         ]
+
 
 @ register_snippet
 class SectionsSchedule(models.Model):
