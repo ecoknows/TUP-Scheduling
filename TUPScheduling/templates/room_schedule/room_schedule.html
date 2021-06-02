@@ -9,7 +9,7 @@
 <header>
     <div class="p-10 font-bold text-center place-self-center">
         <a href="#">
-            <img class="mx-auto mb-2" src="{% static 'img/icons/tuplogo.webp' %}" alt="tup logo">
+          <img class="mx-auto mb-2" src="{% static 'img/icons/tuplogo.webp' %}" alt="tup logo">
             <h1>TECHNOLOGICAL UNIVERSITY</h1>
             <h1>OF THE PHILIPPINES</h1>
         </a>
@@ -18,28 +18,29 @@
 
 <!--Navbar-->
 <nav class="bg-red-700 ">
-    <div class="flex justify-end text-white lg:hidden">
-      <button class="p-4 mobile-menu-button focus:outline-none focus:bg-red-600">
-        <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
-        </svg>
-      </button>
-    </div>
+  <div class="flex justify-end text-white lg:hidden">
+    <button class="p-4 mobile-menu-button focus:outline-none focus:bg-red-600">
+      <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+      </svg>
+    </button>
+  </div>
   
-    <div class="flex justify-center">
-      <div class="absolute inset-y-0 left-0 z-10 px-2 space-y-6 transition duration-150 ease-in-out transform -translate-x-full bg-red-700 sidebar lg:relative lg:translate-x-0">
-        <div class="w-full lg:flex">
-          <div class="pb-4 lg:flex md:pb-0">
-            <ul class="pb-2 text-white md:pb-0 lg:flex ">
-              <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent lg:px-3 hover:border-white" href="/class-schedule"><span>CLASS SCHEDULE</span></a></li>
-              <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent lg:px-3 hover:border-white" href="/instructor-schedule"><span>INSTRUCTOR SCHEDULE</span></a></li>
-              <li><a class="block px-0 py-2 pt-4 border-b-2 border-transparent border-white lg:px-3" href="/room-schedule"><span>ROOM SCHEDULE</span></a></li>
-            </ul>
-          </div>
+  <div class="flex justify-center">
+    <div class="fixed inset-y-0 left-0 z-10 px-2 space-y-6 transition duration-150 ease-in-out transform -translate-x-full bg-red-700 sidebar lg:relative lg:translate-x-0">
+      <div class="w-full lg:flex">
+        <div class="pb-4 lg:flex md:pb-0">
+          <ul class="pb-2 text-white md:pb-0 lg:flex ">
+            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent hover:border-white lg:px-3" href="/class-schedule"><span>CLASS SCHEDULE</span></a></li>
+            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent hover:border-white lg:px-3" href="/instructor-schedule"><span>INSTRUCTOR SCHEDULE</span></a></li>
+            <li><a class="block px-0 py-2 pt-4 border-b-2 border-transparent border-white lg:px-3" href="/room-schedule"><span>ROOM SCHEDULE</span></a></li>
+          </ul>
         </div>
-      </div>
+     </div>
     </div>
+  </div>
 </nav>
+
 {% endblock %}
 
 {% block content %}

@@ -6,23 +6,26 @@
 
 {% block header %}
 
+
+<!--Header-->
 <header>
   <div class="p-10 font-bold text-center place-self-center">
       <a href="#">
-          <img class="mx-auto mb-2" src="{% static 'img/icons/tuplogo.webp' %}" alt="tup logo">
+        <img class="mx-auto mb-2" src="{% static 'img/icons/tuplogo.webp' %}" alt="tup logo">
           <h1>TECHNOLOGICAL UNIVERSITY</h1>
           <h1>OF THE PHILIPPINES</h1>
       </a>
   </div>
 </header>
 
+<!--Navbar-->
 <nav class="bg-red-700 ">
 <div class="flex">
   <div class="flex-1 ">
     <div class="flex justify-center">
         <ul class="flex text-center text-white lg:hidden ">
-          <li class="ml-20"><a class="block px-0 px-3 py-3 pt-4 border-b-2 border-transparent border-white lg:hidden" href="student time.html"><span>TIME</span></a></li>
-          <li class="ml-20"><a class="block px-0 px-3 py-3 pt-4 border-b-2 border-transparent hover:border-white lg:hidden" href="student overview.html"><span>OVERVIEW</span></a></li>
+          <li class="ml-20"><a class="block px-3 py-3 pt-4 border-b-2 border-transparent border-white lg:hidden" href="/class-schedule"><span>TIME</span></a></li>
+          <li class="ml-20"><a class="block px-3 py-3 pt-4 border-b-2 border-transparent hover:border-white lg:hidden" href="class-schedule-overview"><span>OVERVIEW</span></a></li>
         </ul>
       </div>
   </div>
@@ -37,13 +40,13 @@
 </div>
 
   <div class="flex justify-center">
-    <div class="absolute inset-y-0 left-0 z-10 px-2 space-y-6 transition duration-150 ease-in-out transform -translate-x-full bg-red-700 sidebar lg:relative lg:translate-x-0">
+    <div class="fixed inset-y-0 left-0 z-10 px-2 space-y-6 transition duration-150 ease-in-out transform -translate-x-full bg-red-700 sidebar lg:relative lg:translate-x-0">
       <div class="w-full lg:flex">
         <div class="pb-2 lg:flex md:pb-0">
           <ul class="pb-2 text-white md:pb-0 lg:flex ">
-            <li class="mr-20"><a  class="block px-0 py-2 pt-4 border-b-2 border-transparent border-white lg:px-3" href="/class-schedule"><span>CLASS SCHEDULE</span></a></li>
-            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent lg:px-3 hover:border-white" href="/instructor-schedule"><span>INSTRUCTOR SCHEDULE</span></a></li>
-            <li><a  class="block px-0 py-2 pt-4 border-b-2 border-transparent lg:px-3 hover:border-white" href="/room-schedule"><span>ROOM SCHEDULE</span></a></li>
+            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent border-white lg:px-3" href="/class-schedule"><span>CLASS SCHEDULE</span></a></li>
+            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent hover:border-white lg:px-3" href="/instructor-schedule"><span>INSTRUCTOR SCHEDULE</span></a></li>
+            <li><a class="block px-0 py-2 pt-4 border-b-2 border-transparent lg:px-3 hover:border-white" href="/room-schedule"><span>ROOM SCHEDULE</span></a></li>
           </ul>
         </div>
       </div>
@@ -69,7 +72,7 @@
                   <h1 class="font-bold">TIME</h1>
                 </div>
               </a>
-              <a href="class-schedule-overview">
+              <a href="/class-schedule-overview">
                 <div class="px-3 py-3 bg-white border-4 border-gray-400 rounded-r-2xl w-28">
                   <h1 class="font-bold">OVERVIEW</h1>
                 </div>
