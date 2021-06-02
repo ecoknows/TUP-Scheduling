@@ -631,7 +631,6 @@ class BulkSections(models.Model, index.Indexed):
         return self.course_curriculum.course_name
 
     def save(self, *args, **kwargs):
-        print("ETOOOO: ", self.course_curriculum.course_name)
         Sections.objects.filter(
             course_curriculum_id=self.course_curriculum.pk).delete()
 
