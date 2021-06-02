@@ -1,172 +1,178 @@
-// var tiles = document.getElementsByClassName('tile')
-// var section_tile = document.getElementsByClassName('section-tile');
+let tiles = document.getElementsByClassName('tile');
+let section_container = document.getElementById('section-container');
 
-function draggable(draggable_name,tile_name,paper_container){
-  let tiles = document.getElementsByClassName(tile_name);
-  class DraggableElement{
-    constructor(draggbablePaper){
-      this.pos1 = 0;
-      this.pos2 = 0;
-      this.pos3 = 0;
-      this.pos4 = 0;
-      this.paper_hours = 3;
-      this.starting_tile_index = null;
-      this.draggbablePaper = draggbablePaper;
-      this.placementPositionTop =  draggbablePaper.style.top;
-      this.placementPositionLeft =  draggbablePaper.style.left;
-      this.paperHead = draggbablePaper.querySelector('#paper-head')
-      this.dragElement();
-    }
-  
-    dragElement(){
-      if(this.paperHead){
-        this.paperHead.onmousedown = this.eventMouseDown.bind(this);
-      }else{
-        this.draggbablePaper.onmousedown = this.eventMouseDown.bind(this);
-      }
-    }
-    
-  
-    eventMouseDown(e){
-      e = e || window.event;
-      e.preventDefault();
-      // get the mouse cursor position at startup:
-      this.pos3 = e.clientX;
-      this.pos4 = e.clientY;
-      document.onmouseup = this.closeDragElement.bind(this);
-      // call a function whenever the cursor moves:
-      document.onmousemove = this.elementDrag.bind(this);
-    }
-    
-    elementDrag(e){
-      e = e || window.event;
-      e.preventDefault();
-      // calculate the new cursor position:
-      this.pos1 = this.pos3 - e.clientX;
-      this.pos2 = this.pos4 - e.clientY;
-      this.pos3 = e.clientX;
-      this.pos4 = e.clientY;
-      // set the element's new position:
-      this.draggbablePaper.style.position = 'absolute'
-      this.draggbablePaper.style.top = (this.draggbablePaper.offsetTop - this.pos2) + "px";
-      this.draggbablePaper.style.left = (this.draggbablePaper.offsetLeft - this.pos1) + "px";
-    }
-  
-    draggableInfo(element){
-      return{
-        bottom : element.y + element.height,
-        left: element.x,
-        right: element.x + element.width,
-        top: element.y
-      }
-    }
+function section_onmousedown( draggableSectionPaper){
+  let pos1 = 0;
+  let pos2 = 0;
+  let pos3 = 0;
+  let pos4 = 0;
+  let event = window.event;
+  let paper_hours = 3;
+  let draggableSection = draggableSectionPaper.parentElement
 
-
-    resetStartingTile(){
-      //RESET STARTING TILE   
-      if(this.starting_tile_index != null){
-        for(let i = 0; i < this.paper_hours*5; i+=5){
-          if(tiles[this.starting_tile_index+i]?.occupied)
-            tiles[this.starting_tile_index+i].occupied = null;
-        }
-        this.starting_tile_index = null;
-      }
-    }
-    
-    occupyingLogic(index){
-      this.resetStartingTile();
-      let x = 0;     
-      while(x < this.paper_hours*5){
-        tiles[index+x].occupied = true;
-        x+=5;
-      }
-    
-      this.starting_tile_index = index; 
-    }
+  event.preventDefault();
+  pos3 = event.clientX;
+  pos4 = event.clientY;
   
-  
-    collision(){
-  
-      const draggablePaper = this.draggableInfo(this.draggbablePaper.querySelector('#origin').getBoundingClientRect());
-      
-      let i = 0;
-  
-      while(i < tiles.length){
-        if(!tiles[i].occupied){
-          const elementBoundingBox = tiles[i].getBoundingClientRect()
-          const tile = this.draggableInfo(elementBoundingBox);
-  
-          if(this.checkCollision(draggablePaper,tile)){
-            
-            let container = tiles[i].querySelector('.tile-container');
-            container.appendChild(this.draggbablePaper);
-            this.draggbablePaper.style.top = null
-            this.draggbablePaper.style.left = null
-
-            this.occupyingLogic(i);
-  
-            return;
-          }
-          
-   
-        }
-        i++;
-      }
-      const paperSection = document.getElementById(paper_container);
-      const paperContainerBoundingBox = paperSection.getBoundingClientRect()
-      const paperContainer = this.draggableInfo(paperContainerBoundingBox);
-
-      if(this.checkCollision(draggablePaper,paperContainer)){
-        paperSection.appendChild(this.draggbablePaper);
-        this.draggbablePaper.style.top = null
-        this.draggbablePaper.style.left = null
-        this.draggbablePaper.style.position = null
-
-        this.resetStartingTile();
-        return;
-      }
-
-      // NOT COLLIDE RESET ALL 
-      this.draggbablePaper.style.left = this.placementPositionLeft; 
-      this.draggbablePaper.style.top = this.placementPositionTop;
-      if(this.starting_tile_index == null){
-        this.draggbablePaper.style.position = null
-      }
-  
-  
-    }
-  
-    checkCollision(paper, box){
-  
-      if(
-        paper.top > box.bottom || 
-        paper.right < box.left || 
-        paper.bottom < box.top || 
-        paper.left > box.right
-      ){
-        return false;
-      }else{
-        return true;
-      }
-  
-    }
-    
-    closeDragElement(){
-      document.onmouseup = null;
-      document.onmousemove = null;
-      this.collision();
-    }
-  
+  if(!draggableSection.is_dragged){
+    draggableSection.style.top = draggableSection.offsetTop - section_container.scrollTop + 'px'
+    draggableSection.is_dragged = true
   }
   
-  var draggables = document.getElementsByClassName(draggable_name);
   
-  Array.prototype.forEach.call(draggables,(element) => {
-    new DraggableElement(element);
-  });
+  // console.log((draggableSection.offsetTop - pos2) + "px");
+  const elementDrag = e =>{
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+
+    draggableSection.style.position = 'absolute'
+    draggableSection.style.zIndex = 100;
+    draggableSection.style.top = (draggableSection.offsetTop  - pos2) + "px";
+    draggableSection.style.left = (draggableSection.offsetLeft - pos1) + "px";
+  }
+
+  
+  function isOccupied(index){
+    let x = index;
+    let status = false 
+    while(x <= index+12){
+      if (tiles[x] == undefined){
+        return false
+      }
+      if(tiles[x]?.occupied == draggableSection || tiles[x]?.occupied == undefined ){
+        status = true
+      }else{
+        return false
+      }
+      
+      x+=6;
+    }
+    return status;
+  }
+  function occupyingLogic(index){
+    let x = 0;     
+    while(x < paper_hours*6){
+      tiles[index+x].occupied = draggableSection;
+      x+=6;
+    }
+  
+    draggableSection.tileAssigned = index; 
+  }
+
+  
+  function checkCollision(paper, box){
+  
+    if(
+      paper.top > box.bottom || 
+      paper.right < box.left || 
+      paper.bottom < box.top || 
+      paper.left > box.right
+    ){
+      return false;
+    }else{
+      return true;
+    }
+
+  }
+  
+  function convertDraggable(element){
+    return{
+      bottom : element.y + element.height,
+      left: element.x,
+      right: element.x + element.width,
+      top: element.y
+    }
+  }
+  
+  
+  function collision(){
+  
+    const convertedDragable = convertDraggable(draggableSection.querySelector('#origin').getBoundingClientRect());
+
+    let i = 0;
+
+    while(i < tiles.length){
+        const elementBoundingBox = tiles[i].getBoundingClientRect()
+        const tile = convertDraggable(elementBoundingBox);
+        draggableSection.style.zIndex = 0;
+
+        if(checkCollision(convertedDragable,tile)){
+          if(isOccupied(i)){
+
+            let container = tiles[i].querySelector('.tile-container');
+
+            if(!draggableSection.in_main_table){
+              draggableSection.parentElement.remove()
+              draggableSection.in_main_table=true
+            }
+
+            container.appendChild(draggableSection);
+            draggableSection.style.top = null;
+            draggableSection.style.left = null;
+
+            if (draggableSection.tileAssigned != null){ 
+              let x = 0;     
+              while(x < paper_hours*6){
+                tiles[draggableSection.tileAssigned+x].occupied = undefined;
+                x+=6;
+              } 
+            }
+
+            occupyingLogic(i);
+            return;
+          }
+        }
+        
+      i++;
+    }
+
+    draggableSection.style.top = null
+    draggableSection.style.left = null
+    draggableSection.is_dragged = false
+    if(!draggableSection.in_main_table){
+      draggableSection.style.position = null
+    }
+    const convertedSectionContainer = convertDraggable(section_container.getBoundingClientRect());
+
+
+
+    if(checkCollision(convertedDragable,convertedSectionContainer) && draggableSection.in_main_table ){
+
+      if (draggableSection.tileAssigned != null){ 
+        let x = 0;     
+        while(x < paper_hours*6){
+          tiles[draggableSection.tileAssigned+x].occupied = undefined;
+          x+=6;
+        } 
+      }
+      let newSectionBody = document.createElement('div');
+      newSectionBody.style.width = '100%';
+      newSectionBody.style.height = '150px';
+      draggableSection.is_dragged = false
+      draggableSection.in_main_table = false
+      draggableSection.tileAssigned = null;
+      draggableSection.style.position = null
+      newSectionBody.appendChild(draggableSection);
+      section_container.querySelector('#section-wrapper').appendChild(newSectionBody);
+    }
+    
+
+
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+    collision()
+  }
+
+  document.onmouseup = closeDragElement
+  document.onmousemove = elementDrag
+
 }
-
-
-
-draggable('draggable-paper','tile','section-container');
-// draggable('draggable-professor','section-tile','professor-container', false);

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section class="flex justify-center h-screen p-8 mx-auto space-x-4" style="max-width: 500px">
+
+	<div >
+		<header class="flex mb-2 bg-red-700 border-2 border-black">
+			<div class="flex-1 py-2">
+				<h1 class="font-bold text-center text-white uppercase">Room 301 (Lab)</h1>
+			</div>
+			
+			<div class="relative flex items-center justify-end pr-2 cursor-pointer">
+				<svg class="w-6 h-6 text-white border-2 rounded-md " fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+			</div>
+		</header>
+
+		{% include 'includes/main-table.html' %}
+	</div>
+
+	<div >
+		<header class="py-2 bg-red-700 border-2 border-black ">
+			<h1 class="font-bold text-center text-white"> Section </h1>
+		</header>
+
+
+		<header class="py-4 border-l-2 border-r-2 border-black">
+			<div class="flex mx-5 text-gray-600 border-2 border-black rounded-xl">
+				<input class="w-full rounded-l-xl focus:outline-none" type="search" name="search">
+				<button type="submit" class="flex items-center justify-end p-2">
+					<svg class="w-4 h-4 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+						viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" width="512px" height="512px">
+						<path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
+					</svg>
+				</button>
+			</div>
+		</header>
+
+		{% include 'includes/section.html' %}
+
+	</div>
+
+	<div >
+
+		<header class="py-2 bg-red-700 border-2 border-black ">
+			<h1 class="font-bold text-center text-white"> Professor </h1>
+		</header>
+
+
+		<header class="py-4 border-l-2 border-r-2 border-black">
+			<div class="flex mx-5 text-gray-600 border-2 border-black rounded-xl">
+				<input class="w-full rounded-l-xl focus:outline-none" type="search" name="search">
+				<button type="submit" class="flex items-center justify-end p-2">
+					<svg class="w-4 h-4 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+						viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" width="512px" height="512px">
+						<path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
+					</svg>
+				</button>
+			</div>
+		</header>
+
+		{% include 'includes/professor.html' %}
+		
+	</div>
+	
+</section>
+
+{% endblock content %}
+
+{% block scripts %}
+	<script src='{% static "js/draggable.js" %}'></script>
+	<script src='{% static "js/infinite-draggable.js" %}'></script>
+{% endblock  %}

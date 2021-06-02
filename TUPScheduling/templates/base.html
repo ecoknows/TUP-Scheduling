@@ -4,14 +4,20 @@
 {% include "includes/head.html" %}
 {% endblock %}
 
-    <body class="{% block body_class %}{% endblock %}">
+    <body class="{% block body_class %}{% endblock %}" style="font-family: 'Roboto', sans-serif; {% block body_style %} {% endblock %}" >
         {% wagtailuserbar %}
+       
+        {% block header %}
+        {% endblock %}
+
         {% block content %}
         {% endblock %}
         {# Global javascript #}
 
+        {% block scripts %}
+
+        {% endblock %}
+
     </body>
-    
-    <script src='{% static "js/draggable.js" %}'></script>
-    <script src='{% static "js/infinite-draggable.js" %}'></script>
+
 </html>

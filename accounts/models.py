@@ -1,5 +1,7 @@
 from django.db import models
 from django import forms
+from django.core.exceptions import ValidationError
+from django.contrib.auth.models import Group
 
 from modelcluster.models import ClusterableModel
 
@@ -14,7 +16,6 @@ from wagtail.admin.edit_handlers import (
     InlinePanel
 )
 
-from django.core.exceptions import ValidationError
 
 import datetime
 
@@ -47,7 +48,7 @@ class BaseAccount(ClusterableModel, index.Indexed):
         help_text='Ex. Doe'
     )
     section = models.ForeignKey(
-        'home.Sections',
+        'administrator.Sections',
         on_delete=models.SET_NULL,
         null=True,
     )
@@ -55,11 +56,11 @@ class BaseAccount(ClusterableModel, index.Indexed):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
-    def user_code(self):
+    def user_code(self, extra_count):
         user_pk = self.pk
         year = year = str(self.created_at.year - 2000)
 
-        return 'TUPM' + '-' + year + '-' + str(user_pk)
+        return 'TUPM' + '-' + year + '-' + str(user_pk + extra_count)  
 
     basic_info_panel = [
         MultiFieldPanel([
@@ -75,6 +76,7 @@ class BaseAccount(ClusterableModel, index.Indexed):
     class Meta:
         abstract = True
 
+
 @register_snippet
 class Students(BaseAccount):
 
@@ -89,6 +91,25 @@ class Students(BaseAccount):
         verbose_name='Student'
         verbose_name_plural ='Students'
 
+    
+    def save(self):
+        from users.models import User
+        super().save()
+        user = User.objects.create_user(
+            username=self.user_code(extra_count=3000),
+            first_name= self.first_name,
+            last_name= self.last_name,
+            password=self.last_name.upper(),
+            student=self,
+            email=self.first_name + '.' + self.last_name + '@tup.edu.ph',
+        )
+
+        
+            
+        group = Group.objects.get(name='Student')
+        group.user_set.add(user)
+        
+        
 
 @register_snippet
 class Professors(BaseAccount):
@@ -148,7 +169,7 @@ class Professors(BaseAccount):
     )
 
     choose_department = models.ForeignKey(
-        'home.Departments',
+        'administrator.Departments',
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
@@ -186,6 +207,26 @@ class Professors(BaseAccount):
 
     def __str__(self):
         return self.full_name()
+    
+    
+    def save(self):
+        from users.models import User
+        super().save()
+
+        user = User.objects.create_user(
+            username=self.user_code(extra_count=5000),
+            first_name= self.first_name,
+            last_name= self.last_name,
+            password=self.last_name.upper(),
+            professor=self,
+            email=self.first_name + '.' + self.last_name + '@tup.edu.ph',
+        )
+
+        
+            
+        group = Group.objects.get(name='Professor')
+        group.user_set.add(user)
+        
 
     class Meta:
         verbose_name = 'Professor'

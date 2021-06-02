@@ -24,12 +24,17 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
-    'users',
+    'administrator',
+
     'home',
+    'class_schedule',
+    'instructor_schedule',
+    'room_schedule',
+
+    'users',
     'search',
     'accounts',
     'schedule',
-
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -190,6 +195,8 @@ MEDIA_URL = '/media/'
 # Wagtail settings
 
 WAGTAIL_SITE_NAME = "TUPScheduling"
+
+WAGTAIL_FRONTEND_LOGIN_URL = '/login/'
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
