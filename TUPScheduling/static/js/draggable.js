@@ -133,6 +133,7 @@ function section_onmousedown( draggableSectionPaper){
 
     draggableSection.style.top = null
     draggableSection.style.left = null
+    draggableSection.is_dragged = false
     if(!draggableSection.in_main_table){
       draggableSection.style.position = null
     }

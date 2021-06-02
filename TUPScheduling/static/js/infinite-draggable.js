@@ -18,6 +18,7 @@ function professor_onmousedown(dragableProfessor){
         dragableProfessor.parentElement.appendChild(replaceDraggableProfessor)
         dragableProfessor.is_placed = true
     }
+    
     event.preventDefault();
     pos3 = event.clientX;
     pos4 = event.clientY;
