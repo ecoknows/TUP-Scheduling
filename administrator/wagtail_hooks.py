@@ -40,11 +40,11 @@ class SubjectsAdmin(ModelAdmin):
 class CourseCurriculumAdmin(ModelAdmin):
     model = CourseCurriculum
     menu_label = 'Course Curriculum'
-    list_display = ('course_name', 'department',
+    list_display = ('course_name', 'choose_department',
                     'curriculum_year')
     search_fields = ('course_name', 'college__college_name',
-                     'department__Department_Name', 'curriculum_year')
-    list_filter = ('department', 'curriculum_year')
+                     'choose_department__Department_Name', 'curriculum_year')
+    list_filter = ('choose_department', 'curriculum_year')
 
 
 class SectionsAdmin(ModelAdmin):
