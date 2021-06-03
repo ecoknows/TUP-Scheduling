@@ -343,7 +343,8 @@ class Departments(ClusterableModel, index.Indexed):
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
-        related_name='+'
+        related_name='+',
+        verbose_name="College"
     )
 
     panels = [
