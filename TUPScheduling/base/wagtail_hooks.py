@@ -21,7 +21,6 @@ from wagtail.core import hooks
 from django.utils.html import format_html
 from django.templatetags.static import static
 
-
 @hooks.register("insert_global_admin_css")
 def global_admin_css():
     return format_html('<link rel="stylesheet" href="{}">', static("css/admin.css"))
@@ -35,6 +34,7 @@ class SubjectsAdmin(ModelAdmin):
     list_filter = ('lab_or_lec', 'choose_department')
     search_fields = ('subject_code', 'description',
                      'units', 'lab_or_lec', 'hours', 'choose_department__Department_Name')
+
 
 
 class CourseCurriculumAdmin(ModelAdmin):
@@ -146,7 +146,6 @@ class AdminGroup(ModelAdminGroup):
 
 
 modeladmin_register(AdminGroup)
-
 
 class SectionsSchedule(ModelAdmin):
     model = SectionsSchedule

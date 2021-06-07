@@ -84,6 +84,7 @@ class SubjectsOrderable(Orderable):
     fourth_year_second_sem = ParentalKey("base.CourseCurriculum",
                                          related_name="fourth_year_second_sem", null=True)
 
+
     subject = models.ForeignKey(
         "base.Subjects",
         null=True,
@@ -527,6 +528,7 @@ class BulkSections(models.Model, index.Indexed):
         for i in range(self.fourth_year):
             section = Sections(
                 section_name=self.course_curriculum.course_abbreviation + "-4" + chr(i+65), year_level="4th Year", sem=self.sem,  course_curriculum_id=self.course_curriculum.pk)
+
             section.save()
 
     class Meta:
@@ -601,8 +603,6 @@ class Colleges(ClusterableModel, index.Indexed):
         ordering = [
             'college_name'
         ]
-
-
 @ register_snippet
 class SectionsSchedule(models.Model):
     pass
@@ -620,6 +620,5 @@ class RoomsSchedule(models.Model):
 
 class BasePage(Page):
     max_count = 1
-
     def serve(self, request):
         return HttpResponseRedirect('/class-schedule/')
