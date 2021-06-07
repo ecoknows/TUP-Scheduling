@@ -30,20 +30,21 @@ class SubjectsAdmin(ModelAdmin):
     model = Subjects
     menu_label = 'Subjects'
     list_display = ('subject_code', 'description',
-                    'units', 'lab_or_lec', 'hours')
-    list_filter = ('units', 'lab_or_lec', 'hours')
+                    'units', 'lab_or_lec', 'hours', 'choose_department')
+    list_filter = ('lab_or_lec', 'choose_department')
     search_fields = ('subject_code', 'description',
-                     'units', 'lab_or_lec', 'hours')
+                     'units', 'lab_or_lec', 'hours', 'choose_department__Department_Name')
+
 
 
 class CourseCurriculumAdmin(ModelAdmin):
     model = CourseCurriculum
     menu_label = 'Course Curriculum'
-    list_display = ('course_name', 'department',
+    list_display = ('course_name', 'choose_department',
                     'curriculum_year')
-    search_fields = ('course_name', 'college__college_name',
-                     'department__Department_Name', 'curriculum_year')
-    list_filter = ('department', 'curriculum_year')
+    search_fields = ('course_name', 'course_abbreviation',
+                     'choose_department__Department_Name', 'curriculum_year')
+    list_filter = ('choose_department', 'curriculum_year')
 
 
 class SectionsAdmin(ModelAdmin):
@@ -56,13 +57,11 @@ class SectionsAdmin(ModelAdmin):
         'year_level',
         'sem',
         'course_curriculum',
-        'department',
     )
     list_filter = (
         'year_level',
         'sem',
         'course_curriculum',
-        'department',
     )
     search_fields = (
         'section_name',
@@ -70,7 +69,6 @@ class SectionsAdmin(ModelAdmin):
         'sem',
         'course_curriculum__course_name',
         'college__college_name',
-        'department__Department_Name',
     )
 
 
@@ -120,7 +118,7 @@ class DepartmentsAdmin(ModelAdmin):
     )
     search_fields = (
         'Department_Name',
-        'Choose_College',
+        'Choose_College__college_name',
     )
 
 
