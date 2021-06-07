@@ -24,17 +24,15 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
-    'administrator',
 
-    'home',
-    'class_schedule',
-    'instructor_schedule',
-    'room_schedule',
-
-    'users',
-    'search',
-    'accounts',
-    'schedule',
+    'TUPScheduling.base',
+    'TUPScheduling.search',
+    'TUPScheduling.accounts',
+    'TUPScheduling.class_schedule',
+    'TUPScheduling.instructor_schedule',
+    'TUPScheduling.room_schedule',
+    'TUPScheduling.users',
+    'TUPScheduling.schedule',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -122,7 +120,7 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tup_scheduling_db',
+        'NAME': 'tup_scheduling_db_new',
         'USER': 'renegado',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
