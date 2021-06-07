@@ -11,6 +11,8 @@
 {% block extra_js %}
     {{ block.super }}
     {{ view.media.js }}
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -32,7 +34,8 @@
                             
                         {% endif %}
                         {% if view.list_export %}
-                            <div class="dropdown dropdown-button match-width col">
+                            <form id='file-form' class="dropdown dropdown-button match-width col" method="POST">
+                                {% csrf_token %}
                                 <label class="button bicolor button--icon">
                                     <input type="file" id="fileid" name="file" style="display: none">
                                     {% icon name="download" wrapped=1 %}{% trans 'Import CSV' %}
@@ -41,7 +44,7 @@
                                 <ul>
                                     <li><a  class="button bicolor button--icon" href="?export=csv&{{ request.GET.urlencode }}">{% icon name="download" wrapped=1 %}{% trans 'Download CSV' %}</a></li>
                                 </ul>
-                            </div>
+                            </form>
                         {% endif %}
                     </div>
                 {% endblock %}
@@ -103,5 +106,12 @@
             </div>
         </div>
     {% endblock %}
+
+    
+    <script>
+        $("#fileid").change(function(){
+            $("#file-form").submit()
+        });
+    </script>
 
 {% endblock %}

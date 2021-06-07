@@ -125,7 +125,7 @@ class DepartmentsAdmin(ModelAdmin):
 
 
 class CollegesAdmin(ModelAdmin):
-    index_template_name = 'colleges.html'
+    index_template_name = 'base/colleges.html'
     model = Colleges
     menu_label = 'Colleges'
     list_display = ('college_name',)
@@ -143,7 +143,7 @@ class AdminGroup(ModelAdminGroup):
         SectionsAdmin,
         RoomsAdmin,
         DepartmentsAdmin,
-        CollegesAdmin
+        CollegesAdmin,
     )
 
 
