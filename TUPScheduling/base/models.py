@@ -156,7 +156,7 @@ class Subjects(ClusterableModel, index.Indexed):
     hours = models.FloatField(default=1)
 
     choose_department = models.ForeignKey(
-        'home.Departments',
+        'base.Departments',
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
@@ -552,7 +552,7 @@ class Rooms(models.Model, index.Indexed):
     )
 
     choose_department = models.ForeignKey(
-        'administrator.Departments',
+        'base.Departments',
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
