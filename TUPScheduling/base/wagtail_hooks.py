@@ -48,7 +48,7 @@ class CourseCurriculumAdmin(ModelAdmin):
 
 
 class SectionsAdmin(ModelAdmin):
-    index_template_name = 'sections.html'
+    index_template_name = 'base/sections.html'
 
     model = Sections
     menu_label = 'Sections'

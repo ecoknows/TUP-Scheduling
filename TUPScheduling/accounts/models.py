@@ -7,7 +7,7 @@ from modelcluster.models import ClusterableModel
 
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
-from wagtail.search import index 
+from wagtail.search import index
 from wagtail.admin.edit_handlers import (
     FieldPanel,
     MultiFieldPanel,
@@ -18,6 +18,7 @@ from wagtail.admin.edit_handlers import (
 
 
 import datetime
+
 
 def timeConvert(miliTime):
     hours = miliTime.strftime('%H')
@@ -31,7 +32,7 @@ def timeConvert(miliTime):
 
 
 class BaseAccount(ClusterableModel, index.Indexed):
-    
+
     first_name = models.CharField(
         max_length=300,
         null=True,
@@ -52,7 +53,7 @@ class BaseAccount(ClusterableModel, index.Indexed):
         on_delete=models.SET_NULL,
         null=True,
     )
-    
+
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
@@ -60,7 +61,7 @@ class BaseAccount(ClusterableModel, index.Indexed):
         user_pk = self.pk
         year = year = str(self.created_at.year - 2000)
 
-        return 'TUPM' + '-' + year + '-' + str(user_pk + extra_count)  
+        return 'TUPM' + '-' + year + '-' + str(user_pk + extra_count)
 
     basic_info_panel = [
         MultiFieldPanel([
@@ -88,28 +89,24 @@ class Students(BaseAccount):
         return self.full_name()
 
     class Meta:
-        verbose_name='Student'
-        verbose_name_plural ='Students'
+        verbose_name = 'Student'
+        verbose_name_plural = 'Students'
 
-    
     def save(self):
         from users.models import User
         super().save()
         user = User.objects.create_user(
             username=self.user_code(extra_count=3000),
-            first_name= self.first_name,
-            last_name= self.last_name,
+            first_name=self.first_name,
+            last_name=self.last_name,
             password=self.last_name.upper(),
             student=self,
             email=self.first_name + '.' + self.last_name + '@tup.edu.ph',
         )
 
-        
-            
         group = Group.objects.get(name='Student')
         group.user_set.add(user)
-        
-        
+
 
 @register_snippet
 class Professors(BaseAccount):
@@ -137,7 +134,6 @@ class Professors(BaseAccount):
             raise ValidationError(
                 _('End time must be greater than start time'),
             )
-            
 
     preferred_start_time = models.TimeField(
         auto_now=False,
@@ -195,7 +191,6 @@ class Professors(BaseAccount):
         ], heading='Preferred Subjects')
     ]
 
-
     edit_handler = TabbedInterface(
         [
             ObjectList(BaseAccount.basic_info_panel, heading='Profesor Info'),
@@ -204,29 +199,24 @@ class Professors(BaseAccount):
         ]
     )
 
-
     def __str__(self):
         return self.full_name()
-    
-    
+
     def save(self):
         from users.models import User
         super().save()
 
         user = User.objects.create_user(
             username=self.user_code(extra_count=5000),
-            first_name= self.first_name,
-            last_name= self.last_name,
+            first_name=self.first_name,
+            last_name=self.last_name,
             password=self.last_name.upper(),
             professor=self,
             email=self.first_name + '.' + self.last_name + '@tup.edu.ph',
         )
 
-        
-            
         group = Group.objects.get(name='Professor')
         group.user_set.add(user)
-        
 
     class Meta:
         verbose_name = 'Professor'
@@ -234,4 +224,3 @@ class Professors(BaseAccount):
         ordering = [
             'last_name'
         ]
-
