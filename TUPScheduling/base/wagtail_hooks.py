@@ -35,8 +35,6 @@ class SubjectsAdmin(ModelAdmin):
     search_fields = ('subject_code', 'description',
                      'units', 'lab_or_lec', 'hours', 'choose_department__Department_Name')
 
-
-
 class CourseCurriculumAdmin(ModelAdmin):
     model = CourseCurriculum
     menu_label = 'Course Curriculum'
