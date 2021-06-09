@@ -19,7 +19,6 @@ from wagtail.admin.edit_handlers import (
 
 import datetime
 
-
 def timeConvert(miliTime):
     hours = miliTime.strftime('%H')
     minutes = miliTime.strftime('%M')
@@ -32,7 +31,6 @@ def timeConvert(miliTime):
 
 
 class BaseAccount(ClusterableModel, index.Indexed):
-
     first_name = models.CharField(
         max_length=300,
         null=True,
@@ -53,7 +51,6 @@ class BaseAccount(ClusterableModel, index.Indexed):
         on_delete=models.SET_NULL,
         null=True,
     )
-
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
@@ -106,7 +103,6 @@ class Students(BaseAccount):
 
         group = Group.objects.get(name='Student')
         group.user_set.add(user)
-
 
 @register_snippet
 class Professors(BaseAccount):
