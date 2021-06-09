@@ -1,13 +1,20 @@
 let tiles = document.getElementsByClassName('tile');
 let section_container = document.getElementById('section-container');
 
-function section_onmousedown( draggableSectionPaper){
+function show_description(container, text){
+  container.innerText = text
+}
+function remove_description(container, text){
+  container.innerText = text
+}
+
+function section_onmousedown(draggableSectionPaper, height){
   let pos1 = 0;
   let pos2 = 0;
   let pos3 = 0;
   let pos4 = 0;
   let event = window.event;
-  let paper_hours = 3;
+  let paper_hours = height;
   let draggableSection = draggableSectionPaper.parentElement
 
   event.preventDefault();

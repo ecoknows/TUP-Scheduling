@@ -36,7 +36,6 @@ class SubjectsAdmin(ModelAdmin):
                      'units', 'lab_or_lec', 'hours', 'choose_department__Department_Name')
 
 
-
 class CourseCurriculumAdmin(ModelAdmin):
     model = CourseCurriculum
     menu_label = 'Course Curriculum'
@@ -48,7 +47,7 @@ class CourseCurriculumAdmin(ModelAdmin):
 
 
 class SectionsAdmin(ModelAdmin):
-    index_template_name = 'sections.html'
+    index_template_name = 'base/sections.html'
 
     model = Sections
     menu_label = 'Sections'
