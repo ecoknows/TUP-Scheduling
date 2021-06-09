@@ -35,7 +35,6 @@ class SubjectsAdmin(ModelAdmin):
     search_fields = ('subject_code', 'description',
                      'units', 'lab_or_lec', 'hours', 'choose_department__Department_Name')
 
-
 class CourseCurriculumAdmin(ModelAdmin):
     model = CourseCurriculum
     menu_label = 'Course Curriculum'
@@ -122,7 +121,7 @@ class DepartmentsAdmin(ModelAdmin):
 
 
 class CollegesAdmin(ModelAdmin):
-    index_template_name = 'colleges.html'
+    index_template_name = 'base/colleges.html'
     model = Colleges
     menu_label = 'Colleges'
     list_display = ('college_name',)
@@ -140,7 +139,7 @@ class AdminGroup(ModelAdminGroup):
         SectionsAdmin,
         RoomsAdmin,
         DepartmentsAdmin,
-        CollegesAdmin
+        CollegesAdmin,
     )
 
 

@@ -83,7 +83,6 @@ class SubjectsOrderable(Orderable):
                                         related_name="fourth_year_first_sem", null=True)
     fourth_year_second_sem = ParentalKey("base.CourseCurriculum",
                                          related_name="fourth_year_second_sem", null=True)
-
     subject = models.ForeignKey(
         "base.Subjects",
         null=True,
