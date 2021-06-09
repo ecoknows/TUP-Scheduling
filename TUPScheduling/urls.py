@@ -7,6 +7,7 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
 from TUPScheduling.search import views as search_views
+from TUPScheduling.base import views as base_views
 
 urlpatterns = [
     path('django-admin/', admin.site.urls),
@@ -15,6 +16,7 @@ urlpatterns = [
     path('documents/', include(wagtaildocs_urls)),
 
     path('search/', search_views.search, name='search'),
+    path('file-upload/', base_views.upload_file, name='upload_file'),
 
 ]
 
