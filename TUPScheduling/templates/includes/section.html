@@ -9,7 +9,7 @@
 	<div id='section-wrapper' class="pt-4 space-y-4"> 
 		{% for section in section_entries %}
 			{% for subject in section.subjects %}
-				<div style="width: 100%; height: calc({{ subject.hours }} * 50px);">
+				<div style="width: 100%; height: calc({{ subject.hours }} * 50px);" class="filter">
 					<div  class="flex flex-col draggable-paper section-tile" style="line-height: 1; width: 120px; height: calc({{ subject.hours }} * 50px);">
 						<div id='paper-head' class="flex items-center justify-center bg-red-700 border-2 border-black" 
 						style="
@@ -25,7 +25,7 @@
 						</div>
 						<div class="flex items-center justify-center flex-1 bg-white border-2 border-black" >
 							<div id='origin' style="width: fit-content;">
-								<h1 style="cursor:help" class="text-center code_description" onmousedown="show_description(this, '{{subject.description}}' )" onmouseup="remove_description(this, '{{subject.subject_code}}' )">{{ subject.subject_code }}</h1>
+								<h1 style="cursor:help" class="text-center code_description" desc="{{subject.description}}" onmousedown="show_description(this, '{{subject.description}}' )" onmouseup="remove_description(this, '{{subject.subject_code}}' )">{{ subject.subject_code }}</h1>
 							</div>
 						</div>
 					</div>

@@ -16,6 +16,7 @@ function section_onmousedown(draggableSectionPaper, height){
   let event = window.event;
   let paper_hours = height;
   let draggableSection = draggableSectionPaper.parentElement
+  let filterDiv = draggableSection.parentElement
 
   event.preventDefault();
   pos3 = event.clientX;
@@ -129,7 +130,7 @@ function section_onmousedown(draggableSectionPaper, height){
                 x+=6;
               } 
             }
-
+            filterDiv.classList.remove('filter')
             occupyingLogic(i);
             return;
           }
@@ -143,6 +144,7 @@ function section_onmousedown(draggableSectionPaper, height){
     draggableSection.is_dragged = false
     if(!draggableSection.in_main_table){
       draggableSection.style.position = null
+      filterDiv.classList.add('filter')
     }
     const convertedSectionContainer = convertDraggable(section_container.getBoundingClientRect());
 
