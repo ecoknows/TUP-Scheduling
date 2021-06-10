@@ -141,9 +141,9 @@ function section_onmousedown(draggableSectionPaper, height){
 
     draggableSection.style.top = null
     draggableSection.style.left = null
-    draggableSection.is_dragged = false
     if(!draggableSection.in_main_table){
       draggableSection.style.position = null
+      draggableSection.is_dragged = false
       filterDiv.classList.add('filter')
     }
     const convertedSectionContainer = convertDraggable(section_container.getBoundingClientRect());
