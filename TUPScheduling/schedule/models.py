@@ -36,8 +36,17 @@ class Schedule(Page):
         department = 24
         context['professor_entries'] = Professors.objects.filter(
             choose_department_id=department)
-        context['room_entries'] = Rooms.objects.filter(
+
+        temp_rooms = Rooms.objects.filter(
             choose_department_id=department)
+        new_rooms = []
+        for temp_room in temp_rooms:
+            obj_room = {'name': temp_room.Room_Name,
+                        'type': temp_room.Room_Type}
+            new_rooms.append(obj_room)
+        print(new_rooms[0])
+        context['room_entries'] = new_rooms
+
         context['subject_entries'] = Subjects.objects.filter(
             choose_department_id=department)
 

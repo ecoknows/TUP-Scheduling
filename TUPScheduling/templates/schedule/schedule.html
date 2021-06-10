@@ -1,20 +1,63 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+<style>
+	.dropdown-content {
+		display: none;
+		position: absolute;
+		background-color: #f9f9f9;
+		min-width: 160px;
+		box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+		z-index: 1;
+		top:40px;
+		right: -2px;
+	}
+	.dropdown-content a {
+		color: black;
+		padding: 12px 16px;
+		text-decoration: none;
+		display: block;
+		width: 250px;
+	}
+	.dropdown-content a:hover {background-color: #f1f1f1}
+	.dropdown:hover .dropdown-content {
+		display: block;
+	}
+
+	#paper-head {
+		padding: 10px;
+		cursor: move;
+	}
+</style>
 <section class="flex justify-center h-screen p-8 mx-auto space-x-4" style="max-width: 500px">
 
-	<div >
+	<div>
 		<header class="flex mb-2 bg-red-700 border-2 border-black">
 			<div class="flex-1 py-2">
-				<h1 class="font-bold text-center text-white uppercase">Room 301 (Lab)</h1>
+				<h1 class="font-bold text-center text-white uppercase" id="title">{{ room_entries.0.name }}  ({{ room_entries.0.type }})</h1>
 			</div>
-			
-			<div class="relative flex items-center justify-end pr-2 cursor-pointer">
-				<svg class="w-6 h-6 text-white border-2 rounded-md " fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+			<div class="relative flex items-center justify-end pr-2 cursor-pointer dropdown" >
+				<svg class="w-6 h-6 text-white border-2 rounded-md dropbtn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+				<div class="flex mb-2 overflow-auto text-center bg-red-700 border-2 border-black dropdown-content" style="max-height: 611px;">
+					<div class="flex mx-1 my-1 text-gray-600 border-2 border-black rounded-xl" style="width: 250px;">
+						<input id="room-filter" class="w-full rounded-l-xl focus:outline-none" type="search" name="search" style="padding:5px"> 
+						<button type="submit" class="flex items-center justify-end p-2" onclick="filterRoom()">
+							<svg class="w-4 h-4 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+								viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve" width="512px" height="512px">
+								<path d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
+							</svg>
+						</button>
+					</div>
+					{% for room in room_entries %}
+						<a href="#" onclick="dropDown('{{ room.name }}', '{{ room.type }}')" class="border-2 border-red room">{{ room.name }} ({{ room.type }})</a>
+					{% endfor %}
+				</div>
 			</div>
 		</header>
 
-		{% include 'includes/main-table.html' %}
+		{% for room in room_entries %}
+			{% include 'includes/main-table.html' %}
+		{% endfor %}
 	</div>
 
 	<div >
@@ -71,4 +114,5 @@
 	<script src='{% static "js/draggable.js" %}'></script>
 	<script src='{% static "js/infinite-draggable.js" %}'></script>
 	<script src='{% static "js/filter.js" %}'></script>
+	<script src='{% static "js/drop-down.js" %}'></script>
 {% endblock  %}
