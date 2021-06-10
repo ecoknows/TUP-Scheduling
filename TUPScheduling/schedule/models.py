@@ -44,7 +44,7 @@ class Schedule(Page):
             obj_room = {'name': temp_room.Room_Name,
                         'type': temp_room.Room_Type}
             new_rooms.append(obj_room)
-        print(new_rooms[0])
+            
         context['room_entries'] = new_rooms
 
         context['subject_entries'] = Subjects.objects.filter(
