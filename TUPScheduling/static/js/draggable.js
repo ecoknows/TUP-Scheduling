@@ -130,9 +130,7 @@ function section_onmousedown(draggableSectionPaper, height){
                 x+=6;
               } 
             }
-            
             filterDiv.classList.remove('filter')
-
             occupyingLogic(i);
             return;
           }
