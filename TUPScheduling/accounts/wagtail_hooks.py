@@ -1,6 +1,4 @@
 
-
-from wagtail.contrib.modeladmin.views import CreateView
 from wagtail.contrib.modeladmin.options import (
     ModelAdmin,
     ModelAdminGroup,
@@ -13,9 +11,11 @@ from TUPScheduling.accounts.models import (
 )
 
 from TUPScheduling import StringResources
+from TUPScheduling.accounts.views import ProfessorCreateView, StudentCreateView
 
 class Students(ModelAdmin):
     model = Students
+    create_view_class = StudentCreateView
     menu_label = 'Students'
     list_display = ('first_name', 'section')
     list_filter = ('first_name', 'section')
@@ -23,6 +23,7 @@ class Students(ModelAdmin):
 
 class Professors(ModelAdmin):
     model = Professors
+    create_view_class = ProfessorCreateView
     menu_label = 'Professors'
     list_display = ('full_name', 'preferred_time', 'status')
     list_filter = ('status',)

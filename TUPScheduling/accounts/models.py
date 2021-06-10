@@ -89,21 +89,6 @@ class Students(BaseAccount):
         verbose_name = 'Student'
         verbose_name_plural = 'Students'
 
-    def save(self):
-        from users.models import User
-        super().save()
-        user = User.objects.create_user(
-            username=self.user_code(extra_count=3000),
-            first_name=self.first_name,
-            last_name=self.last_name,
-            password=self.last_name.upper(),
-            student=self,
-            email=self.first_name + '.' + self.last_name + '@tup.edu.ph',
-        )
-
-        group = Group.objects.get(name='Student')
-        group.user_set.add(user)
-
 @register_snippet
 class Professors(BaseAccount):
     global start_time
@@ -198,21 +183,6 @@ class Professors(BaseAccount):
     def __str__(self):
         return self.full_name()
 
-    def save(self):
-        from users.models import User
-        super().save()
-
-        user = User.objects.create_user(
-            username=self.user_code(extra_count=5000),
-            first_name=self.first_name,
-            last_name=self.last_name,
-            password=self.last_name.upper(),
-            professor=self,
-            email=self.first_name + '.' + self.last_name + '@tup.edu.ph',
-        )
-
-        group = Group.objects.get(name='Professor')
-        group.user_set.add(user)
 
     class Meta:
         verbose_name = 'Professor'

@@ -96,13 +96,25 @@ function professor_onmousedown(dragableProfessor){
           const tile = convertDraggable(elementBoundingBox);
   
           if(checkCollision(convertedDragable,tile)){
+
+            tile_subject_code = tiles_section[i].querySelector('#subject-code')
+            professor_subject_code = dragableProfessor.querySelector('#subject-code')
+
+            if(tile_subject_code){
+              if (professor_subject_code.innerHTML != tile_subject_code.innerHTML){
+                break;
+              }
+              professor_subject_code.className = 'hidden'
+            }
             
             let container = tiles_section[i].querySelector('.tile-container');
             container.appendChild(dragableProfessor);
             dragableProfessor.style.top = null
             dragableProfessor.style.left = null
-            if (dragableProfessor.querySelector('#professor-name')) {
-                dragableProfessor.querySelector('#professor-name').className = 'text-center'
+
+            professor_name = dragableProfessor.querySelector('#professor-name')
+            if (professor_name) {
+                professor_name.className = 'text-center'
             }
   
             occupyingLogic(i);
