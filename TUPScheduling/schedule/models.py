@@ -62,7 +62,6 @@ class Schedule(Page):
             elif section.year_level == "2nd Year" and section.sem == "Second":
                 section.subjects_query.append(list(SubjectsOrderable.objects.values_list('subject_id', flat=True).filter(
                     second_year_second_sem_id=section.course_curriculum_id)))
-
             elif section.year_level == "3rd Year" and section.sem == "First":
                 section.subjects_query.append(list(SubjectsOrderable.objects.values_list('subject_id', flat=True).filter(
                     third_year_first_sem_id=section.course_curriculum_id)))
@@ -89,4 +88,3 @@ class Schedule(Page):
         context['section_entries'] = sections
 
         return context
-
