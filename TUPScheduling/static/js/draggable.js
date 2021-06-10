@@ -47,7 +47,7 @@ function section_onmousedown(draggableSectionPaper, height){
   function isOccupied(index){
     let x = index;
     let status = false 
-    while(x <= index+12){
+    while(x <= index+(height-1)*6){
       if (tiles[x] == undefined){
         return false
       }
