@@ -34,8 +34,13 @@ class Schedule(Page):
         # print(Professors.objects.all())
 
         department = 24
-        context['professor_entries'] = Professors.objects.filter(
+        profs = Professors.objects.filter(
             choose_department_id=department)
+
+        for prof in profs:
+            prof.units = 0
+
+        context['professor_entries'] = profs
 
         temp_rooms = Rooms.objects.filter(
             choose_department_id=department)
