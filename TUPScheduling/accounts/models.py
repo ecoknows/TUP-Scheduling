@@ -19,6 +19,7 @@ from wagtail.admin.edit_handlers import (
 
 import datetime
 
+
 def timeConvert(miliTime):
     hours = miliTime.strftime('%H')
     minutes = miliTime.strftime('%M')
@@ -88,6 +89,7 @@ class Students(BaseAccount):
     class Meta:
         verbose_name = 'Student'
         verbose_name_plural = 'Students'
+
 
 @register_snippet
 class Professors(BaseAccount):
@@ -162,7 +164,7 @@ class Professors(BaseAccount):
             heading='Preferred Time',
         ),
         FieldPanel('status', widget=forms.RadioSelect),
-        FieldPanel('choose_department'),
+        SnippetChooserPanel('choose_department'),
     ]
 
     subject_panel = [
@@ -182,7 +184,6 @@ class Professors(BaseAccount):
 
     def __str__(self):
         return self.full_name()
-
 
     class Meta:
         verbose_name = 'Professor'

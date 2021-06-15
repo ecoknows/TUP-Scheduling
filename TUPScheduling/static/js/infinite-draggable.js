@@ -1,14 +1,13 @@
 const tiles_section = document.getElementsByClassName('section-tile');
 const professor_container = document.getElementById('professor-section-container');
 
-function professor_onmousedown(dragableProfessor){
+function professor_onmousedown(dragableProfessor, units){
     let pos1 = 0;
     let pos2 = 0;
     let pos3 = 0;
     let pos4 = 0;
     let event = window.event;
-    let paper_hours = 3;
-
+    unit = document.getElementById('units');
 
     dragableProfessor.style.position = 'absolute'
 
@@ -82,7 +81,6 @@ function professor_onmousedown(dragableProfessor){
     
     
     function collision(){
-    
       const convertedDragable = convertDraggable(dragableProfessor.querySelector('#origin').getBoundingClientRect());
       dragableProfessor.style.position = null
       if (dragableProfessor.tileAssigned != null){ 
@@ -106,7 +104,10 @@ function professor_onmousedown(dragableProfessor){
               }
               professor_subject_code.className = 'hidden'
             }
-            
+
+            let new_draggable = dragableProfessor;
+            new_draggable.setAttribute('placed', 'true');
+
             let container = tiles_section[i].querySelector('.tile-container');
             container.appendChild(dragableProfessor);
             dragableProfessor.style.top = null
@@ -117,18 +118,22 @@ function professor_onmousedown(dragableProfessor){
                 professor_name.className = 'text-center'
             }
   
+            new_unit = parseInt(unit.innerText) + units;
+            unit.innerText = new_unit;
             occupyingLogic(i);
   
             return;
           }
-          
-   
         }
         i++;
       }
       
-        dragableProfessor.remove()
-  
+      if(dragableProfessor.hasAttribute('placed')){
+        new_unit = parseInt(unit.innerText) - units;
+        unit.innerText = new_unit;
+        dragableProfessor.removeAttribute('placed');
+      }
+      dragableProfessor.remove()
     }
   
     function closeDragElement() {
