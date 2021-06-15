@@ -1,3 +1,5 @@
+{% load static %}
+
 <style>
 	#section-container{
 		overflow-y: scroll; 
@@ -9,15 +11,23 @@
 	<div id='section-wrapper' class="pt-4 space-y-4"> 
 		{% for section in section_entries %}
 			{% for subject in section.subjects %}
-				<div style="width: 100%; height: calc({{ subject.hours }} * 50px);" class="filter">
-					<div  class="flex flex-col draggable-paper section-tile" style="line-height: 1; width: 120px; height: calc({{ subject.hours }} * 50px);">
+				{% if subject.scheduled == False %}
+				<div style="width: 100%; height: calc({{ subject.subject_object.hours }} * 65px);" class="filter">
+					<div  class="flex flex-col draggable-paper section-tile" style="line-height: 1; width: 120px; height: calc({{ subject.subject_object.hours }} * 65px);">
+						
+
+						<div class="relative">
+							<div class="absolute z-10 prof-image-container" style="left: -0.7rem; top: -0.7rem">
+							</div>
+						</div>
+
 						<div 
 							id='paper-head' 
-							class="flex items-center justify-center bg-red-700 border-t border-l border-r border-black" 
+							class="relative flex items-center justify-center py-1 bg-red-700 border-t border-l border-r border-black" 
 							style="color: #fff;"
-							onmousedown="section_onmousedown(this, {{ subject.hours }})"
+							onmousedown="section_onmousedown(this, {{ subject.subject_object.hours }})"
 						> 
-							<div id='origin'  style="width: fit-content;">
+							<div id='origin' >
 								<h1 class="text-center">{{ section.section_name }}</h1>
 							</div>	
 						</div>
@@ -27,12 +37,17 @@
 
 						<div class="flex items-center justify-center flex-1 bg-white border-2 border-black" >
 							<div id='origin' style="width: fit-content;">
-								<h1 id='subject-code' style="cursor:help" class="text-center code_description" desc="{{subject.description}}" onmousedown="show_description(this, '{{subject.description}}' )" onmouseup="remove_description(this, '{{subject.subject_code}}' )">{{ subject.subject_code }}</h1>
+								<h1 id='subject-code' style="cursor:help" class="text-center code_description" desc="{{subject.subject_object.description}}" onmousedown="show_description(this, '{{subject.subject_object.description}}' )" onmouseup="remove_description(this, '{{subject.subject_object.subject_code}}' )">{{ subject.subject_object.subject_code }}</h1>
 							</div>
 						</div>
 
+						
+						<input id='subject_pk' value="{{subject.subject_object.pk}}" class="hidden">
+						<input id='section_pk' value="{{section.pk}}" class="hidden">
+
 					</div>
 				</div>
+				{% endif %}
 			{% endfor %}
 		{% endfor %}
 	</div>

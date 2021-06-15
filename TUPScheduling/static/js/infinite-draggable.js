@@ -42,6 +42,7 @@ function professor_onmousedown(dragableProfessor, units){
       pos4 = e.clientY;
   
       // set the element's new position:
+      dragableProfessor.parentElement.parentElement.parentElement.style.zIndex = 100
       // console.log(draggableOffsetTop, e.clientY,dragableProfessor.offsetTop-professor_container.scrollTop + 10);
       dragableProfessor.style.top = (dragableProfessor.offsetTop  - pos2) + "px";
       dragableProfessor.style.left = (dragableProfessor.offsetLeft - pos1) + "px";
@@ -83,6 +84,7 @@ function professor_onmousedown(dragableProfessor, units){
     function collision(){
       const convertedDragable = convertDraggable(dragableProfessor.querySelector('#origin').getBoundingClientRect());
       dragableProfessor.style.position = null
+      dragableProfessor.parentElement.parentElement.parentElement.style.zIndex = 0 
       if (dragableProfessor.tileAssigned != null){ 
           tiles_section[dragableProfessor.tileAssigned].occupied = false;
       }
@@ -106,20 +108,22 @@ function professor_onmousedown(dragableProfessor, units){
             }
 
             let new_draggable = dragableProfessor;
+            
+            if(!new_draggable.hasAttribute('placed')){
+              new_unit = parseInt(unit.innerText) + units;
+              unit.innerText = new_unit;
+            }
+
             new_draggable.setAttribute('placed', 'true');
 
-            let container = tiles_section[i].querySelector('.tile-container');
-            container.appendChild(dragableProfessor);
-            dragableProfessor.style.top = null
-            dragableProfessor.style.left = null
-
-            professor_name = dragableProfessor.querySelector('#professor-name')
-            if (professor_name) {
-                professor_name.className = 'text-center'
-            }
-  
-            new_unit = parseInt(unit.innerText) + units;
-            unit.innerText = new_unit;
+            let prof_image_container = tiles_section[i].querySelector('.prof-image-container')
+            let prof_image = dragableProfessor.querySelector('#prof-image')
+            prof_image.style.display = null 
+            prof_image.querySelector('#body').className = null
+            prof_image_container.appendChild(dragableProfessor)
+            
+            dragableProfessor.className = null
+            dragableProfessor.style= null
             occupyingLogic(i);
   
             return;

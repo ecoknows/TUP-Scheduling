@@ -11,11 +11,7 @@ from TUPScheduling.base.models import (
     Colleges,
 )
 
-from TUPScheduling.schedule.models import (
-    SectionsSchedule,
-    ProfessorsSchedule,
-    RoomsSchedule,
-)
+from TUPScheduling.schedule.models import Schedule
 
 from wagtail.core import hooks
 from django.utils.html import format_html
@@ -145,38 +141,12 @@ class AdminGroup(ModelAdminGroup):
 
 modeladmin_register(AdminGroup)
 
-class SectionsSchedule(ModelAdmin):
-    model = SectionsSchedule
-    menu_label = 'Sections'
-    # list_display =
-    # list_filter =
-    # search_fields =
+class ScheduleAdmin(ModelAdmin):
+    model = Schedule
+    menu_label = 'Schedule'
 
+modeladmin_register(ScheduleAdmin)
 
-class ProfessorsSchedule(ModelAdmin):
-    model = ProfessorsSchedule
-    menu_label = 'Professors'
-    # list_display =
-    # list_filter =
-    # search_fields =
-
-
-class RoomsSchedule(ModelAdmin):
-    model = RoomsSchedule
-    menu_label = 'Rooms'
-    # list_display =
-    # list_filter =
-    # search_fields =
-
-
-class SchedulesGroup(ModelAdminGroup):
-    menu_label = 'Schedules'
-    menu_icon = 'user'
-    menu_order = 100
-    items = (SectionsSchedule, ProfessorsSchedule, RoomsSchedule)
-
-
-modeladmin_register(SchedulesGroup)
 
 
 @hooks.register("construct_main_menu")

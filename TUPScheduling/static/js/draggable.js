@@ -8,6 +8,33 @@ function remove_description(container, text){
   container.innerText = text
 }
 
+
+function add_schedule(
+  section_pk,
+  subject,
+  prof_pk,
+  room_pk,
+  year,
+  starting_tine,
+){
+  $.ajax({
+      type: 'POST',
+      data: {
+        add_schedule: true,
+        prof_pk,
+        room_pk,
+        section_pk,
+        subject,
+        year,
+        starting_tine,
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+      success: function (response) {
+        
+      },
+  })
+}
+
 function section_onmousedown(draggableSectionPaper, height){
   let pos1 = 0;
   let pos2 = 0;
@@ -130,6 +157,20 @@ function section_onmousedown(draggableSectionPaper, height){
                 x+=6;
               } 
             }
+            
+            // if (draggableSection.querySelector('#prof_pk')){
+
+            //   add_schedule(
+            //     draggableSection.querySelector('#section_pk').value,
+            //     draggableSection.querySelector('#subject_pk').value,
+            //     draggableSection.querySelector('#prof_pk').value,
+            //     0,
+            //     '12321',
+            //     '421dsa',
+            //   )
+            // }
+
+
             filterDiv.classList.remove('filter')
             occupyingLogic(i);
             return;

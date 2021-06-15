@@ -56,6 +56,7 @@ class RoomOrderable(Orderable):
     )
     room = models.ForeignKey(
         "base.Rooms",
+        null=True,
         on_delete=models.CASCADE,
     )
 

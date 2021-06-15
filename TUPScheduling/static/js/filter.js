@@ -8,7 +8,7 @@ function filter(){
         }
     }else{
         for(let i = 0; i < filterables.length; i++){
-            if(filterables[i].children[0].children[0].innerText.toUpperCase().indexOf(text.toUpperCase()) != -1 || filterables[i].children[0].children[2].innerText.toUpperCase().indexOf(text.toUpperCase()) != -1 || filterables[i].children[0].children[2].children[0].children[0].getAttribute('desc').toUpperCase().indexOf(text.toUpperCase()) != -1){
+            if(filterables[i].children[0].children[1].innerText.toUpperCase().indexOf(text.toUpperCase()) != -1 || filterables[i].children[0].children[3].innerText.toUpperCase().indexOf(text.toUpperCase()) != -1 || filterables[i].children[0].children[3].children[0].children[0].getAttribute('desc').toUpperCase().indexOf(text.toUpperCase()) != -1){
                 filterables[i].style.display = 'block';
                 
             }else{

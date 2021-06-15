@@ -1,4 +1,4 @@
-
+{% load static %}
 <style>
 	#professor-section-container{
 		overflow-y: scroll; 
@@ -24,14 +24,20 @@
                   <div
                       id='draggable-professor'
                       onmousedown="professor_onmousedown(this, {{ subject.subject.units }}, '{{ professor }}')" 
-                      class="flex flex-col bg-white border border-black"
+                      class="flex flex-col bg-white border border-black "
                       style="line-height: 1; width: 120px; "
                     >
-                      <div id="paper-head" class="flex items-center justify-center ">
+                      <input id='prof_pk' value="{{professor.pk}}" class="hidden">
+                      
+                      <div id='prof-image' class="tooltip w-7 h-7" style="display: none;">
+                        <div id='body' class="hidden">
+                          <img class="bg-gray-700 rounded-full" src="{% static 'img/image2.png'%}">
+                          <span class="tooltiptext">{{professor.full_name}}</span>
+                        </div>
+                      </div>
+
+                      <div id="paper-head" class="flex items-center justify-center py-1 "  >
                           <div id="origin" style="width: fit-content">
-                            <h1 id="professor-name" class="hidden text-center">
-                              {{professor.full_name | truncatechars:12 }}
-                            </h1>
                             <h1 id='subject-code' class="text-center">{{subject.subject.subject_code | truncatechars:12}}</h1>
                           </div>
                       </div>
