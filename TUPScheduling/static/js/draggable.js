@@ -12,28 +12,20 @@ function remove_description(container, text){
 function add_schedule(
   section_pk,
   subject,
-  prof_pk,
+  prof,
   room_pk,
-  year,
+  day,
   starting_time,
 ){
-  console.log(
-    section_pk,
-    subject,
-    prof_pk,
-    room_pk,
-    year,
-    starting_time,
-  )
   $.ajax({
       type: 'POST',
       data: {
         add_schedule: true,
-        prof_pk,
+        prof_pk: prof ? prof.pk : null,
         room_pk,
         section_pk,
+        day,
         subject,
-        year,
         starting_time,
         csrfmiddlewaretoken: csrftoken
       },
@@ -42,6 +34,46 @@ function add_schedule(
       },
   })
 }
+
+
+function update_schedule_pk(
+  schedule_pk,
+  day,
+  starting_time
+){
+  $.ajax({
+      type: 'POST',
+      data: {
+        update_add_schedule: true,
+        schedule_pk,
+        day,
+        starting_time,
+        csrfmiddlewaretoken: csrftoken
+      },
+      success: function (response) {
+        
+      },
+  })
+}
+
+
+
+function remove_schedule(
+  schedule_pk
+){
+  $.ajax({
+      type: 'POST',
+      data: {
+        remove_schedule: true,
+        schedule_pk,
+        csrfmiddlewaretoken: csrftoken
+      },
+      success: function (response) {
+        
+      },
+  })
+}
+
 
 function section_onmousedown(draggableSectionPaper, height, temp_top, temp_height){
   let pos1 = 0;
@@ -172,18 +204,23 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
                 x+=6;
               } 
             }
-            
-            // if (draggableSection.querySelector('#prof_pk')){
-            //   console.log(draggableSection.parentElement.querySelector('#room_pk').value, ' DEYMSAN ');
-            //   add_schedule(
-            //     draggableSection.querySelector('#section_pk').value,
-            //     draggableSection.querySelector('#subject_pk').value,
-            //     draggableSection.querySelector('#prof_pk').value,
-            //     1,
-            //     '12321',
-            //     '421dsa',
-            //   )
-            // }
+            let schedule_pk = draggableSection.querySelector('#schedule_pk')
+            if( schedule_pk ){
+              update_schedule_pk(
+                schedule_pk.value,
+                draggableSection.parentElement.querySelector('#day').value,
+                draggableSection.parentElement.querySelector('#starting_time').value,
+              )
+            }else{
+              add_schedule(
+                draggableSection.querySelector('#section_pk').value,
+                draggableSection.querySelector('#subject_pk').value,
+                draggableSection.querySelector('#prof_pk'),
+                draggableSection.parentElement.querySelector('#room_pk').value,
+                draggableSection.parentElement.querySelector('#day').value,
+                draggableSection.parentElement.querySelector('#starting_time').value,
+              )
+            }
 
 
             filterDiv.classList.remove('filter')
@@ -206,6 +243,10 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
 
 
     if(checkCollision(convertedDragable,convertedSectionContainer) && draggableSection.in_main_table ){
+
+      remove_schedule(
+        draggableSection.querySelector('#schedule_pk').value
+      );
 
       if (draggableSection.tileAssigned != null){ 
         let x = 0;     

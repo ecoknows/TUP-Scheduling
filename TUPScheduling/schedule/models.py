@@ -56,29 +56,71 @@ class SchedulePage(Page):
 
     def serve(self, request):
         add_schedule = request.POST.get('add_schedule', None)
+        remove_schedule = request.POST.get('remove_schedule', None)
+        update_schedule = request.POST.get('update_schedule', None)
+        update_remove_schedule = request.POST.get('update_remove_schedule', None)
+        update_add_schedule =  request.POST.get('update_add_schedule', None)
+        
         if add_schedule:
             prof_pk = request.POST.get('prof_pk', None)
             room_pk = request.POST.get('room_pk', None)
             section_pk = request.POST.get('section_pk', None)
-            subject = request.POST.get('subject', None)
-            year = request.POST.get('year', None)
-            starting_tine = request.POST.get('starting_tine', None)
+            day = request.POST.get('day', None)
+            subject_pk = request.POST.get('subject', None)
+            starting_time = request.POST.get('starting_time', None)
+            professor = None
+            if prof_pk:
+                professor = Professors.objects.get(pk=prof_pk)
 
-            professor = Professors.objects.get(pk=prof_pk)
+            print('WALAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!', room_pk, section_pk, ' ECO ', subject_pk)
             room = Rooms.objects.get(pk=room_pk)
             section = Sections.objects.get(pk=section_pk)
-            subject = Subjects.objects.get(pk=subject)
-
-            print(professor, room, section, subject)
+            subject = Subjects.objects.get(pk=subject_pk)
 
             Schedule.objects.update_or_create(
                 prof=professor,
                 room=room,
+                day=day,
                 section=section,
                 subject=subject,
-                starting_time='1232134',
-                school_year='123421'
+                starting_time=starting_time,
+                school_year='123421',
+                
             )
+        if update_add_schedule:
+            day = request.POST.get('day', None)
+            starting_time = request.POST.get('starting_time', None)
+            schedule_pk = request.POST.get('schedule_pk', None)
+            schedule = Schedule.objects.get(pk=schedule_pk)
+            schedule.day = day
+            schedule.starting_time = starting_time
+            print(schedule)
+            schedule.save()
+        
+        if remove_schedule:
+            schedule_pk = request.POST.get('schedule_pk', None)
+            Schedule.objects.get(pk=schedule_pk).delete()
+
+        if update_schedule:
+            schedule_pk = request.POST.get('schedule_pk', None)
+
+            prof_pk = request.POST.get('prof_pk', None)
+            professor = Professors.objects.get(pk=prof_pk)
+            
+            schedule = Schedule.objects.get(pk=schedule_pk)
+            schedule.prof = professor
+            schedule.save()
+        
+        if update_remove_schedule:
+            schedule_pk = request.POST.get('schedule_pk', None)
+
+            prof_pk = request.POST.get('prof_pk', None)
+            professor = Professors.objects.get(pk=prof_pk)
+            
+            schedule = Schedule.objects.get(pk=schedule_pk)
+            schedule.prof = None
+            schedule.save()
+
         
 
         return super().serve(request)
@@ -99,7 +141,9 @@ class SchedulePage(Page):
             choose_department_id=department)
         new_rooms = []
         for temp_room in temp_rooms:
-            obj_room = {'name': temp_room.Room_Name,
+            obj_room = {
+                        'pk': temp_room.pk,
+                        'name': temp_room.Room_Name,
                         'type': temp_room.Room_Type,
                         }
             new_rooms.append(obj_room)

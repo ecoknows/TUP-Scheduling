@@ -1,6 +1,39 @@
 const tiles_section = document.getElementsByClassName('section-tile');
 const professor_container = document.getElementById('professor-section-container');
 
+function update_schedule(schedule_pk, prof_pk){
+
+  $.ajax({
+      type: 'POST',
+      data: {
+        update_schedule: true,
+        schedule_pk,
+        prof_pk,
+        csrfmiddlewaretoken: csrftoken
+      },
+      success: function (response) {
+        
+      },
+  })
+}
+
+
+function remove_prof_schedule(schedule_pk, prof_pk){
+
+  $.ajax({
+      type: 'POST',
+      data: {
+        update_remove_schedule: true,
+        schedule_pk,
+        prof_pk,
+        csrfmiddlewaretoken: csrftoken
+      },
+      success: function (response) {
+        
+      },
+  })
+}
+
 function professor_onmousedown(dragableProfessor, units){
     let pos1 = 0;
     let pos2 = 0;
@@ -107,12 +140,22 @@ function professor_onmousedown(dragableProfessor, units){
               professor_subject_code.className = 'hidden'
             }
 
+            let schedule_pk = tiles_section[i].querySelector('#schedule_pk');
+            if(schedule_pk){
+              update_schedule(
+                schedule_pk.value,
+                dragableProfessor.querySelector('#prof_pk').value
+              )
+            }
+
             let new_draggable = dragableProfessor;
             
             if(!new_draggable.hasAttribute('placed')){
               new_unit = parseInt(unit.innerText) + units;
               unit.innerText = new_unit;
             }
+
+            
 
             new_draggable.setAttribute('placed', 'true');
 
@@ -136,6 +179,14 @@ function professor_onmousedown(dragableProfessor, units){
         new_unit = parseInt(unit.innerText) - units;
         unit.innerText = new_unit;
         dragableProfessor.removeAttribute('placed');
+      }
+
+      let schedule_pk = dragableProfessor.tileAssigned.querySelector('#schedule_pk');
+      if(schedule_pk){
+        remove_prof_schedule(
+          schedule_pk.value,
+          dragableProfessor.querySelector('#prof_pk').value
+        )
       }
       dragableProfessor.remove()
     }
