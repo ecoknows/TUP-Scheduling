@@ -31,14 +31,15 @@
 			{% for day in self.day %}
 				<div class="tile" style="width: 120px; border-bottom: 1px solid black; border-right: 1px solid black;">
 					<div class='tile-container'>
-						
-					
-							<!--{% for subject in already_schedule_object %}
+							<input class='hidden' id='time_counter' value='{{forloop.parentloop.counter}}' >
+							<input class='hidden' id='day_counter' value='{{forloop.counter}}' >
+							{% for subject in already_schedule_object %}
 								{% if room.name == subject.room.Room_Name %}
 									{% if day == subject.day %}
 										{% if time == subject.starting_time %}
+										<input class='hidden' id='paper_hours' value='{{subject.subject.hours}}' >
 										
-										<div  class="flex flex-col draggable-paper section-tile" style="line-height: 1; width: 120px; height: calc({{ subject.subject.hours }} * 65px);">
+										<div class="flex flex-col draggable-paper section-tile scheduled" style="line-height: 1; width: 120px; height: calc({{ subject.subject.hours }} * 65px);">
 											<div class="relative">
 												<div class="absolute z-10 prof-image-container" style="left: -0.7rem; top: -0.7rem">
 												</div>
@@ -67,7 +68,7 @@
 										{% endif %}
 									{% endif %}
 								{% endif %}
-							{% endfor %}-->
+							{% endfor %}
 
 
 

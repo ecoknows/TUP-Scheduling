@@ -173,17 +173,17 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
               } 
             }
             
-            if (draggableSection.querySelector('#prof_pk')){
-              console.log(draggableSection.parentElement.querySelector('#room_pk').value, ' DEYMSAN ');
-              add_schedule(
-                draggableSection.querySelector('#section_pk').value,
-                draggableSection.querySelector('#subject_pk').value,
-                draggableSection.querySelector('#prof_pk').value,
-                1,
-                '12321',
-                '421dsa',
-              )
-            }
+            // if (draggableSection.querySelector('#prof_pk')){
+            //   console.log(draggableSection.parentElement.querySelector('#room_pk').value, ' DEYMSAN ');
+            //   add_schedule(
+            //     draggableSection.querySelector('#section_pk').value,
+            //     draggableSection.querySelector('#subject_pk').value,
+            //     draggableSection.querySelector('#prof_pk').value,
+            //     1,
+            //     '12321',
+            //     '421dsa',
+            //   )
+            // }
 
 
             filterDiv.classList.remove('filter')

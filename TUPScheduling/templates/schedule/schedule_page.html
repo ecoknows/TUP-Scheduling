@@ -149,4 +149,33 @@
 	<script src='{% static "js/infinite-draggable.js" %}'></script>
 	<script src='{% static "js/filter.js" %}'></script>
 	<script src='{% static "js/drop-down.js" %}'></script>
+
+	<script>
+		let scheduledSections = document.getElementsByClassName('scheduled')
+
+
+		function scheduledSection(draggableSection){
+			draggableSection.in_main_table = true
+			let time_counter = draggableSection.parentElement.querySelector('#time_counter').value;
+			let day_counter = draggableSection.parentElement.querySelector('#day_counter').value;
+			let paper_hours = draggableSection.parentElement.querySelector('#paper_hours').value;
+			console.log(paper_hours)
+			
+			draggableSection.style.zIndex = 0
+			draggableSection.style.position = 'absolute'
+			tileAssigned = ((parseInt(time_counter)-1)*6 ) + parseInt(day_counter)  - 1;
+			let x = 0 
+			
+			while(x < paper_hours*6){
+                tiles[tileAssigned+x].occupied = draggableSection;
+                x+=6;
+			} 
+		}
+
+		for(let i = 0; i < scheduledSections.length; i++){
+			scheduledSection(scheduledSections[i])
+		}
+
+	</script>
+	
 {% endblock  %}
