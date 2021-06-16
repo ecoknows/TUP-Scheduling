@@ -1,4 +1,4 @@
-{% load static %}
+{% load static wagtailimages_tags  %}
 <style>
 	#professor-section-container{
 		overflow-y: scroll; 
@@ -14,7 +14,7 @@
           <h1 class="text-center">
             {{ professor.full_name }}
           </h1>
-          <h1 class="text-center" id="units">
+          <h1 class="text-center" id="{{professor}}">
             {{ professor.units }}
           </h1>
         </div>
@@ -23,7 +23,7 @@
               <div class="flex-1">
                   <div
                       id='draggable-professor'
-                      onmousedown="professor_onmousedown(this, {{ subject.subject.units }}, '{{ professor }}')" 
+                      onmousedown="professor_onmousedown(this, {{ subject.subject.units }})" 
                       class="flex flex-col bg-white border border-black "
                       style="line-height: 1; width: 120px; "
                     >
@@ -31,7 +31,8 @@
                       
                       <div id='prof-image' class="tooltip w-7 h-7" style="display: none;">
                         <div id='body' class="hidden">
-                          <img class="bg-gray-700 rounded-full" src="{% static 'img/image2.png'%}">
+                          {% image professor.profile_picture fill-50x50 as prof_image %}
+                          <img class="bg-gray-700 rounded-full" src="{{prof_image.url}}">
                           <span class="tooltiptext">{{professor.full_name}}</span>
                         </div>
                       </div>

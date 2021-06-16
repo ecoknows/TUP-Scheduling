@@ -212,7 +212,8 @@ class SchedulePage(Page):
                 )
         
 
-        context['already_schedule_object'] = Schedule.objects.filter(subject__choose_department=department)
+        context['already_schedule_object'] = Schedule.objects.all()
+        print(context['already_schedule_object'])
         context['section_entries'] = sections
 
         return context
