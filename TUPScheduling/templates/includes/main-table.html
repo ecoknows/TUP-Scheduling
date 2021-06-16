@@ -26,7 +26,7 @@
 				border-left: 1px solid black;
 				"
 			>
-				<h1 class="text-lg text-center">{{time}}</h1>
+				<h1 class="text-lg text-center">{{ time.1 }}</h1>
 			</div>
 
 			{% for day in self.day %}
@@ -36,11 +36,11 @@
 							<input class='hidden' id='day_counter' value='{{forloop.counter}}' >
 							<input class='hidden' id='room_pk' value='{{room.pk}}' >
 							<input class='hidden' id='day' value='{{day}}' >
-							<input class='hidden' id='starting_time' value='{{time}}' >
+							<input class='hidden' id='starting_time' value='{{time.0}}' >
 							{% for subject in already_schedule_object %}
 								{% if room.name == subject.room.Room_Name %}
 									{% if day == subject.day %}
-										{% if time == subject.starting_time %}
+										{% if time.0 == subject.starting_time %}
 										<input class='hidden' id='paper_hours' value='{{subject.subject.hours}}' >
 										<div class="flex flex-col draggable-paper section-tile scheduled" style="line-height: 1; width: 120px; height: calc({{ subject.subject.hours }} * 65px);">
 											

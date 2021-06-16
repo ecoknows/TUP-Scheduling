@@ -14,9 +14,9 @@ class Schedule(models.Model):
         on_delete=models.CASCADE,
         related_name='schedules'
     )
-    starting_time = models.CharField(
-        max_length=200,
+    starting_time = models.IntegerField(
         null=True,
+        choices=_TIME
     )
     school_year = models.CharField(
         max_length=200,
@@ -58,9 +58,10 @@ class SchedulePage(Page):
         add_schedule = request.POST.get('add_schedule', None)
         remove_schedule = request.POST.get('remove_schedule', None)
         update_schedule = request.POST.get('update_schedule', None)
-        update_remove_schedule = request.POST.get('update_remove_schedule', None)
-        update_add_schedule =  request.POST.get('update_add_schedule', None)
-        
+        update_remove_schedule = request.POST.get(
+            'update_remove_schedule', None)
+        update_add_schedule = request.POST.get('update_add_schedule', None)
+
         if add_schedule:
             prof_pk = request.POST.get('prof_pk', None)
             room_pk = request.POST.get('room_pk', None)
@@ -72,20 +73,21 @@ class SchedulePage(Page):
             if prof_pk:
                 professor = Professors.objects.get(pk=prof_pk)
 
-            print('WALAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!', room_pk, section_pk, ' ECO ', subject_pk)
+            print('WALAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!',
+                  room_pk, section_pk, ' ECO ', subject_pk)
             room = Rooms.objects.get(pk=room_pk)
             section = Sections.objects.get(pk=section_pk)
             subject = Subjects.objects.get(pk=subject_pk)
 
-            Schedule.objects.update_or_create(
+            Schedule.objects.create(
                 prof=professor,
                 room=room,
                 day=day,
                 section=section,
                 subject=subject,
-                starting_time=starting_time,
+                starting_time=int(starting_time),
                 school_year='123421',
-                
+
             )
         if update_add_schedule:
             day = request.POST.get('day', None)
@@ -96,7 +98,7 @@ class SchedulePage(Page):
             schedule.starting_time = starting_time
             print(schedule)
             schedule.save()
-        
+
         if remove_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
             Schedule.objects.get(pk=schedule_pk).delete()
@@ -106,22 +108,20 @@ class SchedulePage(Page):
 
             prof_pk = request.POST.get('prof_pk', None)
             professor = Professors.objects.get(pk=prof_pk)
-            
+
             schedule = Schedule.objects.get(pk=schedule_pk)
             schedule.prof = professor
             schedule.save()
-        
+
         if update_remove_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
 
             prof_pk = request.POST.get('prof_pk', None)
             professor = Professors.objects.get(pk=prof_pk)
-            
+
             schedule = Schedule.objects.get(pk=schedule_pk)
             schedule.prof = None
             schedule.save()
-
-        
 
         return super().serve(request)
 
@@ -142,10 +142,10 @@ class SchedulePage(Page):
         new_rooms = []
         for temp_room in temp_rooms:
             obj_room = {
-                        'pk': temp_room.pk,
-                        'name': temp_room.Room_Name,
-                        'type': temp_room.Room_Type,
-                        }
+                'pk': temp_room.pk,
+                'name': temp_room.Room_Name,
+                'type': temp_room.Room_Type,
+            }
             new_rooms.append(obj_room)
 
         context['room_entries'] = new_rooms
@@ -210,9 +210,8 @@ class SchedulePage(Page):
                         'scheduled': scheduled
                     }
                 )
-        
 
-        context['already_schedule_object'] = Schedule.objects.filter(subject__choose_department=department)
+        context['already_schedule_object'] = Schedule.objects.all()
         context['section_entries'] = sections
 
         return context
