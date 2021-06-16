@@ -212,6 +212,7 @@ class SchedulePage(Page):
                 )
 
         context['already_schedule_object'] = Schedule.objects.all()
+        print(context['already_schedule_object'])
         context['section_entries'] = sections
 
         return context

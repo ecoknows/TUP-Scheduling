@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group
 from django.utils.translation import gettext as _
 
 from modelcluster.models import ClusterableModel
+from wagtail.images.edit_handlers import ImageChooserPanel
 
 
 from wagtail.snippets.models import register_snippet
@@ -42,6 +43,7 @@ class BaseAccount(ClusterableModel, index.Indexed):
         on_delete=models.CASCADE,
         null=True
     )
+
 
     first_name = models.CharField(
         max_length=300,
@@ -134,6 +136,14 @@ class Professors(BaseAccount):
                 _('End time must be greater than start time'),
             )
 
+    
+    profile_picture = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
     preferred_start_time = models.TimeField(
         auto_now=False,
         auto_now_add=False,
@@ -157,6 +167,9 @@ class Professors(BaseAccount):
     def preferred_time(self):
         return str(timeConvert(self.preferred_start_time)) + " - " + str(timeConvert(self.preferred_end_time))
 
+
+    units = models.IntegerField(default=0)
+    
     status = models.CharField(
         max_length=200,
         default='Regular',
@@ -166,10 +179,24 @@ class Professors(BaseAccount):
     choose_department = models.ForeignKey(
         'base.Departments',
         null=True,
-        blank=False,
+        blank=True,
         on_delete=models.SET_NULL,
         related_name='+',
     )
+    
+    BaseAccount.basic_info_panel = BaseAccount.basic_info_panel + [
+        ImageChooserPanel('profile_picture')
+    ]
+
+    
+    @property
+    def profile_image(self):
+        # Returns an empty string if there is no profile pic or the rendition
+        # file can't be found.
+        try:
+            return self.profile_picture.get_rendition('fill-50x50').img_tag()
+        except:  # noqa: E722 FIXME: remove bare 'except:'
+            return ''
 
     scheduling_panel = [
         MultiFieldPanel(

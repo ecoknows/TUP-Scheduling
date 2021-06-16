@@ -40,8 +40,9 @@ function professor_onmousedown(dragableProfessor, units){
     let pos3 = 0;
     let pos4 = 0;
     let event = window.event;
-    unit = document.getElementById('units');
-
+    let unit = document.getElementById('units');
+    let professer_header = dragableProfessor.parentElement.parentElement.parentElement.querySelector('#professor-container')
+    console.log(professer_header)
     dragableProfessor.style.position = 'absolute'
 
     if(!dragableProfessor.is_placed){
@@ -181,13 +182,16 @@ function professor_onmousedown(dragableProfessor, units){
         dragableProfessor.removeAttribute('placed');
       }
 
-      let schedule_pk = dragableProfessor.tileAssigned.querySelector('#schedule_pk');
-      if(schedule_pk){
-        remove_prof_schedule(
-          schedule_pk.value,
-          dragableProfessor.querySelector('#prof_pk').value
-        )
+      if(dragableProfessor.tileAssigned){
+        let schedule_pk = dragableProfessor.tileAssigned.querySelector('#schedule_pk');
+        if(schedule_pk){
+          remove_prof_schedule(
+            schedule_pk.value,
+            dragableProfessor.querySelector('#prof_pk').value
+          )
+        }
       }
+      console.log('REMOVEEE!');
       dragableProfessor.remove()
     }
   

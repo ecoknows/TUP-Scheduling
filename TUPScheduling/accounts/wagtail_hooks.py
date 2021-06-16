@@ -25,7 +25,7 @@ class Professors(ModelAdmin):
     model = Professors
     create_view_class = ProfessorCreateView
     menu_label = 'Professors'
-    list_display = ('full_name', 'preferred_time', 'status')
+    list_display = ('full_name', 'preferred_time', 'status', 'profile_image')
     list_filter = ('status',)
     search_fields = ('first_name', 'middle_name', 'last_name', 'full_name',)
 
