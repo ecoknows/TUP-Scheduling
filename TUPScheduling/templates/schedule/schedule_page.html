@@ -159,13 +159,19 @@
 			let time_counter = draggableSection.parentElement.querySelector('#time_counter').value;
 			let day_counter = draggableSection.parentElement.querySelector('#day_counter').value;
 			let paper_hours = draggableSection.parentElement.querySelector('#paper_hours').value;
-			console.log(paper_hours)
-			
+			let professor = draggableSection.querySelector('#draggable-professor')
+
+			if( professor ){
+				draggableSection.occupied = true
+				professor.is_placed = true
+				professor.tileAssigned = draggableSection
+				professor.setAttribute('placed', 'true');
+			}
 			draggableSection.style.zIndex = 0
 			draggableSection.style.position = 'absolute'
 			tileAssigned = ((parseInt(time_counter)-1)*6 ) + parseInt(day_counter)  - 1;
 			let x = 0 
-			
+			draggableSection.tileAssigned = tileAssigned	
 			while(x < paper_hours*6){
                 tiles[tileAssigned+x].occupied = draggableSection;
                 x+=6;

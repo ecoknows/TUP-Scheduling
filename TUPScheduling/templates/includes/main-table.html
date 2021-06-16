@@ -1,3 +1,4 @@
+{% load static %}
 <section class="flex-1 border-4 border-collapse border-black mainTable" style="display: none;" desc="{{ room.name }} ({{ room.type }})" >
 
 	<header class="flex">
@@ -40,10 +41,37 @@
 										<input class='hidden' id='paper_hours' value='{{subject.subject.hours}}' >
 										
 										<div class="flex flex-col draggable-paper section-tile scheduled" style="line-height: 1; width: 120px; height: calc({{ subject.subject.hours }} * 65px);">
+											
 											<div class="relative">
 												<div class="absolute z-10 prof-image-container" style="left: -0.7rem; top: -0.7rem">
+													
+													<div
+													id='draggable-professor'
+													onmousedown="professor_onmousedown(this, {{ subject.subject.units }}, '{{ subject.prof }}')" 
+													style="line-height: 1;  "
+												  >
+													<input id='prof_pk' value="{{subject.prof.pk}}" class="hidden">
+													
+													<div id='prof-image' class="tooltip w-7 h-7">
+													  <div id='body' >
+														<img class="bg-gray-700 rounded-full" src="{% static 'img/image2.png'%}">
+														<span class="tooltiptext">{{subject.prof.full_name}}</span>
+													  </div>
+													</div>
+							  
+													<div id="paper-head" class="flex items-center justify-center py-1 "  >
+														<div id="origin" style="width: fit-content">
+														  <h1 id='subject-code' class="hidden text-center">{{subject.subject.subject_code | truncatechars:12}}</h1>
+														</div>
+													</div>
+
+													
+												</div>
+
+
 												</div>
 											</div>
+
 											<div 
 												id='paper-head' 
 												class="relative flex items-center justify-center py-1 bg-red-700 border-t border-l border-r border-black" 
@@ -54,8 +82,10 @@
 													<h1 class="text-center">{{ subject.section.section_name }}</h1>
 												</div>	
 											</div>
+
 											<div class="bg-white tile-container ">
 											</div>
+
 											<div class="flex items-center justify-center flex-1 bg-white border-2 border-black" >
 												<div id='origin' style="width: fit-content;">
 													<h1 id='subject-code' style="cursor:help" class="text-center code_description" desc="{{subject.subject.description}}" onmousedown="show_description(this, '{{subject.subject.description}}' )" onmouseup="remove_description(this, '{{subject.subject.subject_code}}' )">{{ subject.subject.subject_code }}</h1>

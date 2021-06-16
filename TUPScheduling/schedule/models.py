@@ -158,8 +158,6 @@ class SchedulePage(Page):
                 subject_object = Subjects.objects.get(id=subject)
                 scheduled = False
                 if len(section.schedules.all()) > 0 and subject_object.schedules.all():
-                    schedule = section.schedules.all().first()
-                    already_schedule_object.append(schedule)
                     scheduled = True
 
                 section.subjects.append(
@@ -168,8 +166,9 @@ class SchedulePage(Page):
                         'scheduled': scheduled
                     }
                 )
+        
 
-        context['already_schedule_object'] = already_schedule_object
+        context['already_schedule_object'] = Schedule.objects.filter(subject__choose_department=department)
         context['section_entries'] = sections
 
         return context

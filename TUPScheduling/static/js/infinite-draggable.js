@@ -52,7 +52,7 @@ function professor_onmousedown(dragableProfessor, units){
     
     function occupyingLogic(index){
       tiles_section[index].occupied = true;
-      dragableProfessor.tileAssigned = index; 
+      dragableProfessor.tileAssigned = tiles_section[index]; 
     }
   
     
@@ -86,7 +86,7 @@ function professor_onmousedown(dragableProfessor, units){
       dragableProfessor.style.position = null
       dragableProfessor.parentElement.parentElement.parentElement.style.zIndex = 0 
       if (dragableProfessor.tileAssigned != null){ 
-          tiles_section[dragableProfessor.tileAssigned].occupied = false;
+        dragableProfessor.tileAssigned.occupied = false;
       }
       let i = 0;
   

@@ -205,7 +205,6 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
     const convertedSectionContainer = convertDraggable(section_container.getBoundingClientRect());
 
 
-
     if(checkCollision(convertedDragable,convertedSectionContainer) && draggableSection.in_main_table ){
 
       if (draggableSection.tileAssigned != null){ 
