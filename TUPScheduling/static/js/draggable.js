@@ -216,7 +216,7 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
       }
       let newSectionBody = document.createElement('div');
       newSectionBody.style.width = '100%';
-      newSectionBody.style.height = '150px';
+      newSectionBody.style.height = paper_hours * 65 + 'px';
       draggableSection.is_dragged = false
       draggableSection.in_main_table = false
       draggableSection.tileAssigned = null;
