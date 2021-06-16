@@ -87,7 +87,7 @@
 		</header>
 
 		{% for room in room_entries %}
-			{% include 'includes/main-table.html' %}
+			{% include 'includes/main-table.html' with room=room %}
 		{% endfor %}
 	</div>
 
@@ -142,6 +142,9 @@
 {% endblock content %}
 
 {% block scripts %}
+	<script>
+		var csrftoken = '{{ csrf_token }}';
+	</script>
 	<script src='{% static "js/draggable.js" %}'></script>
 	<script src='{% static "js/infinite-draggable.js" %}'></script>
 	<script src='{% static "js/filter.js" %}'></script>

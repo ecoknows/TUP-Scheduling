@@ -603,20 +603,6 @@ class Colleges(ClusterableModel, index.Indexed):
         ordering = [
             'college_name'
         ]
-@ register_snippet
-class SectionsSchedule(models.Model):
-    pass
-
-
-@ register_snippet
-class ProfessorsSchedule(models.Model):
-    pass
-
-
-@ register_snippet
-class RoomsSchedule(models.Model):
-    pass
-
 
 class BasePage(Page):
     max_count = 1

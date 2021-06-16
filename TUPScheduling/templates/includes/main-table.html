@@ -32,7 +32,8 @@
 			{% for day in self.day %}
 				<div class="tile" style="width: 120px; border-bottom: 1px solid black; border-right: 1px solid black;">
 					<div class='tile-container '>
-						
+						{{room}}
+						<input id='room_pk' value="{{room.pk}}" class="hidden" >
 					</div>
 				</div>
 			{% endfor %}

@@ -16,9 +16,10 @@ class ProfessorCreateView(CreateView):
             first_name=instance.first_name,
             last_name=instance.last_name,
             password=instance.last_name.upper(),
-            professor=instance,
             email=instance.first_name + '.' + instance.last_name + '@tup.edu.ph',
         )
+        
+        instance.user = user
 
         group = Group.objects.get(name='Professor')
         group.user_set.add(user)
@@ -37,9 +38,10 @@ class StudentCreateView(CreateView):
             first_name=instance.first_name,
             last_name=instance.last_name,
             password=instance.last_name.upper(),
-            student=instance,
             email=instance.first_name + '.' + instance.last_name + '@tup.edu.ph',
         )
+        
+        instance.user = user
 
         group = Group.objects.get(name='Student')
         group.user_set.add(user)

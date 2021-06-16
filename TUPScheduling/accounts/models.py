@@ -2,8 +2,10 @@ from django.db import models
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import Group
+from django.utils.translation import gettext as _
 
 from modelcluster.models import ClusterableModel
+
 
 from wagtail.snippets.models import register_snippet
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
@@ -16,8 +18,10 @@ from wagtail.admin.edit_handlers import (
     InlinePanel
 )
 
+from TUPScheduling.users.models import User
 
 import datetime
+
 
 
 def timeConvert(miliTime):
@@ -32,6 +36,13 @@ def timeConvert(miliTime):
 
 
 class BaseAccount(ClusterableModel, index.Indexed):
+    
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        null=True
+    )
+
     first_name = models.CharField(
         max_length=300,
         null=True,
@@ -72,6 +83,10 @@ class BaseAccount(ClusterableModel, index.Indexed):
 
     def full_name(self):
         return self.last_name + ", " + self.first_name + " " + self.middle_name + "."
+
+    def delete(self):
+        self.user.delete()
+        return super().delete()
 
     class Meta:
         abstract = True

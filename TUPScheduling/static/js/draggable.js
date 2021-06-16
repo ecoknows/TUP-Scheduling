@@ -15,8 +15,16 @@ function add_schedule(
   prof_pk,
   room_pk,
   year,
-  starting_tine,
+  starting_time,
 ){
+  console.log(
+    section_pk,
+    subject,
+    prof_pk,
+    room_pk,
+    year,
+    starting_time,
+  )
   $.ajax({
       type: 'POST',
       data: {
@@ -26,8 +34,8 @@ function add_schedule(
         section_pk,
         subject,
         year,
-        starting_tine,
-        csrfmiddlewaretoken: '{{ csrf_token }}'
+        starting_time,
+        csrfmiddlewaretoken: csrftoken
       },
       success: function (response) {
         
@@ -158,17 +166,17 @@ function section_onmousedown(draggableSectionPaper, height){
               } 
             }
             
-            // if (draggableSection.querySelector('#prof_pk')){
-
-            //   add_schedule(
-            //     draggableSection.querySelector('#section_pk').value,
-            //     draggableSection.querySelector('#subject_pk').value,
-            //     draggableSection.querySelector('#prof_pk').value,
-            //     0,
-            //     '12321',
-            //     '421dsa',
-            //   )
-            // }
+            if (draggableSection.querySelector('#prof_pk')){
+              console.log(draggableSection.parentElement.querySelector('#room_pk').value, ' DEYMSAN ');
+              add_schedule(
+                draggableSection.querySelector('#section_pk').value,
+                draggableSection.querySelector('#subject_pk').value,
+                draggableSection.querySelector('#prof_pk').value,
+                1,
+                '12321',
+                '421dsa',
+              )
+            }
 
 
             filterDiv.classList.remove('filter')

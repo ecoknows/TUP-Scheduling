@@ -40,6 +40,11 @@ class Schedule(models.Model):
         on_delete=models.CASCADE,
         related_name='schedules'
     )
+    day = models.CharField(
+        max_length=20,
+        null=True,
+        choices=tuple([(day, day) for day in _DAY])
+    )
 
 
 
@@ -52,7 +57,6 @@ class SchedulePage(Page):
     
     def serve(self, request):
         add_schedule = request.POST.get('add_schedule', None)
-        print(add_schedule, ' sagfasjkask')
         if add_schedule:
             prof_pk = request.POST.get('prof_pk', None)
             room_pk = request.POST.get('room_pk', None)
@@ -63,20 +67,20 @@ class SchedulePage(Page):
 
 
             professor = Professors.objects.get(pk=prof_pk)
-            room = Professors.objects.get(pk=room_pk)
-            section = Professors.objects.get(pk=section_pk)
-            subject = Professors.objects.get(pk=subject)
+            room = Rooms.objects.get(pk=room_pk)
+            section = Sections.objects.get(pk=section_pk)
+            subject = Subjects.objects.get(pk=subject)
 
             print(professor, room, section, subject)
 
-            # Schedule.objects.create(
-            #     professor=professor,
-            #     room=room,
-            #     section=section,
-            #     subject=subject,
-            #     starting_time='1232134',
-            #     school_year='123421'
-            # )
+            Schedule.objects.update_or_create(
+                prof=professor,
+                room=room,
+                section=section,
+                subject=subject,
+                starting_time='1232134',
+                school_year='123421'
+            )
         
 
         return super().serve(request)
