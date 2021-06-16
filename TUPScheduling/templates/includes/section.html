@@ -7,14 +7,13 @@
 	}
 </style>
 
-<section id='section-container' class="h-full border-b-2 border-l-2 border-r-2 border-black" style="width: 200px; height: 542px; padding-left: 15%; padding-bottom: 15%;">
+<section id='section-container' class="h-full border-b-2 border-l-2 border-r-2 border-black" style="width: 200px; height: 707px; padding-left: 15%; padding-bottom: 15%;">
 	<div id='section-wrapper' class="pt-4 space-y-4"> 
 		{% for section in section_entries %}
 			{% for subject in section.subjects %}
 				{% if subject.scheduled == False %}
 				<div style="width: 100%; height: calc({{ subject.subject_object.hours }} * 65px);" class="filter">
 					<div  class="flex flex-col draggable-paper section-tile" style="line-height: 1; width: 120px; height: calc({{ subject.subject_object.hours }} * 65px);">
-						
 
 						<div class="relative">
 							<div class="absolute z-10 prof-image-container" style="left: -0.7rem; top: -0.7rem">
@@ -25,7 +24,7 @@
 							id='paper-head' 
 							class="relative flex items-center justify-center py-1 bg-red-700 border-t border-l border-r border-black" 
 							style="color: #fff;"
-							onmousedown="section_onmousedown(this, {{ subject.subject_object.hours }})"
+							onmousedown="section_onmousedown(this, {{ subject.subject_object.hours }}, null, null)"
 						> 
 							<div id='origin' >
 								<h1 class="text-center">{{ section.section_name }}</h1>
@@ -47,8 +46,50 @@
 
 					</div>
 				</div>
+
+				{% if section.section_name == "BSCS-1A" %}
+					{% if subject.subject_object.subject_code == "CC102-M" %}
+						<div style="width: 100%; height: calc({{ subject.subject_object.hours }} * 65px);" class="filter scheduled">
+							<div  class="flex flex-col draggable-paper section-tile" style="line-height: 1; width: 120px; height: calc({{ subject.subject_object.hours }} * 65px);">
+		
+								<div class="relative">
+									<div class="absolute z-10 prof-image-container" style="left: -0.7rem; top: -0.7rem">
+									</div>
+								</div>
+		
+								<div 
+									id='paper-head' 
+									class="relative flex items-center justify-center py-1 bg-red-700 border-t border-l border-r border-black" 
+									style="color: #fff;"
+									onmousedown="section_onmousedown(this, {{ subject.subject_object.hours }}, 0, 0)"
+								> 
+									<div id='origin' >
+										<h1 class="text-center">{{ section.section_name }}</h1>
+									</div>	
+								</div>
+		
+								<div class="bg-white tile-container ">
+								</div>
+		
+								<div class="flex items-center justify-center flex-1 bg-white border-2 border-black" >
+									<div id='origin' style="width: fit-content;">
+										<h1 id='subject-code' style="cursor:help" class="text-center code_description" desc="{{subject.subject_object.description}}" onmousedown="show_description(this, '{{subject.subject_object.description}}' )" onmouseup="remove_description(this, '{{subject.subject_object.subject_code}}' )">{{ subject.subject_object.subject_code }}</h1>
+									</div>
+								</div>
+		
+								
+								<input id='subject_pk' value="{{subject.subject_object.pk}}" class="hidden">
+								<input id='section_pk' value="{{section.pk}}" class="hidden">
+		
+							</div>
+						</div>
+					{% endif %}
+				{% endif %}
+
+				
 				{% endif %}
 			{% endfor %}
 		{% endfor %}
 	</div>
 </section>
+

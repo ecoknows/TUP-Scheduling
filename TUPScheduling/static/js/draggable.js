@@ -43,7 +43,7 @@ function add_schedule(
   })
 }
 
-function section_onmousedown(draggableSectionPaper, height){
+function section_onmousedown(draggableSectionPaper, height, temp_top, temp_height){
   let pos1 = 0;
   let pos2 = 0;
   let pos3 = 0;
@@ -75,8 +75,15 @@ function section_onmousedown(draggableSectionPaper, height){
 
     draggableSection.style.position = 'absolute'
     draggableSection.style.zIndex = 100;
-    draggableSection.style.top = (draggableSection.offsetTop  - pos2) + "px";
-    draggableSection.style.left = (draggableSection.offsetLeft - pos1) + "px";
+    if(temp_top == null && temp_height == null){
+      draggableSection.style.top = (draggableSection.offsetTop  - pos2) + "px";
+      draggableSection.style.left = (draggableSection.offsetLeft - pos1) + "px";
+    }
+    else{
+      draggableSection.style.top = temp_top + "px";
+      draggableSection.style.left = temp_height + "px";
+    }
+    
   }
 
   
