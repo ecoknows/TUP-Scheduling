@@ -84,7 +84,7 @@
 
               {% for schedule in schedules %}
                 <div class="flex flex-row mb-2">
-                    <div class="w-8 h-8 bg-green-400 rounded-full"></div>
+                    <div class="w-8 h-8 rounded-full" style="background-color: {{ schedule.color }};"></div>
                     <h2 class="py-2 ml-2 font-bold leading-3">{{ schedule.subject.description }}</h2>
                 </div>
               {% endfor %}
@@ -181,267 +181,53 @@
         <table class="font-bold uppercase border-4 border-collapse border-gray-300 table-fixed">
             <thead>
               <tr>
-                <th class="w-16 border-2 border-gray-300">WK</th>
-                <th class="border-2 border-gray-300 w-36">monday</th>
-                <th class="border-2 border-gray-300 w-36">tuesday</th>
-                <th class="border-2 border-gray-300 w-36">wednesday</th>
-                <th class="border-2 border-gray-300 w-36">thursday</th>
-                <th class="border-2 border-gray-300 w-36">friday</th>
-                <th class="border-2 border-gray-300 w-36">saturday</th>
-                <th class="border-2 border-gray-300 w-36">sunday</th>
+                <th class="w-16 border-2 border-gray-300" style="height: 50px;">WK</th>
+                <th class="border-2 border-gray-300 w-36" style="height: 50px;">monday</th>
+                <th class="border-2 border-gray-300 w-36" style="height: 50px;">tuesday</th>
+                <th class="border-2 border-gray-300 w-36" style="height: 50px;">wednesday</th>
+                <th class="border-2 border-gray-300 w-36" style="height: 50px;">thursday</th>
+                <th class="border-2 border-gray-300 w-36" style="height: 50px;">friday</th>
+                <th class="border-2 border-gray-300 w-36" style="height: 50px;">saturday</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td class="text-center border-2 border-gray-300">7 am</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-red-400 border-2 border-red-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="bg-green-400 border-2 border-green-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-red-400 border-2 border-red-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">8 am</td>
-                <td class="bg-green-400 border-2 border-green-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-purple-700 border-2 border-purple-700"></td>
-                <td class="text-center bg-red-400 border-2 border-red-400">chemistry</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="text-center bg-green-400 border-2 border-green-400">calculus</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="text-center bg-purple-700 border-2 border-purple-700">p.e</td>
-                <td class="text-center bg-red-400 border-2 border-red-400">lab</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">9 am</td>
-                <td class="bg-green-400 border-2 border-green-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-purple-700 border-2 border-purple-700"></td>
-                <td class="bg-red-400 border-2 border-red-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="bg-green-400 border-2 border-green-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-red-400 border-2 border-red-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">10 am</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="pr-2 mt-4 text-right bg-yellow-700 border-2 border-yellow-700">purposive</td>
-                <td class="pr-8 text-center bg-yellow-700 border-2 border-yellow-700 ">communication</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-red-400 border-2 border-red-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-yellow-700 border-2 border-yellow-700"></td>
-                <td class="bg-yellow-700 border-2 border-yellow-700"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">11 am</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-blue-400 border-2 border-blue-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="text-center bg-blue-400 border-2 border-blue-400">intro to</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-yellow-400 border-2 border-yellow-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">12 pm</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="text-center bg-blue-400 border-2 border-blue-400">computing</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="text-center bg-yellow-400 border-2 border-yellow-400">programming</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-blue-400 border-2 border-blue-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="text-center bg-yellow-400 border-2 border-yellow-400">language</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">1 pm</td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-yellow-400 border-2 border-yellow-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-yellow-400 border-2 border-yellow-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">2 pm</td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="text-center bg-purple-500 border-2 border-purple-500">chemistry</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-gray-400 border-2 border-gray-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">3 pm</td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="text-center bg-gray-400 border-2 border-gray-400">physics</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-gray-400 border-2 border-gray-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">4 pm</td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-gray-400 border-2 border-gray-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-gray-400 border-2 border-gray-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">5 pm</td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-gray-400 border-2 border-gray-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-gray-400 border-2 border-gray-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">6 pm</td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-gray-400 border-2 border-gray-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-gray-400 border-2 border-gray-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">7 pm</td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-gray-400 border-2 border-gray-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
+
+                {% for time in class_schedule %}
+
+                  <tr>
+                    <td class="text-center border-2 border-gray-300" style="height: 30px;">{{ time }}</td>
+                    {% for day in days %}
+                      <td class="border-2 border-gray-300" style="position: relative;">
+                      {% for schedule in schedules %}
+
+                        {% if schedule.day == day %}
+                          {% if time == schedule.new_time %}
+                          
+                            <div class="flex items-center" style="cursor:help; padding: 3px; text-align: center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.prof}}' )" onmouseup="unshow_professor(this, '{{schedule.subject.description}}' )">{{ schedule.subject.description }}</div>
+                      
+                          {% endif %}
+                        {% endif %}
+
+                      {% endfor %}
+                    </td>
+                  
+
+
+                    {% endfor %}
+                  </tr>
+
+                  <tr>
+                    <td class="h-6 border-2 border-gray-300" style="height: 30px;"></td>
+                    <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                    <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                    <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                    <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                    <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                    <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                  </tr>
+                  
+                {% endfor %}
+
             </tbody>
           </table>
     </div>
@@ -462,6 +248,14 @@
   btn.addEventListener("click", () => {
     sidebar.classList.toggle("-translate-x-full");
   });
+
+  function show_professor(container, text){
+    console.log(text)
+    container.innerText = text
+  }
+  function unshow_professor(container, text){
+    container.innerText = text
+  }
 </script>
 
 {% endblock %}

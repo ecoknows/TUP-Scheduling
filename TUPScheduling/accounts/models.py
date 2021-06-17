@@ -24,7 +24,6 @@ from TUPScheduling.users.models import User
 import datetime
 
 
-
 def timeConvert(miliTime):
     hours = miliTime.strftime('%H')
     minutes = miliTime.strftime('%M')
@@ -37,13 +36,12 @@ def timeConvert(miliTime):
 
 
 class BaseAccount(ClusterableModel, index.Indexed):
-    
+
     user = models.OneToOneField(
         User,
         on_delete=models.CASCADE,
         null=True
     )
-
 
     first_name = models.CharField(
         max_length=300,
@@ -53,7 +51,8 @@ class BaseAccount(ClusterableModel, index.Indexed):
     middle_name = models.CharField(
         max_length=1,
         null=True,
-        help_text='Ex. Michael'
+        help_text='Ex. Michael',
+        verbose_name='middle initial'
     )
     last_name = models.CharField(
         max_length=300,
@@ -78,7 +77,7 @@ class BaseAccount(ClusterableModel, index.Indexed):
     basic_info_panel = [
         MultiFieldPanel([
             FieldPanel('first_name', heading='Enter First Name here'),
-            FieldPanel('middle_name', heading='Enter Middle Name here'),
+            FieldPanel('middle_name', heading='Enter Middle Initial here'),
             FieldPanel('last_name', heading='Enter Last Name here'),
         ], heading='FULL NAME'),
     ]
@@ -87,7 +86,8 @@ class BaseAccount(ClusterableModel, index.Indexed):
         return self.last_name + ", " + self.first_name + " " + self.middle_name + "."
 
     def delete(self):
-        self.user.delete()
+        if self.user:
+            self.user.delete()
         return super().delete()
 
     class Meta:
@@ -136,7 +136,6 @@ class Professors(BaseAccount):
                 _('End time must be greater than start time'),
             )
 
-    
     profile_picture = models.ForeignKey(
         'wagtailimages.Image',
         null=True,
@@ -167,9 +166,8 @@ class Professors(BaseAccount):
     def preferred_time(self):
         return str(timeConvert(self.preferred_start_time)) + " - " + str(timeConvert(self.preferred_end_time))
 
-
     units = models.IntegerField(default=0)
-    
+
     status = models.CharField(
         max_length=200,
         default='Regular',
@@ -183,12 +181,11 @@ class Professors(BaseAccount):
         on_delete=models.SET_NULL,
         related_name='+',
     )
-    
+
     BaseAccount.basic_info_panel = BaseAccount.basic_info_panel + [
         ImageChooserPanel('profile_picture')
     ]
 
-    
     @property
     def profile_image(self):
         # Returns an empty string if there is no profile pic or the rendition

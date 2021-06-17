@@ -579,8 +579,6 @@
 
     </div>
 
-
-
     <!--Mobile to Medium screen Table-->
     <!--Table-->
     <div class="hidden w-full pt-10 pr-10 overflow-auto lg:block xl:w-3/4 ">
@@ -598,12 +596,12 @@
             <tbody>
                 {% for schedule in schedules %}
                     <tr>
-                        <td class="text-center border-2 border-gray-300">1</td>
+                        <td class="text-center border-2 border-gray-300">{{ forloop.counter }}</td>
                         <td class="py-3 pl-2 border-2 border-gray-300">{{ schedule.subject }}</td>
                         <td class="pl-3 border-2 border-gray-300">{{ schedule.subject.description }}</td>
-                        <td class="pl-3 border-2 border-gray-300">{{ schedule.professor }}</td>
+                        <td class="pl-3 border-2 border-gray-300">{{ schedule.prof }}</td>
                         <td class="text-center border-2 border-gray-300">{{ schedule.subject.units }}</td>
-                        <td class="pl-3 border-2 border-gray-300">{{ schedule.day }} | {{ schedule.room }} |</td>
+                        <td class="pl-3 border-2 border-gray-300">{{ schedule.day }} | {{ schedule.room }} | {{ schedule.time }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
