@@ -13,7 +13,7 @@ class InstructorSchedule(Page):
         context = super().get_context(request)
 
         final_schedule = request.user.students.section.schedules.all()
-
+        print(final_schedule)
         i = 0
         list_of_professors = []
         for schedule in final_schedule:
@@ -21,6 +21,7 @@ class InstructorSchedule(Page):
             i += 1
             if schedule.prof not in list_of_professors:
                 list_of_professors.append(schedule.prof)
+                print(schedule.prof)
 
             if schedule.starting_time < 7:
                 schedule.new_time = str(schedule.starting_time) + " PM"
