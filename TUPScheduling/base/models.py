@@ -547,6 +547,24 @@ class Rooms(models.Model, index.Indexed):
         help_text='Ex. Room101'
     )
 
+    room_image = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+
+    floor = models.IntegerField(
+        choices=[
+            (1,'1st Floor'),
+            (2,'2nd Floor'),
+            (3,'3rd Floor'),
+            (4,'4th Floor'),
+            (5,'5th Floor'),
+        ],
+        default=1
+    )
+
     Room_Type = models.CharField(
         max_length=200,
         default='Lecture',
@@ -569,8 +587,20 @@ class Rooms(models.Model, index.Indexed):
     panels = [
         FieldPanel('Room_Name'),
         FieldPanel('Room_Type', widget=forms.RadioSelect),
-        SnippetChooserPanel('choose_department')
+        FieldPanel('floor'),
+        SnippetChooserPanel('choose_department'),
+        ImageChooserPanel('room_image'),
     ]
+
+    @property
+    def room_image_display(self):
+        # Returns an empty string if there is no profile pic or the rendition
+        # file can't be found.
+        try:
+            return self.room_image.get_rendition('fill-150x150').img_tag()
+        except:  # noqa: E722 FIXME: remove bare 'except:'
+            return ''
+
 
     def __str__(self): return self.Room_Name + "  " + self.Room_Type
 
@@ -593,6 +623,9 @@ class Colleges(ClusterableModel, index.Indexed):
         FieldPanel('college_name'),
 
     ]
+    
+    def acronym(self):
+        return "".join(e[0] for e in self.college_name.split())
 
     def __str__(self):
         return self.college_name
@@ -607,7 +640,6 @@ class Colleges(ClusterableModel, index.Indexed):
 class BasePage(Page):
     max_count = 1
     def serve(self, request):
-        print(request.user.is_authenticated)
         if request.user.is_authenticated is False:
             return HttpResponseRedirect('/logout/')
         if request.user.is_superuser:

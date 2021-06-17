@@ -54,76 +54,25 @@
 
     <div class="mx-12 mt-12 mb-20 md:mx-40">
       <div class="grid grid-cols-1 gap-6 p-8 bg-gray-100 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 rounded-xl">
+        
+        {% load wagtailimages_tags %}
+        {% for room in rooms %}
+        {% image room.room_image fill-250x250 as room_image %}
         <a href="laboratory room.html">
           <div class="bg-white rounded-b-xl">
+            {% if room_image %}
+            <img class="object-cover w-full" src="{{room_image.url}}" alt="lab">
+            {% else %}
             <img class="object-cover w-full" src="{% static 'img/image2.png' %}" alt="lab">
-            <h2 class="pt-2 font-bold text-center text-red-700">LABORATORY 1</h2>
+            {% endif %}
+            <h2 class="pt-2 font-bold text-center text-red-700">{{room.Room_Name}}</h2>
             <p class="pb-4 font-thin text-center">COS Building - 3rd Floor</p>
           </div>
         </a>
-        <a href="#">
-          <div class="bg-white rounded-b-xl">
-            <img class="object-cover w-full" src="{% static 'img/image2.png' %}" alt="lab">
-            <h2 class="pt-2 font-bold text-center text-red-700">LABORATORY 2</h2>
-            <p class="pb-4 font-thin text-center">COS Building - 3rd Floor</p>
-          </div>
-        </a>
-        <a href="#">
-          <div class="bg-white rounded-b-xl">
-            <img class="object-cover w-full" src="{% static 'img/image2.png' %}" alt="lab">
-            <h2 class="pt-2 font-bold text-center text-red-700">LABORATORY 3</h2>
-            <p class="pb-4 font-thin text-center">COS Building - 3rd Floor</p>
-          </div>
-        </a>
-        <a href="#">
-          <div class="bg-white rounded-b-xl">
-            <img class="object-cover w-full" src="{% static 'img/image4.png' %}" alt="lecture">
-            <h2 class="pt-2 font-bold text-center text-red-700">ROOM 311</h2>
-            <p class="pb-4 font-thin text-center">COS Building - 3rd Floor</p>
-          </div>
-        </a>
-        <a href="#">
-          <div class="bg-white rounded-b-xl">
-            <img class="object-cover w-full" src="{% static 'img/image4.png' %}" alt="lecture">
-            <h2 class="pt-2 font-bold text-center text-red-700">ROOM 312</h2>
-            <p class="pb-4 font-thin text-center">COS Building - 3rd Floor</p>
-          </div>
-        </a>
-        <a href="#">
-          <div class="bg-white rounded-b-xl">
-            <img class="object-cover w-full" src="{% static 'img/image4.png' %}" alt="lecture">
-            <h2 class="pt-2 font-bold text-center text-red-700">ROOM 313</h2>
-            <p class="pb-4 font-thin text-center">COS Building - 3rd Floor</p>
-          </div>
-        </a>
-        <a href="#">
-          <div class="bg-white rounded-b-xl">
-            <img class="object-cover w-full" src="{% static 'img/image4.png' %}" alt="lecture">
-            <h2 class="pt-2 font-bold text-center text-red-700">ROOM 314</h2>
-            <p class="pb-4 font-thin text-center">COS Building - 3rd Floor</p>
-          </div>
-        </a>
-        <a href="#">
-          <div class="bg-white rounded-b-xl">
-            <img class="object-cover w-full" src="{% static 'img/image4.png' %}" alt="lecture">
-            <h2 class="pt-2 font-bold text-center text-red-700">ROOM 315</h2>
-            <p class="pb-4 font-thin text-center">COS Building - 3rd Floor</p>
-          </div>
-        </a>
-        <a href="#">
-          <div class="bg-white rounded-b-xl">
-            <img class="object-cover w-full" src="{% static 'img/image4.png' %}" alt="lecture">
-            <h2 class="pt-2 font-bold text-center text-red-700">ROOM 316</h2>
-            <p class="pb-4 font-thin text-center">COS Building - 3rd Floor</p>
-          </div>
-        </a>
-        <a href="#">
-          <div class="bg-white rounded-b-xl">
-            <img class="object-cover w-full" src="{% static 'img/image4.png' %}" alt="lecture">
-            <h2 class="pt-2 font-bold text-center text-red-700">ROOM 317</h2>
-            <p class="pb-4 font-thin text-center">COS Building - 3rd Floor</p>
-          </div>
-        </a>
+
+        {% endfor %}
+
+
       </div>
     </div>
 </section>

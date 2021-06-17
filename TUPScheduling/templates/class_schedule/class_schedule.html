@@ -1,7 +1,7 @@
 
 {% extends 'base.html' %}
 
-{% load static %}
+{% load static wagtailimages_tags %}
 
 
 {% block header %}
@@ -62,8 +62,29 @@
   <section class="flex flex-wrap mb-20 overflow-hidden">
       <div class="w-full pt-10 pl-6 overflow-hidden xl:w-1/4 sm:pl-16 md:pl-16">
           <div class="mb-3 font-bold uppercase">
-              <h1>Welcome Back!</h1>
-              <h1>{{ student.first_name }} {{ student.middle_name }}. {{ student.last_name }}</h1>
+                <h1>Welcome Back!</h1>
+                <br>
+                <div class="flex flex-row mb-2">
+                  {% image user.profile_picture fill-50x50 as user_image %}
+                  <img src='{{user_image.url}}' class="w-12 h-12 mr-3 bg-gray-200 rounded-full">
+                  <div class="mr-3">
+                    <h1 class="font-extrabold">{{ user.first_name }} {{ user.middle_name }}. {{ user.last_name }}</h1>
+                    <ul class="flex space-x-3">
+                      {% if request.user.professors %}
+                        <li>Professor</li>
+                      {% endif %}
+
+                      {% if request.user.students %}
+                        <li>Student</li>
+                      {% endif %}
+
+                      <li>|</li>
+                      <li>COS</li>
+                      <li>|</li>
+                      <li><a href="/logout" class="font-medium text-red-700 underline hover:text-gray-400"> Logout</a></li>
+                    </ul>
+                  </div>
+                </div>
           </div>
           <div class="w-56 border-b-2 border-gray-300 rounded"></div>
           <div class="z-0 hidden mt-7 lg:flex">
@@ -202,9 +223,13 @@
 
                         {% if schedule.day == day %}
                           {% if time == schedule.new_time %}
-                          
-                            <div class="flex items-center" style="cursor:help; padding: 3px; text-align: center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.prof}}' )" onmouseup="unshow_professor(this, '{{schedule.subject.description}}' )">{{ schedule.subject.description }}</div>
-                      
+
+                            {% if request.user.students %}
+                            <div class="flex items-center justify-center" style="cursor:help; padding: 3px; text-align: center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.prof}}' )" onmouseup="unshow_professor(this, '{{schedule.section}}' )">{{ schedule.section }}</div>
+                            {% endif %}
+                            {% if request.user.professors %}
+                            <div class="flex items-center justify-center" style="cursor:help; padding: 3px; text-align: center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.room}}' )" onmouseup="unshow_professor(this, '{{schedule.section}}' )">{{ schedule.section }}</div>
+                            {% endif %}
                           {% endif %}
                         {% endif %}
 
