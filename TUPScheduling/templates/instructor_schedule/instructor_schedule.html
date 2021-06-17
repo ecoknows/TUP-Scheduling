@@ -59,7 +59,7 @@
                   <span class="inline-block w-56 rounded-md shadow-sm">
                     <button x-ref="button" @click="onButtonClick()" type="button" aria-haspopup="listbox" :aria-expanded="open" aria-labelledby="assigned-to-label" class="relative w-full py-2 pl-3 pr-10 text-left transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md cursor-default focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5">
                       <div class="flex items-center space-x-3">
-                        <span x-text="['John Doe', 'John Eoe', 'John Foe', '- Select -'][ value-1 ]" class="block truncate">- Select -</span>
+                        <span x-text="{{ list_of_professor_names }}[ value-1 ]" class="block truncate">- Select -</span>
                       </div>
                       <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                         <svg class="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
@@ -71,44 +71,22 @@
                   <div x-show="open" @focusout="onEscape()" @click.away="open = false" x-description="Select popover, show/hide based on select state." x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute w-full mt-1 bg-white rounded-md shadow-lg" style="display: none;">
                     <ul @keydown.enter.stop.prevent="onOptionSelect()" @keydown.space.stop.prevent="onOptionSelect()" @keydown.escape="onEscape()" @keydown.arrow-up.prevent="onArrowUp()" @keydown.arrow-down.prevent="onArrowDown()" x-ref="listbox" tabindex="-1" role="listbox" aria-labelledby="assigned-to-label" :aria-activedescendant="activeDescendant" class="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs focus:outline-none sm:text-sm sm:leading-5">
                       
-                      <li id="assigned-to-option-1" role="option" @click="choose(1)" @mouseenter="selected = 1" @mouseleave="selected = null" :class="{ 'text-white bg-red-600': selected === 1, 'text-gray-900': !(selected === 1) }" class="relative py-2 pl-4 text-gray-900 cursor-default select-none pr-9">
-                        <div class="flex items-center space-x-3">
-                          <span :class="{ 'font-semibold': value === 1, 'font-normal': !(value === 1) }" class="block font-normal truncate">
-                            John Doe
+                      {% for professor in list_of_professors %}
+                        <li onclick="choose(this)" id="assigned-to-option-{{forloop.counter}}" role="option" @click="choose({{forloop.counter}})" @mouseenter="selected = {{forloop.counter}}" @mouseleave="selected = null" :class="{ 'text-white bg-red-600': selected === {{forloop.counter}}, 'text-gray-900': !(selected === {{forloop.counter}}) }" class="relative py-2 pl-4 text-gray-900 cursor-default select-none pr-9">
+                          <div class="flex items-center space-x-3">
+                            <span :class="{ 'font-semibold': value === {{forloop.counter}}, 'font-normal': !(value === {{forloop.counter}}) }" class="block font-normal truncate professor_chosen ">
+                              {{ professor.first_name }} {{ professor.middle_name }}. {{ professor.last_name }}
+                            </span>
+                          </div>
+                          <span x-show="value === {{forloop.counter}}" :class="{ 'text-white': selected === {{forloop.counter}}, 'text-red-600': !(selected === {{forloop.counter}}) }" class="absolute inset-y-0 right-0 flex items-center pr-4 text-red-600" style="display: none;">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                            </svg>
                           </span>
-                        </div>
-                        <span x-show="value === 1" :class="{ 'text-white': selected === 1, 'text-red-600': !(selected === 1) }" class="absolute inset-y-0 right-0 flex items-center pr-4 text-red-600" style="display: none;">
-                          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                          </svg>
-                        </span>
-                      </li>
+                        </li>
+                      {% endfor %}
 
-                      <li id="assigned-to-option-2" role="option" @click="choose(2)" @mouseenter="selected = 2" @mouseleave="selected = null" aria-selected="true" :class="{ 'text-white bg-red-600': selected === 2, 'text-gray-900': !(selected === 2) }" class="relative py-2 pl-4 text-gray-900 cursor-default select-none pr-9">
-                        <div class="flex items-center space-x-3">
-                          <span :class="{ 'font-semibold': value === 2, 'font-normal': !(value === 2) }" class="block font-normal truncate">
-                            John Eoe
-                          </span>
-                        </div>
-                        <span x-show="value === 2" :class="{ 'text-white': selected === 2, 'text-red-600': !(selected === 2) }" class="absolute inset-y-0 right-0 flex items-center pr-4 text-red-600" style="display: none;">
-                          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                          </svg>
-                        </span>
-                      </li>
-
-                      <li id="assigned-to-option-3" role="option" @click="choose(3)" @mouseenter="selected = 3" @mouseleave="selected = null" :class="{ 'text-white bg-red-600': selected === 3, 'text-gray-900': !(selected === 3) }" class="relative py-2 pl-4 text-gray-900 cursor-default select-none pr-9">
-                        <div class="flex items-center space-x-3">
-                          <span :class="{ 'font-semibold': value === 3, 'font-normal': !(value === 3) }" class="block font-normal truncate">
-                            John Foe
-                          </span>
-                        </div>
-                        <span x-show="value === 3" :class="{ 'text-white': selected === 3, 'text-red-600': !(selected === 3) }" class="absolute inset-y-0 right-0 flex items-center pr-4 text-red-600" style="display: none;">
-                          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                          </svg>
-                        </span>
-                      </li>
+                      
 
                     </ul>
                   </div>
@@ -122,38 +100,15 @@
         <div class="w-56 mt-4 border-b-2 border-gray-300 rounded"></div>
         <div class="hidden mt-2 capitalize lg:block">
             <h2 class="py-2 font-bold">subjects</h2>
-            <div class="flex flex-row mb-2">
-                <div class="w-8 h-8 bg-green-400 rounded-full"></div>
-                <h2 class="py-2 ml-2 font-bold leading-3">calculus</h2>
-            </div>
-            <div class="flex flex-row mb-2">
-                <div class="w-8 h-8 bg-purple-500 rounded-full"></div>
-                <h2 class="py-2 ml-2 font-bold leading-3">chemistry</h2>
-            </div>
-            <div class="flex flex-row mb-2">
-                <div class="w-8 h-8 bg-yellow-700 rounded-full"></div>
-                <h2 class="py-2 ml-2 font-bold leading-3">purposive communication</h2>
-            </div>
-            <div class="flex flex-row mb-2">
-                <div class="w-8 h-8 bg-blue-400 rounded-full"></div>
-                <h2 class="py-2 ml-2 font-bold leading-3">intro to computing</h2>
-            </div>
-            <div class="flex flex-row mb-2">
-                <div class="w-8 h-8 bg-gray-400 rounded-full"></div>
-                <h2 class="py-2 ml-2 font-bold leading-3">physics</h2>
-            </div>
-            <div class="flex flex-row mb-2">
-                <div class="w-8 h-8 bg-purple-700 rounded-full"></div>
-                <h2 class="py-2 ml-2 font-bold leading-3">pE</h2>
-            </div>
-            <div class="flex flex-row mb-2">
-                <div class="w-8 h-8 bg-yellow-400 rounded-full"></div>
-                <h2 class="py-2 ml-2 font-bold leading-3">programming language</h2>
-            </div>
-            <div class="flex flex-row mb-2">
-                <div class="w-8 h-8 bg-red-400 rounded-full"></div>
-                <h2 class="py-2 ml-2 font-bold leading-3">chemistry lab</h2>
-            </div>
+
+            {% for professor in professor_ojects %}
+                {% for subject in professor.subjects %}
+                  <div class="flex flex-row mb-2 subject_list" professor_name='{{ professor.name }}' style="display:none;">
+                      <div class="w-8 h-8 bg-green-400 rounded-full"></div>
+                      <h2 class="py-2 ml-2 font-bold leading-3">{{ subject }}</h2>
+                  </div>
+              {% endfor %}
+            {% endfor %}
         </div>
     </div>
 
@@ -524,6 +479,19 @@
         ...options,
         }
     },
+}
+
+function choose(chosen){
+  subject_list = document.getElementsByClassName('subject_list');
+  for(let i = 0; i < subject_list.length; i++){
+    console.log(subject_list[i].getAttribute('professor_name'));
+    if(subject_list[i].getAttribute('professor_name') == chosen.innerText){
+      subject_list[i].style.display = null
+    }else{
+      subject_list[i].style['display'] = 'none';
+    }
+  }
+
 }
 
 
