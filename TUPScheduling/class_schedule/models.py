@@ -48,7 +48,6 @@ class ClassScheduleOverview(Page):
             total_subjects += 1
 
             schedule.color = _COLOR[i]
-            print("asdsada_", _COLOR[i])
             i += 1
 
             if((schedule.starting_time + int(schedule.subject.hours)) == 12):
@@ -62,7 +61,8 @@ class ClassScheduleOverview(Page):
         context['schedules'] = final_schedule
         context['units'] = total_units
         context['total_subjects'] = total_subjects
-        context['school_year'] = request.user.students.section.schedules.all()[
-            0].school_year
+        if request.user.students.section.schedules.all():
+            context['school_year'] = request.user.students.section.schedules.all()[
+                0].school_year
 
         return context
