@@ -54,18 +54,18 @@ class Schedule(models.Model):
         return self.subject.units
 
     def starting_time_display(self):
-        return dict(_TIME_DAY).get(self.starting_time)
+        return dict(_TIME_DAY).get(int(self.starting_time))
 
     def ending_time_display(self):
-        ending_time = int((self.starting_time + self.subject.hours) % 12)
+        ending_time = int((int(self.starting_time) +  int(self.subject.hours)) % 12)
         if ending_time == 0:
             ending_time = 12
         return  dict(_TIME_DAY).get(ending_time)
     def __str__(self):
-        ending_time = int((self.starting_time + self.subject.hours) % 12)
+        ending_time = int((int(self.starting_time) +  int(self.subject.hours)) % 12)
         if ending_time == 0:
             ending_time = 12
-        return self.subject.subject_code + ' | ' + self.subject.description + ' | ' + self.section.__str__() + ' | ' + str(self.subject.units) + ' | ' + self.day[0] + ' - ' + dict(_TIME_DAY).get(self.starting_time) + '-' + dict(_TIME_DAY).get(ending_time)
+        return self.subject.subject_code + ' | ' + self.subject.description + ' | ' + self.section.__str__() + ' | ' + str(self.subject.units) + ' | ' + self.day[0] + ' - ' + dict(_TIME_DAY).get(int(self.starting_time)) + '-' + dict(_TIME_DAY).get(ending_time)
 
 
 class SchedulePage(Page):
