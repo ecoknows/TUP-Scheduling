@@ -70,6 +70,7 @@
                   </span>
                   <div x-show="open" @focusout="onEscape()" @click.away="open = false" x-description="Select popover, show/hide based on select state." x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="absolute w-full mt-1 bg-white rounded-md shadow-lg" style="display: none;">
                     <ul @keydown.enter.stop.prevent="onOptionSelect()" @keydown.space.stop.prevent="onOptionSelect()" @keydown.escape="onEscape()" @keydown.arrow-up.prevent="onArrowUp()" @keydown.arrow-down.prevent="onArrowDown()" x-ref="listbox" tabindex="-1" role="listbox" aria-labelledby="assigned-to-label" :aria-activedescendant="activeDescendant" class="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs focus:outline-none sm:text-sm sm:leading-5">
+                      
                       <li id="assigned-to-option-1" role="option" @click="choose(1)" @mouseenter="selected = 1" @mouseleave="selected = null" :class="{ 'text-white bg-red-600': selected === 1, 'text-gray-900': !(selected === 1) }" class="relative py-2 pl-4 text-gray-900 cursor-default select-none pr-9">
                         <div class="flex items-center space-x-3">
                           <span :class="{ 'font-semibold': value === 1, 'font-normal': !(value === 1) }" class="block font-normal truncate">
@@ -82,6 +83,7 @@
                           </svg>
                         </span>
                       </li>
+
                       <li id="assigned-to-option-2" role="option" @click="choose(2)" @mouseenter="selected = 2" @mouseleave="selected = null" aria-selected="true" :class="{ 'text-white bg-red-600': selected === 2, 'text-gray-900': !(selected === 2) }" class="relative py-2 pl-4 text-gray-900 cursor-default select-none pr-9">
                         <div class="flex items-center space-x-3">
                           <span :class="{ 'font-semibold': value === 2, 'font-normal': !(value === 2) }" class="block font-normal truncate">
@@ -94,6 +96,7 @@
                           </svg>
                         </span>
                       </li>
+
                       <li id="assigned-to-option-3" role="option" @click="choose(3)" @mouseenter="selected = 3" @mouseleave="selected = null" :class="{ 'text-white bg-red-600': selected === 3, 'text-gray-900': !(selected === 3) }" class="relative py-2 pl-4 text-gray-900 cursor-default select-none pr-9">
                         <div class="flex items-center space-x-3">
                           <span :class="{ 'font-semibold': value === 3, 'font-normal': !(value === 3) }" class="block font-normal truncate">
@@ -106,6 +109,7 @@
                           </svg>
                         </span>
                       </li>
+
                     </ul>
                   </div>
                 </div>

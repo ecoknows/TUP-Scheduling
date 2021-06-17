@@ -51,7 +51,7 @@ class BaseAccount(ClusterableModel, index.Indexed):
     middle_name = models.CharField(
         max_length=1,
         null=True,
-        help_text='Ex. Michael',
+        help_text='Ex. M',
         verbose_name='middle initial'
     )
     last_name = models.CharField(
