@@ -183,7 +183,8 @@ class Professors(BaseAccount):
     )
 
     BaseAccount.basic_info_panel = BaseAccount.basic_info_panel + [
-        ImageChooserPanel('profile_picture')
+        ImageChooserPanel('profile_picture'),
+        FieldPanel('units')
     ]
 
     @property

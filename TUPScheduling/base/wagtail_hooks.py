@@ -143,7 +143,11 @@ modeladmin_register(AdminGroup)
 
 class ScheduleAdmin(ModelAdmin):
     model = Schedule
+    menu_icon = 'tick'
     menu_label = 'Schedule'
+    list_display = ('subject', 'subject_description', 'section', 'subject_units', 'day', 'starting_time_display', 'ending_time_display')
+    search_fields = ('subject', 'subject_description', 'section', 'subject_units', 'day', 'starting_time_display', 'ending_time_display')
+    list_filter = ('day', 'starting_time')  
 
 modeladmin_register(ScheduleAdmin)
 

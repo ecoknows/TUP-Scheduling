@@ -34,13 +34,18 @@ function update_schedule_pk(
 
 
 function remove_schedule(
-  schedule_pk
+  schedule_pk,
+  prof,
+  units
 ){
+  console.log(prof, ' haha');
   $.ajax({
       type: 'POST',
       data: {
         remove_schedule: true,
         schedule_pk,
+        prof_pk: prof ? prof.value: null,
+        units: units,
         csrfmiddlewaretoken: csrftoken
       },
       success: function (response) {
@@ -77,17 +82,20 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
     room_pk,
     day,
     starting_time,
+    units,
   ){
+    console.log(units.units_container);
     $.ajax({
         type: 'POST',
         data: {
           add_schedule: true,
-          prof_pk: prof ? prof.pk : null,
+          prof_pk: prof ? prof.value : null,
           room_pk,
           section_pk,
           day,
           subject,
           starting_time,
+          units: units,
           csrfmiddlewaretoken: csrftoken
         },
         success: function (response) {
@@ -217,6 +225,7 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
                 draggableSection.parentElement.querySelector('#starting_time').value,
               )
             }else{
+              
               add_schedule(
                 draggableSection.querySelector('#section_pk').value,
                 draggableSection.querySelector('#subject_pk').value,
@@ -224,6 +233,7 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
                 draggableSection.parentElement.querySelector('#room_pk').value,
                 draggableSection.parentElement.querySelector('#day').value,
                 draggableSection.parentElement.querySelector('#starting_time').value,
+                draggableSection.querySelector('#subject_units').value,
               )
             }
 
@@ -250,9 +260,15 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
     if(checkCollision(convertedDragable,convertedSectionContainer) && draggableSection.in_main_table ){
 
       remove_schedule(
-        draggableSection.querySelector('#schedule_pk').value
+        draggableSection.querySelector('#schedule_pk').value,
+        draggableSection.querySelector('#prof_pk'),
+        draggableSection.querySelector('#subject_units').value,
       );
 
+      let schedule_pk = draggableSection.querySelector('#schedule_pk')
+      if(schedule_pk){
+        schedule_pk.remove()
+      }
       if (draggableSection.tileAssigned != null){ 
         let x = 0;     
         while(x < paper_hours*6){
@@ -261,6 +277,10 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
         } 
       }
       let newSectionBody = document.createElement('div');
+
+      // let unit_container = document.getElementById('professor-section-container').querySelector('#prof-4')
+      // unit_container.innerText = parseInt(unit_container.innerText) -  parseInt(draggableSection.querySelector('#subject_units').value)
+
       newSectionBody.style.width = '100%';
       newSectionBody.style.height = paper_hours * 65 + 'px';
       draggableSection.is_dragged = false
