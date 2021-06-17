@@ -7,6 +7,7 @@ from TUPScheduling.base.models import CourseCurriculum, Sections, Rooms, BasePag
 from TUPScheduling.accounts.models import Professors
 from django.http import JsonResponse
 
+
 class Schedule(models.Model):
     prof = models.ForeignKey(
         Professors,
@@ -72,9 +73,10 @@ class SchedulePage(Page):
         add_schedule = request.POST.get('add_schedule', None)
         remove_schedule = request.POST.get('remove_schedule', None)
         update_schedule = request.POST.get('update_schedule', None)
-        update_remove_schedule = request.POST.get('update_remove_schedule', None)
-        update_add_schedule =  request.POST.get('update_add_schedule', None)
-        
+        update_remove_schedule = request.POST.get(
+            'update_remove_schedule', None)
+        update_add_schedule = request.POST.get('update_add_schedule', None)
+
         if add_schedule:
             prof_pk = request.POST.get('prof_pk', None)
             room_pk = request.POST.get('room_pk', None)
@@ -92,18 +94,18 @@ class SchedulePage(Page):
             room = Rooms.objects.get(pk=room_pk)
             section = Sections.objects.get(pk=section_pk)
             subject = Subjects.objects.get(pk=subject_pk)
-
             schedule_created = Schedule.objects.create(
+
                 prof=professor,
                 room=room,
                 day=day,
                 section=section,
                 subject=subject,
-                starting_time=starting_time,
+                starting_time=int(starting_time),
                 school_year='123421',
             )
 
-            return JsonResponse({'schedule_pk' : schedule_created.pk})
+            return JsonResponse({'schedule_pk': schedule_created.pk})
         if update_add_schedule:
             day = request.POST.get('day', None)
             starting_time = request.POST.get('starting_time', None)
@@ -113,7 +115,7 @@ class SchedulePage(Page):
             schedule.starting_time = starting_time
             print(schedule)
             schedule.save()
-        
+
         if remove_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
             prof_pk = request.POST.get('prof_pk', None)
@@ -135,13 +137,13 @@ class SchedulePage(Page):
 
             prof_pk = request.POST.get('prof_pk', None)
             professor = Professors.objects.get(pk=prof_pk)
-            
+
             schedule = Schedule.objects.get(pk=schedule_pk)
             schedule.prof = professor
             professor.units = professor.units + int(units)
             professor.save()
             schedule.save()
-        
+
         if update_remove_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
             units =  request.POST.get('units', None)
@@ -154,8 +156,6 @@ class SchedulePage(Page):
             schedule = Schedule.objects.get(pk=schedule_pk)
             schedule.prof = None
             schedule.save()
-
-        
 
         return super().serve(request)
 
@@ -173,10 +173,10 @@ class SchedulePage(Page):
         new_rooms = []
         for temp_room in temp_rooms:
             obj_room = {
-                        'pk': temp_room.pk,
-                        'name': temp_room.Room_Name,
-                        'type': temp_room.Room_Type,
-                        }
+                'pk': temp_room.pk,
+                'name': temp_room.Room_Name,
+                'type': temp_room.Room_Type,
+            }
             new_rooms.append(obj_room)
 
         context['room_entries'] = new_rooms
@@ -241,7 +241,6 @@ class SchedulePage(Page):
                         'scheduled': scheduled
                     }
                 )
-        
 
         context['already_schedule_object'] = Schedule.objects.all()
         print(context['already_schedule_object'])

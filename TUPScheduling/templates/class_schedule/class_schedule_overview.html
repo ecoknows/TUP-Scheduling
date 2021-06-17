@@ -90,11 +90,11 @@
                 x-transition:leave="transition ease-in duration-300"
                 x-transition:leave-end="opacity-0 transform scale-y-50"
             >
-                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Total Units: 24</a></li>
-                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Total Subjects: 10</a></li>
-                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Course: BSCS-NS-3A</a></li>
-                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Term/Sem: 2nd</a></li>
-                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">School Year: 2020-2021</a></li>
+                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Total Units: {{ units }}</a></li>
+                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Total Subjects: {{ total_subjects }}</a></li>
+                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Section: {{ student.section }}</a></li>
+                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Term/Sem: {{ student.section.sem }}</a></li>
+                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">School Year: {{ school_year }}</a></li>
             </ul>
             </div>
             </div>
@@ -126,19 +126,19 @@
         <div class="hidden w-56 mt-2 border-b-4 border-gray-300 rounded lg:block"></div>
         <div class="hidden mt-7 lg:block">
             <div class="w-56 bg-gray-400 border-l-8 border-red-700">
-                <h2 class="py-2 ml-2 font-bold">Total Units: 24</h2>
+                <h2 class="py-2 ml-2 font-bold">Total Units: {{ units }}</h2>
             </div>
             <div class="w-56 mt-2 bg-gray-400 border-l-8 border-red-700">
-                <h2 class="py-2 ml-2 font-bold">Total Subjects: 10</h2>
+                <h2 class="py-2 ml-2 font-bold">Total Subjects: {{ total_subjects }}</h2>
             </div>
             <div class="w-56 mt-2 bg-gray-400 border-l-8 border-red-700">
-                <h2 class="py-2 ml-2 font-bold">Course: BSCS-NS-3A</h2>
+                <h2 class="py-2 ml-2 font-bold">Section: {{ student.section }}</h2>
             </div>
             <div class="w-56 mt-2 bg-gray-400 border-l-8 border-red-700">
-                <h2 class="py-2 ml-2 font-bold">Term/Sem: 2nd</h2>
+                <h2 class="py-2 ml-2 font-bold">Term/Sem: {{ student.section.sem }}</h2>
             </div>
             <div class="w-56 mt-2 bg-gray-400 border-l-8 border-red-700">
-                <h2 class="py-2 ml-2 font-bold">School Year: 2020-2021</h2>
+                <h2 class="py-2 ml-2 font-bold">School Year: {{ school_year }}</h2>
             </div>
         </div>
     </div>
@@ -579,8 +579,6 @@
 
     </div>
 
-
-
     <!--Mobile to Medium screen Table-->
     <!--Table-->
     <div class="hidden w-full pt-10 pr-10 overflow-auto lg:block xl:w-3/4 ">
@@ -596,86 +594,16 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                <td class="text-center border-2 border-gray-300">1</td>
-                <td class="py-3 pl-2 border-2 border-gray-300">cs321l-m</td>
-                <td class="pl-3 border-2 border-gray-300">artificial intelligence, laboratory 1</td>
-                <td class="pl-3 border-2 border-gray-300">garcia, may misericordia</td>
-                <td class="text-center border-2 border-gray-300">3</td>
-                <td class="pl-3 border-2 border-gray-300">th 11:00am-02:00pm tba</td>
-                </tr>
-                <tr>
-                <td class="text-center border-2 border-gray-300">2</td>
-                <td class="py-3 pl-2 border-2 border-gray-300">cs322-m</td>
-                <td class="pl-3 border-2 border-gray-300">artificial intelligence, lecture 2</td>
-                <td class="pl-3 border-2 border-gray-300">lee, jan eilbert lim</td>
-                <td class="text-center border-2 border-gray-300">3</td>
-                <td class="pl-3 border-2 border-gray-300 ">th 11:00am-02:00pm tba</td>
-                </tr>
-                <tr>
-                <td class="text-center border-2 border-gray-300">3</td>
-                <td class="py-3 pl-2 border-2 border-gray-300">cs303-m</td>
-                <td class="pl-3 border-2 border-gray-300">automata theory and formal language</td>
-                <td class="pl-3 border-2 border-gray-300">abisado, mideth b</td>
-                <td class="text-center border-2 border-gray-300">1</td>
-                <td class="pl-3 border-2 border-gray-300">th 11:00am-02:00pm tba</td>
-                </tr>
-                <tr>
-                <td class="text-center border-2 border-gray-300">4</td>
-                <td class="py-3 pl-2 border-2 border-gray-300">cse3-m</td>
-                <td class="pl-3 border-2 border-gray-300">cs professional elective 3</td>
-                <td class="pl-3 border-2 border-gray-300">abisado, mideth b</td>
-                <td class="text-center border-2 border-gray-300">2</td>
-                <td class="pl-3 border-2 border-gray-300">th 11:00am-02:00pm tba</td>
-                </tr>
-                <tr>
-                <td class="text-center border-2 border-gray-300">5</td>
-                <td class="py-3 pl-2 border-2 border-gray-300">cse4-m</td>
-                <td class="pl-3 border-2 border-gray-300">cs professional elective 4</td>
-                <td class="pl-3 border-2 border-gray-300">vargas, darwin campos</td>
-                <td class="text-center border-2 border-gray-300">1</td>
-                <td class="pl-3 border-2 border-gray-300">th 11:00am-02:00pm tba</td>
-                </tr>
-                <tr>
-                <td class="text-center border-2 border-gray-300">6</td>
-                <td class="py-3 pl-2 border-2 border-gray-300">cc303-m</td>
-                <td class="pl-3 border-2 border-gray-300">methods of research in computing</td>
-                <td class="pl-3 border-2 border-gray-300">vargas, darwin campos</td>
-                <td class="text-center border-2 border-gray-300">2</td>
-                <td class="pl-3 border-2 border-gray-300">th 11:00am-02:00pm tba</td>
-                </tr>
-                <tr>
-                <td class="text-center border-2 border-gray-300">7</td>
-                <td class="py-3 pl-2 border-2 border-gray-300">cs363-m</td>
-                <td class="pl-3 border-2 border-gray-300">Modeling and simulation</td>
-                <td class="pl-3 border-2 border-gray-300">lee, jan eilbert lim</td>
-                <td class="text-center border-2 border-gray-300">3</td>
-                <td class="pl-3 border-2 border-gray-300">th 11:00am-02:00pm tba</td>
-                </tr>
-                <tr>
-                <td class="text-center border-2 border-gray-300">8</td>
-                <td class="py-3 pl-2 border-2 border-gray-300">cs341l-m</td>
-                <td class="pl-3 border-2 border-gray-300">software engineering 2, laboratory</td>
-                <td class="pl-3 border-2 border-gray-300">amador, peragrino, jr bonsa</td>
-                <td class="text-center border-2 border-gray-300">3</td>
-                <td class="pl-3 border-2 border-gray-300">th 11:00am-02:00pm tba</td>
-                </tr>
-                <tr>
-                <td class="text-center border-2 border-gray-300">9</td>
-                <td class="py-3 pl-2 border-2 border-gray-300">cs342-m</td>
-                <td class="pl-3 border-2 border-gray-300">software engineering 2, lecture</td>
-                <td class="pl-3 border-2 border-gray-300">tomagan, ariel</td>
-                <td class="text-center border-2 border-gray-300">3</td>
-                <td class="pl-3 border-2 border-gray-300">th 11:00am-02:00pm tba</td>
-                </tr>
-                <tr>
-                <td class="text-center border-2 border-gray-300">10</td>
-                <td class="py-3 pl-2 border-2 border-gray-300">gec3-m</td>
-                <td class="pl-3 border-2 border-gray-300">the contemporary world</td>
-                <td class="pl-3 border-2 border-gray-300">lita, marlyn s</td>
-                <td class="text-center border-2 border-gray-300">3</td>
-                <td class="pl-3 border-2 border-gray-300">th 11:00am-02:00pm tba</td>
-                </tr>
+                {% for schedule in schedules %}
+                    <tr>
+                        <td class="text-center border-2 border-gray-300">{{ forloop.counter }}</td>
+                        <td class="py-3 pl-2 border-2 border-gray-300">{{ schedule.subject }}</td>
+                        <td class="pl-3 border-2 border-gray-300">{{ schedule.subject.description }}</td>
+                        <td class="pl-3 border-2 border-gray-300">{{ schedule.prof }}</td>
+                        <td class="text-center border-2 border-gray-300">{{ schedule.subject.units }}</td>
+                        <td class="pl-3 border-2 border-gray-300">{{ schedule.day }} | {{ schedule.room }} | {{ schedule.time }}</td>
+                    </tr>
+                {% endfor %}
             </tbody>
             </table>
     </div>

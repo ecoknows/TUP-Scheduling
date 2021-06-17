@@ -37,6 +37,26 @@ _TIME_DAY = [
      (11,'06:00 PM'),
 ]
 
+_COLOR = [
+    '#FF0000',
+    '#FFA500',
+    '#FFFF00',
+    '#00FF00',
+    '#0000FF',
+    '#4B0082',
+    '#EE82EE',
+    '#800080',
+    '#FFC0CB',
+    '#C0C0C0',
+    '#FFD700',
+    '#F5F5DC',
+    '#A52A2A',
+    '#808080'
+]
+
+_CLASS_SCHEDULE = ['7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM',
+                   '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM']
+
 
 class Strings:
     overview = 'OVERVIEW'
