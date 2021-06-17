@@ -11,23 +11,25 @@ class ClassSchedule(Page):
     def get_context(self, request):
         context = super().get_context(request)
 
-        final_schedule = request.user.students.section.schedules.all()
-        i = 0
-        for schedule in final_schedule:
-            schedule.color = _COLOR[i]
-            i += 1
+        
+        if hasattr(request.user, 'students'):
+            final_schedule = request.user.students.section.schedules.all()
+            i = 0
+            for schedule in final_schedule:
+                schedule.color = _COLOR[i]
+                i += 1
 
-            if schedule.starting_time < 7:
-                schedule.new_time = str(schedule.starting_time) + " PM"
-            elif schedule.starting_time == 12:
-                schedule.new_time = str(schedule.starting_time) + " PM"
-            else:
-                schedule.new_time = str(schedule.starting_time) + " AM"
+                if schedule.starting_time < 7:
+                    schedule.new_time = str(schedule.starting_time) + " PM"
+                elif schedule.starting_time == 12:
+                    schedule.new_time = str(schedule.starting_time) + " PM"
+                else:
+                    schedule.new_time = str(schedule.starting_time) + " AM"
 
-        context['student'] = request.user.students
-        context['schedules'] = final_schedule
-        context['class_schedule'] = _CLASS_SCHEDULE
-        context['days'] = _DAY
+            context['student'] = request.user.students
+            context['schedules'] = final_schedule
+            context['class_schedule'] = _CLASS_SCHEDULE
+            context['days'] = _DAY
 
         return context
 
