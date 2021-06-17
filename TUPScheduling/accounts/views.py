@@ -16,6 +16,7 @@ class ProfessorCreateView(CreateView):
             first_name=instance.first_name,
             last_name=instance.last_name,
             password=instance.last_name.upper(),
+            is_professor=True,
             email=instance.first_name + '.' + instance.last_name + '@tup.edu.ph',
         )
         
@@ -37,6 +38,7 @@ class StudentCreateView(CreateView):
             username=instance.user_code(extra_count=3000),
             first_name=instance.first_name,
             last_name=instance.last_name,
+            is_student=True,
             password=instance.last_name.upper(),
             email=instance.first_name + '.' + instance.last_name + '@tup.edu.ph',
         )

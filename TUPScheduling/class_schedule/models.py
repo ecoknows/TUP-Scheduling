@@ -11,23 +11,25 @@ class ClassSchedule(Page):
     def get_context(self, request):
         context = super().get_context(request)
 
-        final_schedule = request.user.students.section.schedules.all()
-        i = 0
-        for schedule in final_schedule:
-            schedule.color = _COLOR[i]
-            i += 1
+        
+        if hasattr(request.user, 'students'):
+            final_schedule = request.user.students.section.schedules.all()
+            i = 0
+            for schedule in final_schedule:
+                schedule.color = _COLOR[i]
+                i += 1
 
-            if schedule.starting_time < 7:
-                schedule.new_time = str(schedule.starting_time) + " PM"
-            elif schedule.starting_time == 12:
-                schedule.new_time = str(schedule.starting_time) + " PM"
-            else:
-                schedule.new_time = str(schedule.starting_time) + " AM"
+                if schedule.starting_time < 7:
+                    schedule.new_time = str(schedule.starting_time) + " PM"
+                elif schedule.starting_time == 12:
+                    schedule.new_time = str(schedule.starting_time) + " PM"
+                else:
+                    schedule.new_time = str(schedule.starting_time) + " AM"
 
-        context['student'] = request.user.students
-        context['schedules'] = final_schedule
-        context['class_schedule'] = _CLASS_SCHEDULE
-        context['days'] = _DAY
+            context['student'] = request.user.students
+            context['schedules'] = final_schedule
+            context['class_schedule'] = _CLASS_SCHEDULE
+            context['days'] = _DAY
 
         return context
 
@@ -48,7 +50,6 @@ class ClassScheduleOverview(Page):
             total_subjects += 1
 
             schedule.color = _COLOR[i]
-            print("asdsada_", _COLOR[i])
             i += 1
 
             if((schedule.starting_time + int(schedule.subject.hours)) == 12):
@@ -62,7 +63,8 @@ class ClassScheduleOverview(Page):
         context['schedules'] = final_schedule
         context['units'] = total_units
         context['total_subjects'] = total_subjects
-        context['school_year'] = request.user.students.section.schedules.all()[
-            0].school_year
+        if request.user.students.section.schedules.all():
+            context['school_year'] = request.user.students.section.schedules.all()[
+                0].school_year
 
         return context

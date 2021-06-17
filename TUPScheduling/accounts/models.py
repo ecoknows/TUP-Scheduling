@@ -167,6 +167,7 @@ class Professors(BaseAccount):
         return str(timeConvert(self.preferred_start_time)) + " - " + str(timeConvert(self.preferred_end_time))
 
     units = models.IntegerField(default=0)
+    is_scheduler = models.BooleanField(default=False)
 
     status = models.CharField(
         max_length=200,
@@ -181,10 +182,11 @@ class Professors(BaseAccount):
         on_delete=models.SET_NULL,
         related_name='+',
     )
+    
 
     BaseAccount.basic_info_panel = BaseAccount.basic_info_panel + [
         ImageChooserPanel('profile_picture'),
-        FieldPanel('units')
+        FieldPanel('is_scheduler')
     ]
 
     @property
