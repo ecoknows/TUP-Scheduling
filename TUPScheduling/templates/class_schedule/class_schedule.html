@@ -226,7 +226,7 @@
 
 
                             {% if request.user.students %}
-                            <div class="flex items-center justify-center" style="cursor:help; padding: 3px; text-align: center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.prof}}' )" onmouseup="unshow_professor(this, '{{schedule.section}}' )">{{ schedule.section }}</div>
+                            <div class="flex items-center justify-center" style="cursor:help; padding: 3px; text-align: center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.room}}' )" onmouseup="unshow_professor(this, '{{schedule.prof}}' )">{{ schedule.prof }}</div>
                             {% endif %}
                             {% if request.user.professors %}
                             <div class="flex items-center justify-center" style="cursor:help; padding: 3px; text-align: center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.room}}' )" onmouseup="unshow_professor(this, '{{schedule.section}}' )">{{ schedule.section }}</div>

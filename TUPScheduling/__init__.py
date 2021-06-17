@@ -51,7 +51,21 @@ _COLOR = [
     '#82d4bb',
     '#ffc670',
     '#ff85c8',
-    '#aed1e6'
+    '#aed1e6',
+    '#cdb4db',
+    '#f08080',
+    '#ffac81',
+    '#95b8d1',
+    '#ffee93',
+    '#ff9899',
+    '#e5d9d3',
+    '#aaf683',
+    '#e19f66',
+    '#fdd99b',
+    '#82d4bb',
+    '#ffc670',
+    '#ff85c8',
+    '#aed1e6',
 ]
 
 _CLASS_SCHEDULE = ['7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM',

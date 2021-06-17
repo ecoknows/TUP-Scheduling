@@ -206,6 +206,7 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
               let room_type = tiles[i].querySelector('#room_type')
               console.log(room_type, lab_or_lec)
               if (room_type.value != lab_or_lec.value){
+                alert('Room Type and Subject Type Mismatch!')
                 break;
               }
             }
