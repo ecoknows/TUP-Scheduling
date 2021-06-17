@@ -203,7 +203,7 @@
                         {% if schedule.day == day %}
                           {% if time == schedule.new_time %}
                           
-                            <div class="flex items-center" style="cursor:help; padding: 3px; text-align: center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.prof}}' )" onmouseup="unshow_professor(this, '{{schedule.subject.description}}' )">{{ schedule.subject.description }}</div>
+                            <div class="flex items-center" style="text-align: center; cursor:help; padding: 5px; display:flex; justify-content:center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.room}}' )" onmouseup="unshow_professor(this, '{{schedule.prof}}' )">{{ schedule.prof }}</div>
                       
                           {% endif %}
                         {% endif %}

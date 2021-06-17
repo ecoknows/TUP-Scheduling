@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load base_tags %}
+
 {% block header %}
 
 <!--Header-->
@@ -101,14 +103,18 @@
         <div class="hidden mt-2 capitalize lg:block">
             <h2 class="py-2 font-bold">subjects</h2>
 
-            {% for professor in professor_ojects %}
+            {% for professor in professor_objects %}
                 {% for subject in professor.subjects %}
-                  <div class="flex flex-row mb-2 subject_list" professor_name='{{ professor.name }}' style="display:none;">
-                      <div class="w-8 h-8 bg-green-400 rounded-full"></div>
-                      <h2 class="py-2 ml-2 font-bold leading-3">{{ subject }}</h2>
+                  <div class="flex flex-row mb-2 subject_list" professor_name='{{ professor.name }}' style="display:none; align-items: center;">
+                      <div class="w-8 h-8 bg-green-400 rounded-full circles" style="background-color: {{professor.colors | getColor:forloop.counter0}}"></div>
+
+                      <div style="max-width: 300px;">
+                        <h2 class="py-2 ml-2 leading-3" style="line-height: 20px;">{{ subject.description }}</h2>
+                      </div>
                   </div>
               {% endfor %}
             {% endfor %}
+            
         </div>
     </div>
 
@@ -198,214 +204,118 @@
     <!--End of Mobile to Medium screen Table-->
 
     <!--Table-->
-    <div class="hidden w-full pt-10 pr-10 overflow-auto xl:w-3/4 lg:block">
-        <table class="font-bold uppercase border-4 border-collapse border-gray-300 table-fixed">
-            <thead>
-              <tr>
-                <th class="w-16 border-2 border-gray-300">WK</th>
-                <th class="border-2 border-gray-300 w-36">monday</th>
-                <th class="border-2 border-gray-300 w-36">tuesday</th>
-                <th class="border-2 border-gray-300 w-36">wednesday</th>
-                <th class="border-2 border-gray-300 w-36">thursday</th>
-                <th class="border-2 border-gray-300 w-36">friday</th>
-                <th class="border-2 border-gray-300 w-36">saturday</th>
-                <th class="border-2 border-gray-300 w-36">sunday</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="text-center border-2 border-gray-300">7 am</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-red-400 border-2 border-red-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="bg-green-400 border-2 border-green-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-red-400 border-2 border-red-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">8 am</td>
-                <td class="bg-green-400 border-2 border-green-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-purple-700 border-2 border-purple-700"></td>
-                <td class="text-center bg-red-400 border-2 border-red-400">chemistry</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="text-center bg-green-400 border-2 border-green-400">calculus</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="text-center bg-purple-700 border-2 border-purple-700">p.e</td>
-                <td class="text-center bg-red-400 border-2 border-red-400">lab</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">9 am</td>
-                <td class="bg-green-400 border-2 border-green-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-purple-700 border-2 border-purple-700"></td>
-                <td class="bg-red-400 border-2 border-red-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="bg-green-400 border-2 border-green-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-red-400 border-2 border-red-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">10 am</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="pr-2 text-right bg-yellow-700 border-2 border-yellow-700">purposive</td>
-                <td class="pr-8 text-center bg-yellow-700 border-2 border-yellow-700">communication</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-red-400 border-2 border-red-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-yellow-700 border-2 border-yellow-700"></td>
-                <td class="bg-yellow-700 border-2 border-yellow-700"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">11 am</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-blue-400 border-2 border-blue-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="text-center bg-blue-400 border-2 border-blue-400">intro to</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-yellow-400 border-2 border-yellow-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">12 pm</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="text-center bg-blue-400 border-2 border-blue-400">computing</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="text-center bg-yellow-400 border-2 border-yellow-400">programming</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-blue-400 border-2 border-blue-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="text-center bg-yellow-400 border-2 border-yellow-400">language</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">1 pm</td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-yellow-400 border-2 border-yellow-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-yellow-400 border-2 border-yellow-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">2 pm</td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="text-center bg-purple-500 border-2 border-purple-500">chemistry</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-gray-400 border-2 border-gray-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">3 pm</td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="text-center bg-gray-400 border-2 border-gray-400">physics</td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="h-6 border-2 border-gray-300"></td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-gray-400 border-2 border-gray-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-              <tr>
-                <td class="text-center border-2 border-gray-300">4 pm</td>
-                <td class="bg-purple-500 border-2 border-purple-500"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="bg-gray-400 border-2 border-gray-400"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-                <td class="border-2 border-gray-300"></td>
-              </tr>
-            </tbody>
-          </table>
-    </div>
+    {% for professor in professor_objects %}
+    <div class="z-0 hidden w-full pt-10 pr-10 overflow-auto xl:w-3/4 lg:block prof_schedule_table" style="display: none;" professor_name='{{ professor.name }}'>
+      <table class="font-bold uppercase border-4 border-collapse border-gray-300 table-fixed">
+          <thead>
+            <tr>
+              <th class="w-16 border-2 border-gray-300" style="height: 50px;">WK</th>
+              <th class="border-2 border-gray-300 w-36" style="height: 50px;">monday</th>
+              <th class="border-2 border-gray-300 w-36" style="height: 50px;">tuesday</th>
+              <th class="border-2 border-gray-300 w-36" style="height: 50px;">wednesday</th>
+              <th class="border-2 border-gray-300 w-36" style="height: 50px;">thursday</th>
+              <th class="border-2 border-gray-300 w-36" style="height: 50px;">friday</th>
+              <th class="border-2 border-gray-300 w-36" style="height: 50px;">saturday</th>
+            </tr>
+          </thead>
+          <tbody>
+
+              {% for time in class_schedule %}
+
+                <tr>
+                  <td class="text-center border-2 border-gray-300" style="height: 30px;">{{ time }}</td>
+                  {% for day in days %}
+                    <td class="border-2 border-gray-300" style="position: relative;">
+                    {% for schedule in schedules %}
+                        {% if schedule.day == day %}
+                          {% if time == schedule.new_time %}
+                            {% for subject in professor.subjects %}
+                              {% if subject.description == schedule.subject.description %}
+                              <div professor_name='{{schedule.prof}}' class="flex items-center professor_div" style="text-align: center; cursor:help; padding: 5px; display:flex; justify-content:center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{professor.colors | getColor:forloop.counter0}}" onmousedown="show_room(this, '{{schedule.room}}' )" onmouseup="unshow_room(this, '{{schedule.section}}' )">{{ schedule.section }}</div>
+                              {% endif %}
+                            {% endfor %}    
+                          {% endif %}
+                      {% endif %}
+                    {% endfor %}
+                  </td>
+                
+
+
+                  {% endfor %}
+                </tr>
+
+                <tr>
+                  <td class="h-6 border-2 border-gray-300" style="height: 30px;"></td>
+                  <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                  <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                  <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                  <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                  <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                  <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                </tr>
+                
+              {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+    {% endfor %}
+
+    <div class="z-0 hidden w-full pt-10 pr-10 overflow-auto xl:w-3/4 lg:block prof_schedule_table" style="display: block;" professor_name='default'>
+      <table class="font-bold uppercase border-4 border-collapse border-gray-300 table-fixed">
+          <thead>
+            <tr>
+              <th class="w-16 border-2 border-gray-300" style="height: 50px;">WK</th>
+              <th class="border-2 border-gray-300 w-36" style="height: 50px;">monday</th>
+              <th class="border-2 border-gray-300 w-36" style="height: 50px;">tuesday</th>
+              <th class="border-2 border-gray-300 w-36" style="height: 50px;">wednesday</th>
+              <th class="border-2 border-gray-300 w-36" style="height: 50px;">thursday</th>
+              <th class="border-2 border-gray-300 w-36" style="height: 50px;">friday</th>
+              <th class="border-2 border-gray-300 w-36" style="height: 50px;">saturday</th>
+            </tr>
+          </thead>
+          <tbody>
+
+              {% for time in class_schedule %}
+
+                <tr>
+                  <td class="text-center border-2 border-gray-300" style="height: 30px;">{{ time }}</td>
+                  {% for day in days %}
+                    <td class="border-2 border-gray-300" style="position: relative;">
+                    {% for schedule in schedules %}
+
+                      {% if schedule.day == day %}
+                        {% if time == schedule.new_time %}
+                        
+                          <div class="flex items-center" style="text-align: center; cursor:help; padding: 5px; display:flex; justify-content:center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.room}}' )"></div>
+                    
+                        {% endif %}
+                      {% endif %}
+
+                    {% endfor %}
+                  </td>
+                
+
+
+                  {% endfor %}
+                </tr>
+
+                <tr>
+                  <td class="h-6 border-2 border-gray-300" style="height: 30px;"></td>
+                  <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                  <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                  <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                  <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                  <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                  <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                </tr>
+                
+              {% endfor %}
+
+          </tbody>
+        </table>
+      </div>
+    
 </section>
 {% endblock %}
 
@@ -483,16 +393,44 @@
 
 function choose(chosen){
   subject_list = document.getElementsByClassName('subject_list');
+  prof_schedule_table = document.getElementsByClassName('prof_schedule_table');
+  professor_div = document.getElementsByClassName('professor_div')
+  
   for(let i = 0; i < subject_list.length; i++){
-    console.log(subject_list[i].getAttribute('professor_name'));
     if(subject_list[i].getAttribute('professor_name') == chosen.innerText){
-      subject_list[i].style.display = null
+      subject_list[i].style.display = null;
     }else{
       subject_list[i].style['display'] = 'none';
     }
   }
 
+  for(let i = 0; i < prof_schedule_table.length; i++){
+    if(prof_schedule_table[i].getAttribute('professor_name') == chosen.innerText){
+      prof_schedule_table[i].style.display = null;
+    }else{
+      prof_schedule_table[i].style['display'] = 'none';
+    }
+  }
+  
+  for(let i = 0; i < professor_div.length; i++){
+    professor_temp = professor_div[i].getAttribute('professor_name').split(",");
+    professor_temp = professor_temp[1].slice(1, professor_temp[1].length) + " " + professor_temp[0]
+    if(professor_temp == chosen.innerText){
+      professor_div[i].style.display = null;
+    }else{
+      professor_div[i].style['display'] = 'none';
+    }
+  }
+
 }
+
+  function show_room(container, text){
+      container.innerText = text
+  }
+  
+  function unshow_room(container, text){
+    container.innerText = text
+  }
 
 
 </script>
