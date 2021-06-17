@@ -2,7 +2,7 @@ from wagtail.core.models import Page
 from django.db import models
 
 from wagtail.snippets.models import register_snippet
-from TUPScheduling import _DAY, _TIME
+from TUPScheduling import _DAY, _TIME, _TIME_DAY
 from TUPScheduling.base.models import CourseCurriculum, Sections, Rooms, BasePage, Subjects, SubjectsOrderable
 from TUPScheduling.accounts.models import Professors
 from django.http import JsonResponse
@@ -14,9 +14,9 @@ class Schedule(models.Model):
         on_delete=models.CASCADE,
         related_name='schedules'
     )
-    starting_time = models.CharField(
-        max_length=200,
-        null=True,
+    starting_time = models.IntegerField(
+        choices=_TIME,
+        default=7
     )
     school_year = models.CharField(
         max_length=200,
@@ -46,6 +46,20 @@ class Schedule(models.Model):
         choices=tuple([(day, day) for day in _DAY])
     )
 
+    def subject_description(self):
+        return self.subject.description
+        
+    def subject_units(self):
+        return self.subject.units
+
+    def starting_time_display(self):
+        return dict(_TIME_DAY).get(self.starting_time)
+
+    def ending_time_display(self):
+        return  dict(_TIME_DAY).get(self.starting_time + self.subject.hours )
+    def __str__(self):
+        return self.subject.subject_code + ' | ' + self.subject.description + ' | ' + self.section.__str__() + ' | ' + str(self.subject.units) + ' | ' + self.day[0] + ' - ' + dict(_TIME_DAY).get(self.starting_time) + '-' + dict(_TIME_DAY).get(self.starting_time + self.subject.hours )
+
 
 class SchedulePage(Page):
     max_count = 1
@@ -68,9 +82,12 @@ class SchedulePage(Page):
             day = request.POST.get('day', None)
             subject_pk = request.POST.get('subject', None)
             starting_time = request.POST.get('starting_time', None)
+            units =  request.POST.get('units', None)
             professor = None
             if prof_pk:
                 professor = Professors.objects.get(pk=prof_pk)
+                professor.units = int(units)
+                professor.save()
 
             room = Rooms.objects.get(pk=room_pk)
             section = Sections.objects.get(pk=section_pk)
@@ -99,23 +116,40 @@ class SchedulePage(Page):
         
         if remove_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
+            prof_pk = request.POST.get('prof_pk', None)
+            units = request.POST.get('units', None)
+
+            
+            if prof_pk:
+                professor = Professors.objects.get(pk=prof_pk)
+                professor.units = professor.units - int(units)
+                professor.save()
+            
+
             Schedule.objects.get(pk=schedule_pk).delete()
+            
 
         if update_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
+            units =  request.POST.get('units', None)
 
             prof_pk = request.POST.get('prof_pk', None)
             professor = Professors.objects.get(pk=prof_pk)
             
             schedule = Schedule.objects.get(pk=schedule_pk)
             schedule.prof = professor
+            professor.units = professor.units + int(units)
+            professor.save()
             schedule.save()
         
         if update_remove_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
+            units =  request.POST.get('units', None)
 
             prof_pk = request.POST.get('prof_pk', None)
             professor = Professors.objects.get(pk=prof_pk)
+            professor.units = professor.units - int(units)
+            professor.save()
             
             schedule = Schedule.objects.get(pk=schedule_pk)
             schedule.prof = None
@@ -131,9 +165,6 @@ class SchedulePage(Page):
         department = 24
         profs = Professors.objects.filter(
             choose_department_id=department)
-
-        for prof in profs:
-            prof.units = 0
 
         context['professor_entries'] = profs
 

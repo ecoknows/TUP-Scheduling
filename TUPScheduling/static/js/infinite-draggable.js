@@ -1,14 +1,14 @@
 const tiles_section = document.getElementsByClassName('section-tile');
 const professor_container = document.getElementById('professor-section-container');
 
-function update_schedule(schedule_pk, prof_pk){
-
+function update_schedule(schedule_pk, prof_pk, units){
   $.ajax({
       type: 'POST',
       data: {
         update_schedule: true,
         schedule_pk,
         prof_pk,
+        units: units,
         csrfmiddlewaretoken: csrftoken
       },
       success: function (response) {
@@ -18,14 +18,14 @@ function update_schedule(schedule_pk, prof_pk){
 }
 
 
-function remove_prof_schedule(schedule_pk, prof_pk){
-
+function remove_prof_schedule(schedule_pk, prof_pk, units){
   $.ajax({
       type: 'POST',
       data: {
         update_remove_schedule: true,
         schedule_pk,
         prof_pk,
+        units: units ? units.value : null,
         csrfmiddlewaretoken: csrftoken
       },
       success: function (response) {
@@ -41,8 +41,14 @@ function professor_onmousedown(dragableProfessor, units){
     let pos4 = 0;
     let event = window.event;
     // let unit = document.getElementById('units');
-    let professer_header = dragableProfessor.parentElement.parentElement.parentElement
-    console.log(professer_header)
+    
+    if (!dragableProfessor.units_container){
+
+      let units_prof = professor_container.querySelector('#prof-'+dragableProfessor.querySelector('#prof_pk').value)
+      dragableProfessor.units_container= units_prof
+      console.log(units_prof);
+    }
+    
     dragableProfessor.style.position = 'absolute'
 
     if(!dragableProfessor.is_placed){
@@ -145,16 +151,17 @@ function professor_onmousedown(dragableProfessor, units){
             if(schedule_pk){
               update_schedule(
                 schedule_pk.value,
-                dragableProfessor.querySelector('#prof_pk').value
+                dragableProfessor.querySelector('#prof_pk').value,
+                tiles_section[i].querySelector('#subject_units').value
               )
             }
 
             let new_draggable = dragableProfessor;
             
-            // if(!new_draggable.hasAttribute('placed')){
-            //   new_unit = parseInt(unit.innerText) + units;
-            //   unit.innerText = new_unit;
-            // }
+            if(dragableProfessor.units_container){
+              new_unit = parseInt(dragableProfessor.units_container.innerText) + units;
+              dragableProfessor.units_container.innerText = new_unit;
+            }
 
             
 
@@ -176,19 +183,20 @@ function professor_onmousedown(dragableProfessor, units){
         i++;
       }
       
-      // if(dragableProfessor.hasAttribute('placed')){
-      //   new_unit = parseInt(unit.innerText) - units;
-      //   unit.innerText = new_unit;
-      //   dragableProfessor.removeAttribute('placed');
-      // }
 
       if(dragableProfessor.tileAssigned){
         let schedule_pk = dragableProfessor.tileAssigned.querySelector('#schedule_pk');
         if(schedule_pk){
           remove_prof_schedule(
             schedule_pk.value,
-            dragableProfessor.querySelector('#prof_pk').value
+            dragableProfessor.querySelector('#prof_pk').value,
+            dragableProfessor.tileAssigned.querySelector('#subject_units')
           )
+        }
+        
+        if(dragableProfessor.units_container){
+          new_unit = parseInt(dragableProfessor.units_container.innerText) - units;
+          dragableProfessor.units_container.innerText = new_unit;
         }
       }
       console.log('REMOVEEE!');

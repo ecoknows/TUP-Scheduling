@@ -14,7 +14,7 @@
           <h1 class="text-center">
             {{ professor.full_name }}
           </h1>
-          <h1 class="text-center" id="{{professor}}">
+          <h1 class="text-center" id="prof-{{professor.pk}}">
             {{ professor.units }}
           </h1>
         </div>
@@ -33,7 +33,7 @@
                         <div id='body' class="hidden">
                           {% image professor.profile_picture fill-50x50 as prof_image %}
                           <img class="bg-gray-700 rounded-full" src="{{prof_image.url}}">
-                          <span class="tooltiptext">{{professor.full_name}}</span>
+                          <span id='full_name' class="tooltiptext">{{professor.full_name}}</span>
                         </div>
                       </div>
 
