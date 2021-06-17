@@ -35,6 +35,7 @@
 							<input class='hidden' id='time_counter' value='{{forloop.parentloop.counter}}' >
 							<input class='hidden' id='day_counter' value='{{forloop.counter}}' >
 							<input class='hidden' id='room_pk' value='{{room.pk}}' >
+							<input class='hidden' id='room_type' value='{{room.type}}' >
 							<input class='hidden' id='day' value='{{day}}' >
 							<input class='hidden' id='starting_time' value='{{time.0}}' >
 							{% for subject in already_schedule_object %}
@@ -102,6 +103,7 @@
 											<input id='subject_units' value="{{subject.subject.units}}" class="hidden">
 											<input id='subject_pk' value="{{subject.subject.pk}}" class="hidden">
 											<input id='section_pk' value="{{subject.section.pk}}" class="hidden">
+											<input id='lab_or_lec' value="{{subject.subject.lab_or_lec}}" class="hidden">
 										</div>
 
 										{% endif %}

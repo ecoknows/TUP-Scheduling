@@ -19,10 +19,8 @@ class Schedule(models.Model):
         choices=_TIME,
         default=7
     )
-    school_year = models.CharField(
-        max_length=200,
-        null=True,
-    )
+    school_year = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
     room = models.ForeignKey(
         Rooms,
         null=True,
@@ -58,11 +56,11 @@ class Schedule(models.Model):
         if ending_time == 0:
             ending_time = 12
         return  dict(_TIME_DAY).get(ending_time)
-    def __str__(self):
-        ending_time = int((int(self.starting_time) +  int(self.subject.hours)) % 12)
-        if ending_time == 0:
-            ending_time = 12
-        return self.subject.subject_code + ' | ' + self.subject.description + ' | ' + self.section.__str__() + ' | ' + str(self.subject.units) + ' | ' + self.day[0] + ' - ' + dict(_TIME_DAY).get(int(self.starting_time)) + '-' + dict(_TIME_DAY).get(ending_time)
+    # def __str__(self):
+    #     ending_time = int((int(self.starting_time) +  int(self.subject.hours)) % 12)
+    #     if ending_time == 0:
+    #         ending_time = 12
+    #     return self.subject.subject_code + ' | ' + self.subject.description + ' | ' + self.section.__str__() + ' | ' + str(self.subject.units) + ' | ' + self.day[0] + ' - ' + dict(_TIME_DAY).get(int(self.starting_time)) + '-' + dict(_TIME_DAY).get(ending_time)
 
 
 class SchedulePage(Page):
@@ -105,7 +103,6 @@ class SchedulePage(Page):
                 section=section,
                 subject=subject,
                 starting_time=int(starting_time),
-                school_year='123421',
             )
 
             return JsonResponse({'schedule_pk': schedule_created.pk})

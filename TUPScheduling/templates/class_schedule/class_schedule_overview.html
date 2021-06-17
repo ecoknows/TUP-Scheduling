@@ -1,7 +1,7 @@
 
 {% extends 'base.html' %}
 
-{% load static %}
+{% load static wagtailimages_tags %}
 
 
 {% block header %}
@@ -60,7 +60,29 @@
     <div class="w-full pt-10 pl-16 overflow-hidden xl:w-1/4">
         <div class="mb-3 font-bold uppercase">
             <h1>Welcome Back!</h1>
-            <h1>{{ student.first_name }} {{ student.middle_name }}. {{ student.last_name }}</h1>
+            <br>
+            <div class="flex flex-row mb-2">
+              {% image user.profile_picture fill-50x50 as user_image %}
+              <img src='{{user_image.url}}' class="w-12 h-12 mr-3 bg-gray-200 rounded-full">
+              <div class="mr-3">
+                <h1 class="font-extrabold">{{ user.first_name }} {{ user.middle_name }}. {{ user.last_name }}</h1>
+                <ul class="flex space-x-3">
+                    {% if request.user.professors %}
+                        <li>Professor</li>
+                    {% endif %}
+
+                    {% if request.user.students %}
+                        <li>Student</li>
+                    {% endif %}
+                  <li>|</li>
+                  <li>
+                      {{user.choose_department.Choose_College.acronym}}
+                  </li>
+                  <li>|</li>
+                  <li><a href="/logout" class="font-medium text-red-700 underline hover:text-gray-400"> Logout</a></li>
+                </ul>
+              </div>
+            </div>
         </div>
         <div class="w-56 border-b-2 border-gray-300 rounded"></div>
         <div class="z-0 hidden mt-7 lg:flex ">
@@ -91,9 +113,18 @@
                 x-transition:leave-end="opacity-0 transform scale-y-50"
             >
                 <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Total Units: {{ units }}</a></li>
-                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Total Subjects: {{ total_subjects }}</a></li>
-                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Section: {{ student.section }}</a></li>
-                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Term/Sem: {{ student.section.sem }}</a></li>
+                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">
+                    {% if total_subjects %}
+                        Total Subjects: {{ total_subjects }}
+                    {% endif %}
+                    {% if total_schedule %}
+                        Total Schedule: {{ total_schedule }}
+                    {% endif %}
+                </a></li>
+                {% if user.section %}
+                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Section: {{ user.section }}</a></li>
+                {% endif %}
+                <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">Term/Sem: {{ user.section.sem }}</a></li>
                 <li><a href="#" class="block px-4 py-1 border-b hover:bg-indigo-100">School Year: {{ school_year }}</a></li>
             </ul>
             </div>
@@ -129,13 +160,24 @@
                 <h2 class="py-2 ml-2 font-bold">Total Units: {{ units }}</h2>
             </div>
             <div class="w-56 mt-2 bg-gray-400 border-l-8 border-red-700">
-                <h2 class="py-2 ml-2 font-bold">Total Subjects: {{ total_subjects }}</h2>
+                <h2 class="py-2 ml-2 font-bold">
+                    {% if total_subjects %}
+                        Total Subjects: {{ total_subjects }}
+                    {% endif %}
+                    {% if total_schedule %}
+                        Total Schedule: {{ total_schedule }}
+                    {% endif %}
+                </h2>
             </div>
+
+            {% if user.section %}
             <div class="w-56 mt-2 bg-gray-400 border-l-8 border-red-700">
-                <h2 class="py-2 ml-2 font-bold">Section: {{ student.section }}</h2>
+                <h2 class="py-2 ml-2 font-bold">Section: {{ user.section }}</h2>
             </div>
+            {% endif %}
+
             <div class="w-56 mt-2 bg-gray-400 border-l-8 border-red-700">
-                <h2 class="py-2 ml-2 font-bold">Term/Sem: {{ student.section.sem }}</h2>
+                <h2 class="py-2 ml-2 font-bold">Term/Sem: {{ user.section.sem }}</h2>
             </div>
             <div class="w-56 mt-2 bg-gray-400 border-l-8 border-red-700">
                 <h2 class="py-2 ml-2 font-bold">School Year: {{ school_year }}</h2>
@@ -588,7 +630,14 @@
                 <th class="p-4 border-2 border-gray-300 w-44">#</th>
                 <th class="w-1/12 p-4 border-2 border-gray-300">subject code</th>
                 <th class="w-2/5 p-8 border-2 border-gray-300">description</th>
-                <th class="w-1/4 border-2 border-gray-300">Instructor Name</th>
+                <th class="w-1/4 border-2 border-gray-300">
+                    {% if request.user.professors %}
+                        Section
+                    {% endif %}
+                    {% if request.user.students %}
+                        Instructor Name
+                    {% endif %}
+                </th>
                 <th class="w-16 p-2 border-2 border-gray-300">Units</th>
                 <th class="w-4/6 border-2 border-gray-300">Schedule</th>
                 </tr>
@@ -599,7 +648,14 @@
                         <td class="text-center border-2 border-gray-300">{{ forloop.counter }}</td>
                         <td class="py-3 pl-2 border-2 border-gray-300">{{ schedule.subject }}</td>
                         <td class="pl-3 border-2 border-gray-300">{{ schedule.subject.description }}</td>
-                        <td class="pl-3 border-2 border-gray-300">{{ schedule.prof }}</td>
+                        <td class="pl-3 border-2 border-gray-300">
+                            {% if request.user.students %}
+                                {{ schedule.prof }}
+                            {% endif %}
+                            {% if request.user.professors %}
+                                {{ schedule.section }}
+                            {% endif %}
+                        </td>
                         <td class="text-center border-2 border-gray-300">{{ schedule.subject.units }}</td>
                         <td class="pl-3 border-2 border-gray-300">{{ schedule.day }} | {{ schedule.room }} | {{ schedule.time }}</td>
                     </tr>

@@ -198,7 +198,18 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
 
         if(checkCollision(convertedDragable,tile)){
           if(isOccupied(i)){
+            
+            let lab_or_lec = draggableSection.querySelector('#lab_or_lec');
 
+            console.log(lab_or_lec)
+            if(lab_or_lec){
+              let room_type = tiles[i].querySelector('#room_type')
+              console.log(room_type, lab_or_lec)
+              if (room_type.value != lab_or_lec.value){
+                break;
+              }
+            }
+            
             let container = tiles[i].querySelector('.tile-container');
 
             if(!draggableSection.in_main_table){

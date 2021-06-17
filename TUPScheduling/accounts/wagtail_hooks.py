@@ -17,7 +17,7 @@ class Students(ModelAdmin):
     model = Students
     create_view_class = StudentCreateView
     menu_label = 'Students'
-    list_display = ('first_name', 'section')
+    list_display = ('first_name', 'section', 'profile_image')
     list_filter = ('first_name', 'section')
     search_fields = ('first_name', 'section')
 
