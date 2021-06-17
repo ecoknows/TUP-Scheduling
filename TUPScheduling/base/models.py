@@ -607,4 +607,6 @@ class Colleges(ClusterableModel, index.Indexed):
 class BasePage(Page):
     max_count = 1
     def serve(self, request):
+        if request.user.is_superuser:
+            return HttpResponseRedirect('/admin/')
         return HttpResponseRedirect('/class-schedule/')

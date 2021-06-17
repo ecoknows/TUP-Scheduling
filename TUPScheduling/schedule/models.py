@@ -57,9 +57,9 @@ class Schedule(models.Model):
         return dict(_TIME_DAY).get(self.starting_time)
 
     def ending_time_display(self):
-        return  dict(_TIME_DAY).get(self.starting_time + self.subject.hours )
+        return  dict(_TIME_DAY).get((self.starting_time + self.subject.hours) % 12 )
     def __str__(self):
-        return self.subject.subject_code + ' | ' + self.subject.description + ' | ' + self.section.__str__() + ' | ' + str(self.subject.units) + ' | ' + self.day[0] + ' - ' + dict(_TIME_DAY).get(self.starting_time) + '-' + dict(_TIME_DAY).get(self.starting_time + self.subject.hours )
+        return self.subject.subject_code + ' | ' + self.subject.description + ' | ' + self.section.__str__() + ' | ' + str(self.subject.units) + ' | ' + self.day[0] + ' - ' + dict(_TIME_DAY).get(self.starting_time) + '-' + dict(_TIME_DAY).get((self.starting_time + self.subject.hours ) % 12 )
 
 
 class SchedulePage(Page):
