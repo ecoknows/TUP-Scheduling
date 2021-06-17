@@ -592,6 +592,15 @@ class Rooms(models.Model, index.Indexed):
         ImageChooserPanel('room_image'),
     ]
 
+    def floor_display(self):
+        return dict([
+            (1,'1st Floor'),
+            (2,'2nd Floor'),
+            (3,'3rd Floor'),
+            (4,'4th Floor'),
+            (5,'5th Floor'),
+        ]).get(self.floor)
+
     @property
     def room_image_display(self):
         # Returns an empty string if there is no profile pic or the rendition

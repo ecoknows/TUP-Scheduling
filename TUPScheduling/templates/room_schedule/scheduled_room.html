@@ -1,0 +1,249 @@
+
+{% extends 'base.html' %}
+
+{% load static wagtailimages_tags %}
+
+
+{% block header %}
+
+
+<!--Header-->
+<header>
+  <div class="p-10 font-bold text-center place-self-center">
+      <a href="#">
+        <img class="mx-auto mb-2" src="{% static 'img/icons/tuplogo.webp' %}" alt="tup logo">
+          <h1>TECHNOLOGICAL UNIVERSITY</h1>
+          <h1>OF THE PHILIPPINES</h1>
+      </a>
+  </div>
+</header>
+
+<!--Navbar-->
+<nav class="bg-red-700 ">
+<div class="flex">
+  <div class="flex-1 ">
+    <div class="flex justify-center">
+        <ul class="flex text-center text-white lg:hidden ">
+          <li class="ml-20"><a class="block px-3 py-3 pt-4 border-b-2 border-transparent border-white lg:hidden" href="/class-schedule"><span>TIME</span></a></li>
+          <li class="ml-20"><a class="block px-3 py-3 pt-4 border-b-2 border-transparent hover:border-white lg:hidden" href="class-schedule-overview"><span>OVERVIEW</span></a></li>
+        </ul>
+      </div>
+  </div>
+
+  <div class="flex justify-end text-white lg:hidden">
+    <button class="p-4 mobile-menu-button focus:outline-none focus:bg-red-600 ">
+      <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+  <div class="flex justify-center">
+    <div class="fixed inset-y-0 left-0 z-10 px-2 space-y-6 transition duration-150 ease-in-out transform -translate-x-full bg-red-700 sidebar lg:relative lg:translate-x-0">
+      <div class="w-full lg:flex">
+        <div class="pb-2 lg:flex md:pb-0">
+          <ul class="pb-2 text-white md:pb-0 lg:flex ">
+            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent hover:border-white lg:px-3" href="/class-schedule"><span>CLASS SCHEDULE</span></a></li>
+            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent hover:border-white lg:px-3" href="/instructor-schedule"><span>INSTRUCTOR SCHEDULE</span></a></li>
+            <li><a class="block px-0 py-2 pt-4 border-b-2 border-transparent border-white lg:px-3" href="/room-schedule"><span>ROOM SCHEDULE</span></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</nav>
+
+{% endblock %}
+
+{% block content %}
+  <!--Subject Legends-->
+  <section class="flex flex-wrap mb-20 overflow-hidden">
+      <div class="w-full pt-10 pl-6 overflow-hidden xl:w-1/4 sm:pl-16 md:pl-16">
+          <div class="mb-3 font-bold uppercase">
+                <h1>{{room}}</h1>
+                <span class="uppercase">{{room.choose_department.Choose_College.acronym}} BUILDING</span> - {{room.floor_display}}</p>
+          </div>
+          <div class="w-56 border-b-2 border-gray-300 rounded"></div>
+          
+          <div class="z-0 hidden capitalize mt-7 lg:block">
+              <h2 class="py-2 font-bold">my subjects</h2>
+
+              {% for schedule in schedules %}
+                <div class="flex flex-row mb-2">
+                    <div class="w-8 h-8 rounded-full" style="background-color: {{ schedule.color }};"></div>
+                    <h2 class="py-2 ml-2 font-bold leading-3">{{ schedule.subject.description }}</h2>
+                </div>
+              {% endfor %}
+          </div>
+      </div>
+
+      <!--Mobile to Medium screen Table-->
+      <div class="grid w-full grid-cols-7 gap-4 px-3 py-2 my-2 text-center lg:hidden">
+        <div class="font-bold">M</div>
+        <div class="font-bold">T</div>
+        <div class="font-bold">W</div>
+        <div class="font-bold">TH</div>
+        <div class="font-bold">F</div>
+        <div class="font-bold">SAT</div>
+        <div class="font-bold">SUN</div>
+      </div>
+
+      <div class="grid w-full h-20 grid-cols-7 gap-4 px-3 text-center lg:hidden">
+        <div class="font-bold"><button class="overflow-hidden bg-white rounded-full sm:w-11 md:w:11 sm:h-11 md:h:11 sm:ring-4 md:ring-4 h-9 w-9 ring-2 ring-indigo-400">4</button></div>
+        <div class="font-bold"><button class="overflow-hidden bg-white rounded-full sm:w-11 md:w:11 sm:h-11 md:h:11 sm:ring-4 md:ring-4 h-9 w-9 ring-2 ring-blue-400">3</button></div>
+        <div class="font-bold"><button class="overflow-hidden bg-white rounded-full sm:w-11 md:w:11 sm:h-11 md:h:11 sm:ring-4 md:ring-4 h-9 w-9 ring-2 ring-green-400">2</button></div>
+        <div class="font-bold"><button class="overflow-hidden bg-white rounded-full sm:w-11 md:w:11 sm:h-11 md:h:11 sm:ring-4 md:ring-4 h-9 w-9 ring-2 ring-purple-400">5</button></div>
+        <div class="font-bold"><button class="overflow-hidden bg-white rounded-full sm:w-11 md:w:11 sm:h-11 md:h:11 sm:ring-4 md:ring-4 h-9 w-9 ring-2 ring-pink-400">3</button></div>
+        <div class="font-bold"><button class="overflow-hidden bg-white rounded-full sm:w-11 md:w:11 sm:h-11 md:h:11 sm:ring-4 md:ring-4 h-9 w-9 ring-2 ring-red-300">0</button></div>
+        <div class="font-bold"><button class="overflow-hidden bg-white rounded-full sm:w-11 md:w:11 sm:h-11 md:h:11 sm:ring-4 md:ring-4 h-9 w-9 ring-2 ring-yellow-500 ring-opacity-60">0</button></div>
+      </div>
+
+      <div class="flex justify-start w-full h-5 pl-6 text-lg font-bold lg:hidden sm:ml-10 md:ml-10"><h2>Monday</h2></div>
+      <div class="grid w-full grid-cols-3 gap-4 lg:hidden">
+        <div class="pt-6 pl-4 ml-4 text-sm font-bold sm:pl-8 md:pl-8 sm:ml-10 md:ml-10 sm:text-base md:text-base">
+          <ul>
+            <li class="pt-3">7 AM</li>
+            <li class="pt-6">8 AM</li>
+            <li class="pt-6">9 AM</li>
+            <li class="pt-6">10 AM</li>
+            <li class="pt-6">11 AM</li>
+            <li class="pt-6">12 PM</li>
+            <li class="pt-6">1 PM</li>
+            <li class="pt-6">2 PM</li>
+            <li class="pt-6">3 PM</li>
+            <li class="pt-6">4 PM</li>
+            <li class="pt-6">5 PM</li>
+            <li class="pt-6">6 PM</li>
+            <li class="pt-6">7 PM</li>
+          </ul>
+        </div>
+        <div class="relative flex flex-row justify-center w-1 mt-8 bg-gray-300 sm:ml-6 md:ml-6">
+          <div class="absolute w-3 h-3 bg-purple-600 rounded-full sm:w-4 md:w-4 sm:h-4 md:h-4"></div>
+          <div class="absolute w-3 h-3 my-48 bg-blue-600 rounded-full sm:w-4 md:w-4 sm:h-4 md:h-4"></div>
+          <div class="absolute w-3 h-3 bg-green-600 rounded-full bottom-48 sm:mb-4 md:mb-4 sm:bottom-56 md:bottom-56 sm:w-4 md:w-4 sm:h-4 md:h-4"></div>
+        </div>
+
+          <div class="max-w-2xl -ml-20 pt-9 sm:-ml-28 md:-ml-32">
+            <div class="relative flex flex-col justify-between p-4 leading-normal bg-purple-300 rounded-2xl">
+              <div class="absolute inset-0 w-10 h-full bg-purple-600"></div>
+              <div class="pl-10 mb-8 ml-3">
+                <div class="mb-2 text-lg font-bold text-gray-900 sm:text-xl md:text-xl">CC-303</div>
+                <p class="text-sm text-gray-900 sm:text-base md:text-base">RESEARCH</p>
+              </div>
+              <div class="pl-10 ml-3">
+                <div class="text-sm">
+                  <p class="leading-none text-gray-900">May Garcia</p>
+                </div>
+              </div>
+            </div>
+            <div class="relative flex flex-col justify-between h-24 p-4 leading-normal bg-blue-200 rounded-2xl my-14">
+              <div class="absolute inset-0 w-10 h-full bg-blue-600"></div>
+              <div class="pl-10 mb-8 ml-3 -m-1">
+                <div class="text-base font-bold text-gray-900 sm:text-lg md:text-lg">CC-303</div>
+                <p class="mb-1 text-sm text-gray-900 sm:text-base md:text-base ">RESEARCH</p>
+                <p class="text-sm leading-none text-gray-900">May Garcia</p>
+              </div>
+            </div>
+            <div class="relative flex flex-col justify-between p-4 leading-normal bg-green-200 h-25 rounded-2xl">
+              <div class="absolute inset-0 w-10 h-full bg-green-600"></div>
+              <div class="pl-10 mb-8 ml-3">
+                <div class="mb-2 text-lg font-bold text-gray-900 sm:text-xl md:text-xl">CC-303</div>
+                <p class="text-sm text-gray-900 sm:text-base md:text-base">RESEARCH</p>
+              </div>
+              <div class="pl-10 ml-3">
+                <div class="text-sm">
+                  <p class="leading-none text-gray-900">May Garcia</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          
+      </div>
+      <!--End of Mobile to Medium screen Table-->
+      <!--Table-->
+      <!--Table-->
+      <div class="z-0 hidden w-full pt-10 pr-10 overflow-auto xl:w-3/4 lg:block">
+        <table class="font-bold uppercase border-4 border-collapse border-gray-300 table-fixed">
+            <thead>
+              <tr>
+                <th class="w-16 border-2 border-gray-300" style="height: 50px;">WK</th>
+                <th class="border-2 border-gray-300 w-36" style="height: 50px;">monday</th>
+                <th class="border-2 border-gray-300 w-36" style="height: 50px;">tuesday</th>
+                <th class="border-2 border-gray-300 w-36" style="height: 50px;">wednesday</th>
+                <th class="border-2 border-gray-300 w-36" style="height: 50px;">thursday</th>
+                <th class="border-2 border-gray-300 w-36" style="height: 50px;">friday</th>
+                <th class="border-2 border-gray-300 w-36" style="height: 50px;">saturday</th>
+              </tr>
+            </thead>
+            <tbody>
+
+                {% for time in class_schedule %}
+
+                  <tr>
+                    <td class="text-center border-2 border-gray-300" style="height: 30px;">{{ time }}</td>
+                    {% for day in days %}
+                      <td class="border-2 border-gray-300" style="position: relative;">
+                      {% for schedule in schedules %}
+
+                        {% if schedule.day == day %}
+                          {% if time == schedule.new_time %}
+
+                            <div class="flex items-center justify-center" style="cursor:help; padding: 5px; text-align: center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.prof}}' )" onmouseup="unshow_professor(this, '{{schedule.section}}' )">{{ schedule.section }}</div>
+                            
+                          {% endif %}
+                        {% endif %}
+
+                      {% endfor %}
+                    </td>
+                  
+
+
+                    {% endfor %}
+                  </tr>
+
+                  <tr>
+                    <td class="h-6 border-2 border-gray-300" style="height: 30px;"></td>
+                    <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                    <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                    <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                    <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                    <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                    <td class="border-2 border-gray-300" style="height: 30px;"></td>
+                  </tr>
+                  
+                {% endfor %}
+
+            </tbody>
+          </table>
+    </div>
+  </section>
+  
+{% endblock %}
+
+{% block scripts %}
+    
+<!--JS Scripts-->
+<script>
+
+  //Sidebar
+  const btn = document.querySelector(".mobile-menu-button");
+  const sidebar = document.querySelector(".sidebar");
+  
+  
+  btn.addEventListener("click", () => {
+    sidebar.classList.toggle("-translate-x-full");
+  });
+
+  function show_professor(container, text){
+    console.log(text)
+    container.innerText = text
+  }
+  function unshow_professor(container, text){
+    container.innerText = text
+  }
+</script>
+
+{% endblock %}

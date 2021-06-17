@@ -58,7 +58,7 @@
         {% load wagtailimages_tags %}
         {% for room in rooms %}
         {% image room.room_image fill-250x250 as room_image %}
-        <a href="laboratory room.html">
+        <a href="{{room.pk}}">
           <div class="bg-white rounded-b-xl">
             {% if room_image %}
             <img class="object-cover w-full" src="{{room_image.url}}" alt="lab">
@@ -66,7 +66,8 @@
             <img class="object-cover w-full" src="{% static 'img/image2.png' %}" alt="lab">
             {% endif %}
             <h2 class="pt-2 font-bold text-center text-red-700">{{room.Room_Name}}</h2>
-            <p class="pb-4 font-thin text-center">COS Building - 3rd Floor</p>
+            <p class="pb-4 font-thin text-center">
+              <span class="uppercase">{{room.choose_department.Choose_College.acronym}}</span> - {{room.floor_display}}</p>
           </div>
         </a>
 
