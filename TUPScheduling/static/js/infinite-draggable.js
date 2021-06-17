@@ -40,8 +40,8 @@ function professor_onmousedown(dragableProfessor, units){
     let pos3 = 0;
     let pos4 = 0;
     let event = window.event;
-    let unit = document.getElementById('units');
-    let professer_header = dragableProfessor.parentElement.parentElement.parentElement.querySelector('#professor-container')
+    // let unit = document.getElementById('units');
+    let professer_header = dragableProfessor.parentElement.parentElement.parentElement
     console.log(professer_header)
     dragableProfessor.style.position = 'absolute'
 
@@ -151,10 +151,10 @@ function professor_onmousedown(dragableProfessor, units){
 
             let new_draggable = dragableProfessor;
             
-            if(!new_draggable.hasAttribute('placed')){
-              new_unit = parseInt(unit.innerText) + units;
-              unit.innerText = new_unit;
-            }
+            // if(!new_draggable.hasAttribute('placed')){
+            //   new_unit = parseInt(unit.innerText) + units;
+            //   unit.innerText = new_unit;
+            // }
 
             
 
@@ -176,11 +176,11 @@ function professor_onmousedown(dragableProfessor, units){
         i++;
       }
       
-      if(dragableProfessor.hasAttribute('placed')){
-        new_unit = parseInt(unit.innerText) - units;
-        unit.innerText = new_unit;
-        dragableProfessor.removeAttribute('placed');
-      }
+      // if(dragableProfessor.hasAttribute('placed')){
+      //   new_unit = parseInt(unit.innerText) - units;
+      //   unit.innerText = new_unit;
+      //   dragableProfessor.removeAttribute('placed');
+      // }
 
       if(dragableProfessor.tileAssigned){
         let schedule_pk = dragableProfessor.tileAssigned.querySelector('#schedule_pk');
