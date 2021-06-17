@@ -607,6 +607,17 @@ class Colleges(ClusterableModel, index.Indexed):
 class BasePage(Page):
     max_count = 1
     def serve(self, request):
+        print(request.user.is_authenticated)
+        if request.user.is_authenticated is False:
+            return HttpResponseRedirect('/logout/')
         if request.user.is_superuser:
             return HttpResponseRedirect('/admin/')
-        return HttpResponseRedirect('/class-schedule/')
+        if request.user.is_student:
+            return HttpResponseRedirect('/class-schedule/')
+        if request.user.is_professor:
+            if request.user.professors.is_scheduler:
+                return HttpResponseRedirect('/schedule/')
+            return HttpResponseRedirect('/class-schedule/')
+
+        return HttpResponseRedirect('/logout/')
+

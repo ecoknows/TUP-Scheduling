@@ -167,6 +167,7 @@ class SchedulePage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
+        
 
         department = 24
         profs = Professors.objects.filter(
