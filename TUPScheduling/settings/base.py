@@ -120,7 +120,7 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tup_testing',
+        'NAME': 'testing_tup_base',
         'USER': 'renegado',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
