@@ -43,6 +43,22 @@ class BaseAccount(ClusterableModel, index.Indexed):
         null=True
     )
 
+    profile_picture = models.ForeignKey(
+        'wagtailimages.Image',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+    )
+    
+    
+    choose_department = models.ForeignKey(
+        'base.Departments',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='+',
+    )
+
     first_name = models.CharField(
         max_length=300,
         null=True,
@@ -99,7 +115,18 @@ class Students(BaseAccount):
 
     panels = BaseAccount.basic_info_panel + [
         SnippetChooserPanel('section', heading='Pick what section'),
+        ImageChooserPanel('profile_picture'),
+        SnippetChooserPanel('choose_department'),
     ]
+
+    @property
+    def profile_image(self):
+        # Returns an empty string if there is no profile pic or the rendition
+        # file can't be found.
+        try:
+            return self.profile_picture.get_rendition('fill-50x50').img_tag()
+        except:  # noqa: E722 FIXME: remove bare 'except:'
+            return ''
 
     def __str__(self):
         return self.full_name()
@@ -136,12 +163,6 @@ class Professors(BaseAccount):
                 _('End time must be greater than start time'),
             )
 
-    profile_picture = models.ForeignKey(
-        'wagtailimages.Image',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-    )
 
     preferred_start_time = models.TimeField(
         auto_now=False,
@@ -175,13 +196,6 @@ class Professors(BaseAccount):
         choices=[('Regular', 'Regular'), ('Part-time', 'Part-time')]
     )
 
-    choose_department = models.ForeignKey(
-        'base.Departments',
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name='+',
-    )
     
 
     BaseAccount.basic_info_panel = BaseAccount.basic_info_panel + [

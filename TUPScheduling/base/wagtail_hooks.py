@@ -91,6 +91,7 @@ class RoomsAdmin(ModelAdmin):
     list_display = (
         'Room_Name',
         'Room_Type',
+        'room_image_display'
     )
     list_filter = (
         'Room_Type',

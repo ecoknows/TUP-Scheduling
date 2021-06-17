@@ -19,10 +19,8 @@ class Schedule(models.Model):
         choices=_TIME,
         default=7
     )
-    school_year = models.CharField(
-        max_length=200,
-        null=True,
-    )
+    school_year = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
     room = models.ForeignKey(
         Rooms,
         null=True,
@@ -105,7 +103,6 @@ class SchedulePage(Page):
                 section=section,
                 subject=subject,
                 starting_time=int(starting_time),
-                school_year='123421',
             )
 
             return JsonResponse({'schedule_pk': schedule_created.pk})
