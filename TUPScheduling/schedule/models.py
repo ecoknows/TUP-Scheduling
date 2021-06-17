@@ -5,6 +5,7 @@ from wagtail.snippets.models import register_snippet
 from TUPScheduling import _DAY, _TIME
 from TUPScheduling.base.models import CourseCurriculum, Sections, Rooms, BasePage, Subjects, SubjectsOrderable
 from TUPScheduling.accounts.models import Professors
+from django.http import JsonResponse
 
 
 class Schedule(models.Model):
@@ -73,13 +74,11 @@ class SchedulePage(Page):
             if prof_pk:
                 professor = Professors.objects.get(pk=prof_pk)
 
-            print('WALAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!!!!!!!!!!!!!',
-                  room_pk, section_pk, ' ECO ', subject_pk)
             room = Rooms.objects.get(pk=room_pk)
             section = Sections.objects.get(pk=section_pk)
             subject = Subjects.objects.get(pk=subject_pk)
+            schedule_created = Schedule.objects.create(
 
-            Schedule.objects.create(
                 prof=professor,
                 room=room,
                 day=day,
@@ -87,8 +86,9 @@ class SchedulePage(Page):
                 subject=subject,
                 starting_time=int(starting_time),
                 school_year='123421',
-
             )
+
+            return JsonResponse({'schedule_pk': schedule_created.pk})
         if update_add_schedule:
             day = request.POST.get('day', None)
             starting_time = request.POST.get('starting_time', None)

@@ -9,31 +9,6 @@ function remove_description(container, text){
 }
 
 
-function add_schedule(
-  section_pk,
-  subject,
-  prof,
-  room_pk,
-  day,
-  starting_time,
-){
-  $.ajax({
-      type: 'POST',
-      data: {
-        add_schedule: true,
-        prof_pk: prof ? prof.pk : null,
-        room_pk,
-        section_pk,
-        day,
-        subject,
-        starting_time,
-        csrfmiddlewaretoken: csrftoken
-      },
-      success: function (response) {
-        
-      },
-  })
-}
 
 
 function update_schedule_pk(
@@ -95,6 +70,36 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
   }
   
   
+  function add_schedule(
+    section_pk,
+    subject,
+    prof,
+    room_pk,
+    day,
+    starting_time,
+  ){
+    $.ajax({
+        type: 'POST',
+        data: {
+          add_schedule: true,
+          prof_pk: prof ? prof.pk : null,
+          room_pk,
+          section_pk,
+          day,
+          subject,
+          starting_time,
+          csrfmiddlewaretoken: csrftoken
+        },
+        success: function (response) {
+          let input_schedule = document.createElement('input');
+          input_schedule.className='hidden'
+          input_schedule.id = 'schedule_pk'
+          input_schedule.value=response.schedule_pk
+
+          draggableSection.appendChild(input_schedule)
+        },
+    })
+  }
   // console.log((draggableSection.offsetTop - pos2) + "px");
   const elementDrag = e =>{
     e = e || window.event;
