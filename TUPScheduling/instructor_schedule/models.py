@@ -1,3 +1,4 @@
+
 from django.db import models
 from wagtail.core.models import Page
 from TUPScheduling.base.models import BasePage
@@ -60,7 +61,6 @@ class InstructorSchedule(Page):
                 professor_object['subjects'] = list(dict.fromkeys(professor_object['subjects']))
                 temp_prof.append(professor_object)
                         
-    
 
             context['list_of_professors'] = list_of_professors
             context['list_of_professor_names'] = list_of_professor_names
