@@ -45,7 +45,13 @@
         <div class="pb-2 lg:flex md:pb-0">
           <ul class="pb-2 text-white md:pb-0 lg:flex ">
             <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent hover:border-white lg:px-3" href="/class-schedule"><span>CLASS SCHEDULE</span></a></li>
-            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent hover:border-white lg:px-3" href="/instructor-schedule"><span>INSTRUCTOR SCHEDULE</span></a></li>
+            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent hover:border-white lg:px-3" href="/instructor-schedule"><span>
+              {% if user.request.students %}
+              INSTRUCTOR SCHEDULE
+              {% else %}
+              SECTIONS SCHEDULE
+              {% endif %}
+            </span></a></li>
             <li><a class="block px-0 py-2 pt-4 border-b-2 border-transparent border-white lg:px-3" href="/room-schedule"><span>ROOM SCHEDULE</span></a></li>
           </ul>
         </div>
