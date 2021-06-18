@@ -46,7 +46,7 @@
           <ul class="pb-2 text-white md:pb-0 lg:flex ">
             <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent border-white lg:px-3" href="/class-schedule"><span>CLASS SCHEDULE</span></a></li>
             <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent hover:border-white lg:px-3" href="/instructor-schedule"><span>
-              {% if user.request.students %}
+              {% if request.user.students %}
               INSTRUCTOR SCHEDULE
               {% else %}
               SECTIONS SCHEDULE
