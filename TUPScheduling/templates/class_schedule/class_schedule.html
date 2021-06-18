@@ -45,7 +45,13 @@
         <div class="pb-2 lg:flex md:pb-0">
           <ul class="pb-2 text-white md:pb-0 lg:flex ">
             <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent border-white lg:px-3" href="/class-schedule"><span>CLASS SCHEDULE</span></a></li>
-            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent hover:border-white lg:px-3" href="/instructor-schedule"><span>INSTRUCTOR SCHEDULE</span></a></li>
+            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent hover:border-white lg:px-3" href="/instructor-schedule"><span>
+              {% if user.request.students %}
+              INSTRUCTOR SCHEDULE
+              {% else %}
+              SECTIONS SCHEDULE
+              {% endif %}
+            </span></a></li>
             <li><a class="block px-0 py-2 pt-4 border-b-2 border-transparent lg:px-3 hover:border-white" href="/room-schedule"><span>ROOM SCHEDULE</span></a></li>
           </ul>
         </div>
@@ -101,7 +107,12 @@
           </div>
           <div class="z-0 hidden w-56 mt-2 border-b-4 border-gray-300 rounded lg:block"></div>
           <div class="z-0 hidden capitalize mt-7 lg:block">
-              <h2 class="py-2 font-bold">my subjects</h2>
+
+              {% if request.user.professors %}
+              <h2 class="py-2 font-bold">my sections</h2>
+              {% else %}
+                <h2 class="py-2 font-bold">my subjects</h2>
+              {% endif %}
 
               {% for schedule in schedules %}
                 <div class="flex flex-row mb-2">
@@ -226,7 +237,7 @@
 
 
                             {% if request.user.students %}
-                            <div class="flex items-center justify-center" style="cursor:help; padding: 3px; text-align: center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.prof}}' )" onmouseup="unshow_professor(this, '{{schedule.section}}' )">{{ schedule.section }}</div>
+                            <div class="flex items-center justify-center" style="cursor:help; padding: 3px; text-align: center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.room}}' )" onmouseup="unshow_professor(this, '{{schedule.prof}}' )">{{ schedule.prof }}</div>
                             {% endif %}
                             {% if request.user.professors %}
                             <div class="flex items-center justify-center" style="cursor:help; padding: 3px; text-align: center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.room}}' )" onmouseup="unshow_professor(this, '{{schedule.section}}' )">{{ schedule.section }}</div>

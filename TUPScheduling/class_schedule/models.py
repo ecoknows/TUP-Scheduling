@@ -114,7 +114,7 @@ class ClassScheduleOverview(Page):
             context['total_schedule'] = total_subjects
             if request.user.professors.schedules.all():
                 context['school_year'] = request.user.professors.schedules.all()[
-                    0].school_year.year
+                    0].school_year
 
 
         return context

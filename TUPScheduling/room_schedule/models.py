@@ -14,10 +14,21 @@ class RoomSchedule(RoutablePageMixin, Page):
 
         if room:
             final_schedule = room.schedules.all()
+
+            subject_color = {}
+            subject_holder = []
+            no_duplicate = []
             i = 0
             for schedule in final_schedule:
-                schedule.color = _COLOR[i]
-                i += 1
+                if schedule.subject not in subject_holder:
+                    subject_color[schedule.subject.description] = _COLOR[i]
+                    subject_holder.append(schedule.subject)
+
+                    schedule.color = subject_color[schedule.subject.description]
+                    no_duplicate.append(schedule)
+
+                    i += 1
+                schedule.color = subject_color[schedule.subject.description]
 
                 if schedule.starting_time < 7:
                     schedule.new_time = str(schedule.starting_time) + " PM"
@@ -25,14 +36,16 @@ class RoomSchedule(RoutablePageMixin, Page):
                     schedule.new_time = str(schedule.starting_time) + " PM"
                 else:
                     schedule.new_time = str(schedule.starting_time) + " AM"
-                    
+
+
             return self.render(
                 request,
                 context_overrides={
                     'room': room,
                     'schedules': final_schedule,
                     'class_schedule': _CLASS_SCHEDULE,
-                    'days': _DAY
+                    'days': _DAY,
+                    'no_duplicate': no_duplicate
                 },
                 template="room_schedule/scheduled_room.html",
             )
@@ -41,6 +54,7 @@ class RoomSchedule(RoutablePageMixin, Page):
         context = super().get_context(request)
 
         context['rooms'] = Rooms.objects.all()
+        
 
         return context
 
