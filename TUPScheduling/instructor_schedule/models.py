@@ -81,7 +81,7 @@ class InstructorSchedule(Page):
                     continue
                 if schedule.section not in list_of_sections:
                     if schedule.prof == request.user.professors:
-                        print(schedule.prof)
+
                         list_of_sections.append(schedule.section)
 
                 if schedule.starting_time < 7:
@@ -91,7 +91,7 @@ class InstructorSchedule(Page):
                 else:
                     schedule.new_time = str(schedule.starting_time) + " AM"
             
-            print(list_of_sections)
+
 
 
             list_of_section_names = []
@@ -117,7 +117,7 @@ class InstructorSchedule(Page):
                         section_object['subjects'].append(schedule.subject)
                         section_object['colors'].append(_COLOR[i])
                         i += 1
-                print(section_object)
+  
                         
                 section_object['subjects'] = list(dict.fromkeys(section_object['subjects']))
                 temp_sec.append(section_object)
