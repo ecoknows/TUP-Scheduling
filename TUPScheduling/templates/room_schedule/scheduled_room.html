@@ -76,7 +76,7 @@
           <div class="z-0 hidden capitalize mt-7 lg:block">
               <h2 class="py-2 font-bold">my subjects</h2>
 
-              {% for schedule in schedules %}
+              {% for schedule in no_duplicate %}
                 <div class="flex flex-row mb-2">
                     <div class="w-8 h-8 rounded-full" style="background-color: {{ schedule.color }};"></div>
                     <h2 class="py-2 ml-2 font-bold leading-3">{{ schedule.subject.description }}</h2>
