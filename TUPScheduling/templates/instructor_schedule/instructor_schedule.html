@@ -34,7 +34,13 @@
         <div class="pb-4 lg:flex md:pb-0">
           <ul class="pb-2 text-white md:pb-0 lg:flex ">
             <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent hover:border-white lg:px-3" href="/class-schedule"><span>CLASS SCHEDULE</span></a></li>
-            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent border-white lg:px-3" href="/instructor-schedule"><span>INSTRUCTOR SCHEDULE</span></a></li>
+            <li class="mr-20"><a class="block px-0 py-2 pt-4 border-b-2 border-transparent border-white lg:px-3" href="/instructor-schedule"><span></span>
+              {% if request.user.professors %}
+                SECTIONS SCHEDULE
+              {% else %}
+                INSTRUCTOR SCHEDULE
+              {% endif %}
+            </span></a></li>
             <li><a class="block px-0 py-2 pt-4 border-b-2 border-transparent lg:px-3 hover:border-white" href="/room-schedule"><span>ROOM SCHEDULE</span></a></li>
           </ul>
         </div>
@@ -77,7 +83,13 @@
                         <li onclick="choose(this)" id="assigned-to-option-{{forloop.counter}}" role="option" @click="choose({{forloop.counter}})" @mouseenter="selected = {{forloop.counter}}" @mouseleave="selected = null" :class="{ 'text-white bg-red-600': selected === {{forloop.counter}}, 'text-gray-900': !(selected === {{forloop.counter}}) }" class="relative py-2 pl-4 text-gray-900 cursor-default select-none pr-9">
                           <div class="flex items-center space-x-3">
                             <span :class="{ 'font-semibold': value === {{forloop.counter}}, 'font-normal': !(value === {{forloop.counter}}) }" class="block font-normal truncate professor_chosen ">
-                              {{ professor.first_name }} {{ professor.middle_name }}. {{ professor.last_name }}
+                              {% if request.user.professors %}
+
+                                {{ professor.section_name }}
+
+                              {% else %}
+                                {{ professor.first_name }} {{ professor.middle_name }}. {{ professor.last_name }}
+                              {% endif %}
                             </span>
                           </div>
                           <span x-show="value === {{forloop.counter}}" :class="{ 'text-white': selected === {{forloop.counter}}, 'text-red-600': !(selected === {{forloop.counter}}) }" class="absolute inset-y-0 right-0 flex items-center pr-4 text-red-600" style="display: none;">
@@ -229,11 +241,29 @@
                     {% for schedule in schedules %}
                         {% if schedule.day == day %}
                           {% if time == schedule.new_time %}
+                            
+                            {% if request.user.professors %}
+
+                              {% if professor.name == schedule.section.section_name %}
+                                  
+                                  {% for subject in professor.subjects %}
+                                    {% if subject.description == schedule.subject.description %}
+                                      <div class="flex items-center professor_div" style="text-align: center; cursor:help; padding: 5px; display:flex; justify-content:center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{professor.colors | getColor:forloop.counter0}}" onmousedown="show_room(this, '{{schedule.room}}' )" onmouseup="unshow_room(this, '{{schedule.section}}' )">{{ schedule.section }}</div>
+                                    {% endif %}
+                                  {% endfor %} 
+                              
+                              {% endif %}
+                              
+                            {% else %} 
+
                             {% for subject in professor.subjects %}
                               {% if subject.description == schedule.subject.description %}
-                              <div professor_name='{{schedule.prof}}' class="flex items-center professor_div" style="text-align: center; cursor:help; padding: 5px; display:flex; justify-content:center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{professor.colors | getColor:forloop.counter0}}" onmousedown="show_room(this, '{{schedule.room}}' )" onmouseup="unshow_room(this, '{{schedule.section}}' )">{{ schedule.section }}</div>
+                                <div professor_name='{{schedule.prof}}' class="flex items-center professor_div" style="text-align: center; cursor:help; padding: 5px; display:flex; justify-content:center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{professor.colors | getColor:forloop.counter0}}" onmousedown="show_room(this, '{{schedule.room}}' )" onmouseup="unshow_room(this, '{{schedule.section}}' )">{{ schedule.section }}</div>
                               {% endif %}
-                            {% endfor %}    
+                            {% endfor %} 
+
+                            {% endif %}
+
                           {% endif %}
                       {% endif %}
                     {% endfor %}
@@ -286,7 +316,7 @@
 
                       {% if schedule.day == day %}
                         {% if time == schedule.new_time %}
-                        
+
                           <div class="flex items-center" style="text-align: center; cursor:help; padding: 5px; display:flex; justify-content:center; width: 100%; height: calc({{ schedule.subject.hours }} * 60px); position: absolute; top: 0; left: 0; background-color: {{ schedule.color }}" onmousedown="show_professor(this, '{{schedule.room}}' )"></div>
                     
                         {% endif %}
@@ -413,13 +443,16 @@ function choose(chosen){
   }
   
   for(let i = 0; i < professor_div.length; i++){
-    professor_temp = professor_div[i].getAttribute('professor_name').split(",");
-    professor_temp = professor_temp[1].slice(1, professor_temp[1].length) + " " + professor_temp[0]
-    if(professor_temp == chosen.innerText){
-      professor_div[i].style.display = null;
-    }else{
-      professor_div[i].style['display'] = 'none';
+    if(professor_div[i].getAttribute('professor_name')){
+      professor_temp = professor_div[i].getAttribute('professor_name').split(",");
+      professor_temp = professor_temp[1].slice(1, professor_temp[1].length) + " " + professor_temp[0]
+      if(professor_temp == chosen.innerText){
+        professor_div[i].style.display = null;
+      }else{
+        professor_div[i].style['display'] = 'none';
+      }
     }
+    
   }
 
 }

@@ -38,7 +38,6 @@ function remove_schedule(
   prof,
   units
 ){
-  console.log(prof, ' haha');
   $.ajax({
       type: 'POST',
       data: {
@@ -84,7 +83,6 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
     starting_time,
     units,
   ){
-    console.log(units.units_container);
     $.ajax({
         type: 'POST',
         data: {

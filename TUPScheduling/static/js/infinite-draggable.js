@@ -46,7 +46,6 @@ function professor_onmousedown(dragableProfessor, units){
 
       let units_prof = professor_container.querySelector('#prof-'+dragableProfessor.querySelector('#prof_pk').value)
       dragableProfessor.units_container= units_prof
-      console.log(units_prof);
     }
     
     dragableProfessor.style.position = 'absolute'
@@ -199,7 +198,6 @@ function professor_onmousedown(dragableProfessor, units){
           dragableProfessor.units_container.innerText = new_unit;
         }
       }
-      console.log('REMOVEEE!');
       dragableProfessor.remove()
     }
   
