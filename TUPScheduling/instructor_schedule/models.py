@@ -42,7 +42,6 @@ class InstructorSchedule(Page):
         
         
         temp_prof = []
-        print(list_of_professor_names_without_select)
         for professor in list_of_professor_names_without_select:
             professor_object = {}
             i = 0

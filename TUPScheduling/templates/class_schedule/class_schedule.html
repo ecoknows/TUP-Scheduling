@@ -101,7 +101,12 @@
           </div>
           <div class="z-0 hidden w-56 mt-2 border-b-4 border-gray-300 rounded lg:block"></div>
           <div class="z-0 hidden capitalize mt-7 lg:block">
-              <h2 class="py-2 font-bold">my subjects</h2>
+
+              {% if request.user.professors %}
+              <h2 class="py-2 font-bold">my sections</h2>
+              {% else %}
+                <h2 class="py-2 font-bold">my subjects</h2>
+              {% endif %}
 
               {% for schedule in schedules %}
                 <div class="flex flex-row mb-2">

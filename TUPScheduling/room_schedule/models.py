@@ -14,8 +14,6 @@ class RoomSchedule(RoutablePageMixin, Page):
 
         if room:
             final_schedule = room.schedules.all()
-            print(final_schedule)
-
 
             subject_color = {}
             subject_holder = []
@@ -39,7 +37,6 @@ class RoomSchedule(RoutablePageMixin, Page):
                 else:
                     schedule.new_time = str(schedule.starting_time) + " AM"
 
-            print(no_duplicate)
 
             return self.render(
                 request,
