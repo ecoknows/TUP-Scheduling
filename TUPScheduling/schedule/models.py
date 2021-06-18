@@ -113,7 +113,6 @@ class SchedulePage(Page):
             schedule = Schedule.objects.get(pk=schedule_pk)
             schedule.day = day
             schedule.starting_time = starting_time
-            print(schedule)
             schedule.save()
 
         if remove_schedule:
