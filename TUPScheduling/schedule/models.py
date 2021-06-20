@@ -78,6 +78,16 @@ class SchedulePage(Page):
             'update_remove_schedule', None)
         update_add_schedule = request.POST.get('update_add_schedule', None)
 
+        button_reset = request.POST.get('button_reset', None)
+        reset_all = request.POST.get('reset_all', None)
+
+
+        if button_reset:
+            Schedule.objects.filter(room_id = button_reset).delete()
+        
+        if reset_all:
+            Schedule.objects.all().delete()
+
         if add_schedule:
             prof_pk = request.POST.get('prof_pk', None)
             room_pk = request.POST.get('room_pk', None)
@@ -85,11 +95,11 @@ class SchedulePage(Page):
             day = request.POST.get('day', None)
             subject_pk = request.POST.get('subject', None)
             starting_time = request.POST.get('starting_time', None)
-            units = request.POST.get('units', None)
+            # units = request.POST.get('units', None)
             professor = None
             if prof_pk:
                 professor = Professors.objects.get(pk=prof_pk)
-                professor.units = int(units)
+                # professor.units = int(units)
                 professor.save()
 
             room = Rooms.objects.get(pk=room_pk)
@@ -118,35 +128,35 @@ class SchedulePage(Page):
         if remove_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
             prof_pk = request.POST.get('prof_pk', None)
-            units = request.POST.get('units', None)
+            # units = request.POST.get('units', None)
 
             if prof_pk:
                 professor = Professors.objects.get(pk=prof_pk)
-                professor.units = professor.units - int(units)
+                # professor.units = professor.units - int(units)
                 professor.save()
 
             Schedule.objects.get(pk=schedule_pk).delete()
 
         if update_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
-            units = request.POST.get('units', None)
+            # units = request.POST.get('units', None)
 
             prof_pk = request.POST.get('prof_pk', None)
             professor = Professors.objects.get(pk=prof_pk)
 
             schedule = Schedule.objects.get(pk=schedule_pk)
             schedule.prof = professor
-            professor.units = professor.units + int(units)
+            # professor.units = professor.units + int(units)
             professor.save()
             schedule.save()
 
         if update_remove_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
-            units = request.POST.get('units', None)
+            # units = request.POST.get('units', None)
 
             prof_pk = request.POST.get('prof_pk', None)
             professor = Professors.objects.get(pk=prof_pk)
-            professor.units = professor.units - int(units)
+            # professor.units = professor.units - int(units)
             professor.save()
 
             schedule = Schedule.objects.get(pk=schedule_pk)
@@ -163,7 +173,7 @@ class SchedulePage(Page):
         profs = Professors.objects.filter(
             choose_department_id=department)
 
-        context['professor_entries'] = profs
+        
 
         temp_rooms = Rooms.objects.filter(
             choose_department_id=department)
@@ -238,8 +248,40 @@ class SchedulePage(Page):
                         'scheduled': scheduled
                     }
                 )
+        
+        list_of_schedules = Schedule.objects.all()
+        list_of_professors = []
+        units = []
+
+        for schedule in list_of_schedules:
+            if schedule.prof == None:
+                continue
+
+            if schedule.prof not in list_of_professors:
+                list_of_professors.append(schedule.prof)
+                units.append(0)
+
+        i = 0
+        for schedule in list_of_schedules:
+            for i in range(len(list_of_professors)):
+                if list_of_professors[i] == schedule.prof:
+                    units[i] += schedule.subject.units
+            i += 1
+        
+       
+        for professor in profs:
+            flag = 1
+            for i in range(len(units)):
+                if professor == list_of_professors[i]:
+                    professor.units = units[i]
+                    flag = 0
+            if flag:
+                professor.units = 0
+        
+
 
         context['already_schedule_object'] = Schedule.objects.all()
         context['section_entries'] = sections
+        context['professor_entries'] = profs
 
         return context

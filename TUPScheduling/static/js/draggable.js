@@ -36,7 +36,7 @@ function update_schedule_pk(
 function remove_schedule(
   schedule_pk,
   prof,
-  units
+  // units
 ){
   $.ajax({
       type: 'POST',
@@ -44,7 +44,7 @@ function remove_schedule(
         remove_schedule: true,
         schedule_pk,
         prof_pk: prof ? prof.value: null,
-        units: units,
+        // units: units,
         csrfmiddlewaretoken: csrftoken
       },
       success: function (response) {
@@ -81,7 +81,7 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
     room_pk,
     day,
     starting_time,
-    units,
+    // units,
   ){
     $.ajax({
         type: 'POST',
@@ -93,7 +93,7 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
           day,
           subject,
           starting_time,
-          units: units,
+          // units: units,
           csrfmiddlewaretoken: csrftoken
         },
         success: function (response) {

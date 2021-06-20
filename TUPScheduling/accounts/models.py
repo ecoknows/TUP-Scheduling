@@ -187,7 +187,7 @@ class Professors(BaseAccount):
     def preferred_time(self):
         return str(timeConvert(self.preferred_start_time)) + " - " + str(timeConvert(self.preferred_end_time))
 
-    units = models.IntegerField(default=0)
+    # units = models.IntegerField(default=0)
     is_scheduler = models.BooleanField(default=False)
 
     status = models.CharField(
