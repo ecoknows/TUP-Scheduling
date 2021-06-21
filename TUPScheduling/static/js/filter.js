@@ -34,7 +34,7 @@ function filterProf(){
             }else{
                 let flag = 0;
                 for(let j = 0; j < filterables[i].children[1].children.length; j++){
-                    if(filterables[0].children[1].children[j].children[0].children[0].children[0].children[1].innerText.toUpperCase().indexOf(text.toUpperCase()) != -1 ){
+                    if(filterables[i].children[1].children[j].children[0].children[2].children[0].children[0].innerText.toUpperCase().indexOf(text.toUpperCase()) != -1 ){
                         filterables[i].style.display = 'block';
                         flag = 1;
                         break;

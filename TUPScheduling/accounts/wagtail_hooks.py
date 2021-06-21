@@ -28,7 +28,7 @@ class Professors(ModelAdmin):
     menu_label = 'Professors'
     list_display = ('full_name', 'preferred_time', 'status', 'profile_image')
     list_filter = ('status',)
-    search_fields = ('first_name', 'middle_name', 'last_name', 'full_name',)
+    search_fields = ('first_name', 'middle_name', 'last_name',)
 
 
 class AccountsGroup(ModelAdminGroup):

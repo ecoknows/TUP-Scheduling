@@ -59,6 +59,29 @@
 	.tooltip:hover .tooltiptext {
 	visibility: visible;
 	}
+	
+	.reset-button{
+		border: solid 3px #e5e7eb;
+		transition: .2s;
+		color: #b91c1c
+	}
+	.reset-button:hover{
+		border: solid 3px #b91c1c;
+		color: #000000;
+	}
+
+	.reset-all-button{
+		border: solid 3px #b91c1c;
+		transition: .2s;
+		color: #ffffff;
+		background-color: #000000;
+	}
+	.reset-all-button:hover{
+		border: solid 3px #000000;
+		transition: .2s;
+		color: #b91c1c;
+		background-color: #e5e7eb;
+	}
 </style>
 <section class="flex justify-center h-screen p-8 mx-auto space-x-4" style="max-width: 500px">
 
@@ -69,8 +92,8 @@
 			</div>
 			<div class="relative flex items-center justify-end pr-2 cursor-pointer dropdown" >
 				<svg class="w-6 h-6 text-white border-2 rounded-md dropbtn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-				<div class="flex mb-2 overflow-auto text-center bg-red-700 border-2 border-black dropdown-content" style="max-height: 611px;">
-					<div class="flex mx-1 my-1 text-gray-600 border-2 border-black rounded-xl" style="width: 250px;">
+				<div class="flex mb-2 overflow-auto text-center bg-red-700 border-2 border-black dropdown-content" style="max-height: 840px; overflow-x: hidden;">
+					<div class="flex mx-1 my-1 text-gray-600 border-2 border-black rounded-xl">
 						<input id="room-filter" class="w-full rounded-l-xl focus:outline-none" type="search" name="search" style="padding:5px"> 
 						<button type="submit" class="flex items-center justify-end p-2" onclick="filterRoom()">
 							<svg class="w-4 h-4 text-gray-600 fill-current" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
@@ -79,8 +102,25 @@
 							</svg>
 						</button>
 					</div>
+					<form id="reset-all" method="POST">
+						{% csrf_token %}
+						<input type="text" class="hidden" name="reset_all" value=1>
+						<div class="px-3 py-1 mb-1 mr-5 text-gray-600 border-2 reset-all-button rounded-xl" style="width: 100%;" onclick="return resetAll()">Clear Schedule</div>
+					</form>
 					{% for room in room_entries %}
-						<a href="#" onclick="dropDown('{{ room.name }}', '{{ room.type }}')" class="border-2 border-red room">{{ room.name }} ({{ room.type }})</a>
+						<div style="display: flex; flex-direction: row;">
+							<a onclick="dropDown('{{ room.name }}', '{{ room.type }}')" class="border-2 border-red room">{{ room.name }} ({{ room.type }})</a>
+							
+							<form id="reset-room" method="POST">
+								{% csrf_token %}
+								<input type="text" class="hidden" >
+								<button type="submit" name="button_reset" value="{{ room.pk }}" class="px-2 py-1 text-gray-600 reset-button reset-icon-div" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;" onclick="return resetRoom('{{ room.name }}', '{{ room.type }}')">
+									<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+										<path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" />
+									</svg>
+								</button>
+							</form>
+						</div>	
 					{% endfor %}
 				</div>
 			</div>
@@ -182,6 +222,10 @@
 			scheduledSection(scheduledSections[i])
 		}
 
+		if ( window.history.replaceState ) {
+			window.history.replaceState( null, null, window.location.href );
+		}
 	</script>
 	
 {% endblock  %}
+
