@@ -656,8 +656,6 @@ class BasePage(Page):
         if request.user.is_student:
             return HttpResponseRedirect('/class-schedule/')
         if request.user.is_professor:
-            if request.user.professors.is_scheduler:
-                return HttpResponseRedirect('/schedule/')
             return HttpResponseRedirect('/class-schedule/')
 
         return HttpResponseRedirect('/logout/')

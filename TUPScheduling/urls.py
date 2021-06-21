@@ -8,6 +8,7 @@ from wagtail.documents import urls as wagtaildocs_urls
 
 from TUPScheduling.search import views as search_views
 from TUPScheduling.base import views as base_views
+from TUPScheduling.accounts import views as account_views
 
 urlpatterns = [
     path('django-admin/', admin.site.urls),
@@ -17,6 +18,7 @@ urlpatterns = [
 
     path('search/', search_views.search, name='search'),
     path('file-upload/', base_views.upload_file, name='upload_file'),
+    path('delete-prof-schedule/<int:prof_pk>/', account_views.delete_schedule_of_professor, name='upload_file'),
 
 ]
 

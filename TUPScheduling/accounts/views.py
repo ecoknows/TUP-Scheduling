@@ -1,8 +1,21 @@
 from django.contrib.auth.models import Group
 
-from wagtail.contrib.modeladmin.views import CreateView
+from wagtail.contrib.modeladmin.views import CreateView, IndexView
 
 from TUPScheduling.users.models import User
+from django.http import HttpResponseRedirect
+from TUPScheduling.schedule.models import Schedule
+from TUPScheduling.accounts.models import Professors
+from wagtail.admin import messages
+
+def delete_schedule_of_professor(request,prof_pk):
+    if request.user.is_superuser and prof_pk:
+        Schedule.objects.filter(prof_id=prof_pk).delete()
+        messages.success(
+            request, 'You successfully deleted schedule of ' + Professors.objects.get(pk=prof_pk).last_name 
+        )
+    
+    return HttpResponseRedirect('/admin/accounts/professors/')
 
 
 class ProfessorCreateView(CreateView):
