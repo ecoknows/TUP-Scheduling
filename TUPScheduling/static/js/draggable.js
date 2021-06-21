@@ -53,6 +53,32 @@ function remove_schedule(
   })
 }
 
+function restriction_checker(
+  section_pk,
+  subject,
+  prof,
+  room_pk,
+  day,
+  starting_time,
+){
+  $.ajax({
+      type: 'POST',
+      data: {
+        restriction: true,
+        prof_pk: prof ? prof.value : null,
+        room_pk,
+        section_pk,
+        day,
+        subject,
+        starting_time,
+        csrfmiddlewaretoken: csrftoken
+      },
+      success: function (response) {
+        console.log(response, ' asdasdsa  ')
+      },
+  })
+}
+
 
 function section_onmousedown(draggableSectionPaper, height, temp_top, temp_height){
   let pos1 = 0;
@@ -74,6 +100,7 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
   }
   
   
+
   function add_schedule(
     section_pk,
     subject,
@@ -199,7 +226,6 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
             
             let lab_or_lec = draggableSection.querySelector('#lab_or_lec');
 
-            console.log(lab_or_lec)
             if(lab_or_lec){
               let room_type = tiles[i].querySelector('#room_type')
               console.log(room_type, lab_or_lec)
@@ -227,6 +253,18 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
                 x+=6;
               } 
             }
+
+            
+            // restriction_checker(
+            //   draggableSection.querySelector('#section_pk').value,
+            //   draggableSection.querySelector('#subject_pk').value,
+            //   draggableSection.querySelector('#prof_pk'),
+            //   draggableSection.parentElement.querySelector('#room_pk').value,
+            //   draggableSection.parentElement.querySelector('#day').value,
+            //   draggableSection.parentElement.querySelector('#starting_time').value,
+            //   draggableSection.querySelector('#subject_units').value,
+            // )
+
             let schedule_pk = draggableSection.querySelector('#schedule_pk')
             if( schedule_pk ){
               update_schedule_pk(

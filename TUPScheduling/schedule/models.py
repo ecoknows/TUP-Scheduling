@@ -6,6 +6,7 @@ from TUPScheduling import _DAY, _TIME, _TIME_DAY
 from TUPScheduling.base.models import CourseCurriculum, Sections, Rooms, BasePage, Subjects, SubjectsOrderable
 from TUPScheduling.accounts.models import Professors
 from django.http import JsonResponse
+from django.http import HttpResponseRedirect
 
 
 class Schedule(models.Model):
@@ -45,8 +46,11 @@ class Schedule(models.Model):
         choices=tuple([(day, day) for day in _DAY])
     )
 
-    # def subject_description(self):
-    #     return self.subject.description
+    def subject_description(self):
+        return self.subject.description
+
+    def subject_units(self):
+        return self.subject.units
 
     def starting_time_display(self):
         return dict(_TIME_DAY).get(int(self.starting_time))
@@ -55,7 +59,8 @@ class Schedule(models.Model):
         ending_time = int((int(self.starting_time) +  int(self.subject.hours)) % 12)
         if ending_time == 0:
             ending_time = 12
-        return  dict(_TIME_DAY).get(ending_time)
+        return dict(_TIME_DAY).get(ending_time)
+        
     # def __str__(self):
     #     ending_time = int((int(self.starting_time) +  int(self.subject.hours)) % 12)
     #     if ending_time == 0:
@@ -71,6 +76,10 @@ class SchedulePage(Page):
     parent_page_types = [BasePage]
 
     def serve(self, request):
+
+        if request.user.professors.is_scheduler is False:
+            return HttpResponseRedirect('/class-schedule/')
+            
         add_schedule = request.POST.get('add_schedule', None)
         remove_schedule = request.POST.get('remove_schedule', None)
         update_schedule = request.POST.get('update_schedule', None)
@@ -87,6 +96,59 @@ class SchedulePage(Page):
         
         if reset_all:
             Schedule.objects.all().delete()
+
+        # restriction = request.POST.get('restriction', None)
+    
+        # if restriction:
+        #     section_pk = request.POST.get('section_pk', None)
+        #     day = request.POST.get('day', None)
+        #     subject_pk = request.POST.get('subject', None)
+        #     starting_time = request.POST.get('starting_time', None)
+
+        #     schedules = Schedule.objects.filter(
+        #         day = day,
+        #         section_id = section_pk,    
+        #     )
+
+
+
+        #     time_checker = 0 
+        #     ending_time_trace = -1
+        #     first_time = True
+        #     for sched in schedules:
+        #         hours = sched.subject.hours
+        #         starting_time = sched.starting_time
+        #         past_ending_time_trace = ending_time_trace
+        #         future_ending_time_trace = sched.starting_time + sched.subject.hours
+
+        #         if (past_ending_time_trace)%12 == 0:
+        #             past_ending_time_trace = 12
+                    
+
+        #         print('WOOOY BAWAL YAN! : ', past_ending_time_trace  , starting_time)
+        #         if past_ending_time_trace == starting_time or first_time:
+        #             print('asdsadsa')
+        #             ending_time_trace = future_ending_time_trace
+        #             time_checker = time_checker + hours
+        #             if time_checker > 5:
+
+        #                 Schedule.objects.filter(
+        #                     day = day,
+        #                     section_id = section_pk,    
+        #                     starting_time = starting_time,
+        #                 ).delete()
+
+        #                 return JsonResponse({'status':  False})
+        #         else:
+        #             time_checker = 0
+        #         first_time = False
+                
+
+
+
+
+
+        #     return JsonResponse({'status':  True})
 
         if add_schedule:
             prof_pk = request.POST.get('prof_pk', None)
@@ -167,6 +229,7 @@ class SchedulePage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
+
         
 
         department = 24
