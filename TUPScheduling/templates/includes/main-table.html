@@ -43,7 +43,6 @@
 								{% if room.name == subject.room.Room_Name %}
 									{% if day == subject.day %}
 										{% if time.0 == subject.starting_time %}
-										<input class='hidden' id='paper_hours' value='{{subject.subject.hours}}' >
 										<div class="flex flex-col draggable-paper section-tile scheduled" style="line-height: 1; width: 120px; height: calc({{ subject.subject.hours }} * 65px);">
 											<input class='hidden' id='past_tile' value='{% get_starting_tile forloop.parentloop.parentloop.counter forloop.parentloop.counter %}' >
 
@@ -106,6 +105,7 @@
 											<input id='subject_pk' value="{{subject.subject.pk}}" class="hidden">
 											<input id='section_pk' value="{{subject.section.pk}}" class="hidden">
 											<input id='lab_or_lec' value="{{subject.subject.lab_or_lec}}" class="hidden">
+											<input class='hidden' id='subject_hours' value='{{subject.subject.hours}}' >
 										</div>
 
 										{% endif %}

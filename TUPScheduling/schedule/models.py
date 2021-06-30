@@ -104,10 +104,14 @@ class SchedulePage(Page):
             day = request.POST.get('day', None)
             subject_pk = request.POST.get('subject', None)
             starting_time = request.POST.get('starting_time', None)
+            subject_hours = request.POST.get('subject_hours', None)
+            room_pk = request.POST.get('room_pk', None)
+            print('subject_hours' ,subject_hours)
             
             schedule_pk = request.POST.get('schedule_pk', None)
             past_time = request.POST.get('past_time', None)
             past_day = request.POST.get('past_day', None)
+
 
 
             schedules = Schedule.objects.filter(
@@ -115,6 +119,41 @@ class SchedulePage(Page):
                 section_id = section_pk,    
             )
 
+
+            current_starting_time = int(starting_time)
+            current_ending_time = current_starting_time + int(float(subject_hours))
+
+            # RESTRICTION SAME TIME IN  ROOM
+            print('EXCLUDE ' ,schedules.exclude(room_id = room_pk))
+            for sched in schedules.exclude(room_id = room_pk):
+
+                sched_starting_time = sched.starting_time
+                sched_ending_time = int(float(sched.starting_time + sched.subject.hours))
+                if (current_starting_time >= sched_starting_time and current_starting_time <= sched_ending_time) or (sched_starting_time >= current_starting_time and sched_starting_time <= current_ending_time):
+                    
+                    if restriction == 'ADD':
+                        Schedule.objects.filter(
+                            day = day,
+                            section_id = section_pk,    
+                            starting_time=starting_time,
+                            room_id=room_pk
+                        ).delete()
+                    
+                    if restriction == 'UPDATE':
+
+                        update_schedule = Schedule.objects.get(
+                            pk=schedule_pk
+                        )
+                        update_schedule.day = past_day
+                        update_schedule.starting_time = past_time
+                        update_schedule.save()
+
+                    return JsonResponse({
+                        'status': False,
+                        'error': 'Overlapping Schedule',
+                    })
+            
+                   
 
 
             time_checker = 0 

@@ -70,10 +70,12 @@ function restriction_checker(
   room_pk,
   day,
   starting_time,
+  subject_hours,
   schedule_pk,
   past_time,
   past_day,
 ){
+  console.log(subject_hours, 'restriction');
   $.ajax({
       type: 'POST',
       data: {
@@ -87,6 +89,7 @@ function restriction_checker(
         schedule_pk,
         past_time, 
         past_day,
+        subject_hours,
         csrfmiddlewaretoken: csrftoken
       },
       success: function (response) {
@@ -169,6 +172,7 @@ function update_schedule_pk(
   prof,
   room_pk,
   starting_time,
+  subject_hours,
 ){
   $.ajax({
       type: 'POST',
@@ -177,6 +181,7 @@ function update_schedule_pk(
         schedule_pk,
         day,
         starting_time,
+        subject_hours,
         csrfmiddlewaretoken: csrftoken
       },
       success: function (response) {
@@ -201,6 +206,7 @@ function update_schedule_pk(
           room_pk,
           day,
           starting_time,
+          subject_hours,
           schedule_pk,
           past_time,
           past_day,
@@ -217,7 +223,7 @@ function add_schedule(
   room_pk,
   day,
   starting_time,
-  // units,
+  subject_hours,
 ){
   $.ajax({
       type: 'POST',
@@ -229,7 +235,7 @@ function add_schedule(
         day,
         subject,
         starting_time,
-        // units: units,
+        subject_hours,
         csrfmiddlewaretoken: csrftoken
       },
       success: function (response) {
@@ -244,6 +250,7 @@ function add_schedule(
           room_pk,
           day,
           starting_time,
+          subject_hours,
         )
 
         let input_schedule = document.createElement('input');
@@ -387,7 +394,6 @@ function add_schedule(
               } 
             }
 
-
             let schedule_pk = draggableSection.querySelector('#schedule_pk')
             if( schedule_pk ){
               update_schedule_pk(
@@ -400,6 +406,7 @@ function add_schedule(
                 draggableSection.querySelector('#prof_pk'),
                 draggableSection.parentElement.querySelector('#room_pk').value,
                 draggableSection.parentElement.querySelector('#starting_time').value,
+                draggableSection.querySelector('#subject_hours').value,
               )
             }else{
               
@@ -410,7 +417,7 @@ function add_schedule(
                 draggableSection.parentElement.querySelector('#room_pk').value,
                 draggableSection.parentElement.querySelector('#day').value,
                 draggableSection.parentElement.querySelector('#starting_time').value,
-                draggableSection.querySelector('#subject_units').value,
+                draggableSection.querySelector('#subject_hours').value,
               )
             }
 
