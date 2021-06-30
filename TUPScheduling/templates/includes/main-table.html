@@ -1,4 +1,4 @@
-{% load static wagtailimages_tags %}
+{% load static wagtailimages_tags filter_tags %}
 <section class="flex-1 border-4 border-collapse border-black mainTable" style="display: none;" desc="{{ room.name }} ({{ room.type }})" >
 
 	<header class="flex">
@@ -32,6 +32,7 @@
 			{% for day in self.day %}
 				<div class="tile" style="width: 120px; border-bottom: 1px solid black; border-right: 1px solid black;">
 					<div class='tile-container'>
+							
 							<input class='hidden' id='time_counter' value='{{forloop.parentloop.counter}}' >
 							<input class='hidden' id='day_counter' value='{{forloop.counter}}' >
 							<input class='hidden' id='room_pk' value='{{room.pk}}' >
@@ -42,9 +43,9 @@
 								{% if room.name == subject.room.Room_Name %}
 									{% if day == subject.day %}
 										{% if time.0 == subject.starting_time %}
-										<input class='hidden' id='paper_hours' value='{{subject.subject.hours}}' >
 										<div class="flex flex-col draggable-paper section-tile scheduled" style="line-height: 1; width: 120px; height: calc({{ subject.subject.hours }} * 65px);">
-											
+											<input class='hidden' id='past_tile' value='{% get_starting_tile forloop.parentloop.parentloop.counter forloop.parentloop.counter %}' >
+
 											<input class='hidden' id='schedule_pk' value='{{subject.pk}}' >
 										
 											<div class="relative">
@@ -104,6 +105,7 @@
 											<input id='subject_pk' value="{{subject.subject.pk}}" class="hidden">
 											<input id='section_pk' value="{{subject.section.pk}}" class="hidden">
 											<input id='lab_or_lec' value="{{subject.subject.lab_or_lec}}" class="hidden">
+											<input class='hidden' id='subject_hours' value='{{subject.subject.hours}}' >
 										</div>
 
 										{% endif %}

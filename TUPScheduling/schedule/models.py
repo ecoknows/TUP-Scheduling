@@ -97,58 +97,116 @@ class SchedulePage(Page):
         if reset_all:
             Schedule.objects.all().delete()
 
-        # restriction = request.POST.get('restriction', None)
+        restriction = request.POST.get('restriction', None)
     
-        # if restriction:
-        #     section_pk = request.POST.get('section_pk', None)
-        #     day = request.POST.get('day', None)
-        #     subject_pk = request.POST.get('subject', None)
-        #     starting_time = request.POST.get('starting_time', None)
+        if restriction:
+            section_pk = request.POST.get('section_pk', None)
+            day = request.POST.get('day', None)
+            subject_pk = request.POST.get('subject', None)
+            starting_time = request.POST.get('starting_time', None)
+            subject_hours = request.POST.get('subject_hours', None)
+            room_pk = request.POST.get('room_pk', None)
+            print('subject_hours' ,subject_hours)
+            
+            schedule_pk = request.POST.get('schedule_pk', None)
+            past_time = request.POST.get('past_time', None)
+            past_day = request.POST.get('past_day', None)
 
-        #     schedules = Schedule.objects.filter(
-        #         day = day,
-        #         section_id = section_pk,    
-        #     )
 
 
+            schedules = Schedule.objects.filter(
+                day = day,
+                section_id = section_pk,    
+            )
 
-        #     time_checker = 0 
-        #     ending_time_trace = -1
-        #     first_time = True
-        #     for sched in schedules:
-        #         hours = sched.subject.hours
-        #         starting_time = sched.starting_time
-        #         past_ending_time_trace = ending_time_trace
-        #         future_ending_time_trace = sched.starting_time + sched.subject.hours
 
-        #         if (past_ending_time_trace)%12 == 0:
-        #             past_ending_time_trace = 12
+            current_starting_time = int(starting_time)
+            current_ending_time = current_starting_time + int(float(subject_hours))
+
+            # RESTRICTION SAME TIME IN  ROOM
+            print('EXCLUDE ' ,schedules.exclude(room_id = room_pk))
+            for sched in schedules.exclude(room_id = room_pk):
+
+                sched_starting_time = sched.starting_time
+                sched_ending_time = int(float(sched.starting_time + sched.subject.hours))
+                if (current_starting_time >= sched_starting_time and current_starting_time <= sched_ending_time) or (sched_starting_time >= current_starting_time and sched_starting_time <= current_ending_time):
                     
+                    if restriction == 'ADD':
+                        Schedule.objects.filter(
+                            day = day,
+                            section_id = section_pk,    
+                            starting_time=starting_time,
+                            room_id=room_pk
+                        ).delete()
+                    
+                    if restriction == 'UPDATE':
 
-        #         print('WOOOY BAWAL YAN! : ', past_ending_time_trace  , starting_time)
-        #         if past_ending_time_trace == starting_time or first_time:
-        #             print('asdsadsa')
-        #             ending_time_trace = future_ending_time_trace
-        #             time_checker = time_checker + hours
-        #             if time_checker > 5:
+                        update_schedule = Schedule.objects.get(
+                            pk=schedule_pk
+                        )
+                        update_schedule.day = past_day
+                        update_schedule.starting_time = past_time
+                        update_schedule.save()
 
-        #                 Schedule.objects.filter(
-        #                     day = day,
-        #                     section_id = section_pk,    
-        #                     starting_time = starting_time,
-        #                 ).delete()
+                    return JsonResponse({
+                        'status': False,
+                        'error': 'Overlapping Schedule',
+                    })
+            
+                   
 
-        #                 return JsonResponse({'status':  False})
-        #         else:
-        #             time_checker = 0
-        #         first_time = False
+
+            time_checker = 0 
+            ending_time_trace = -1
+            first_time = True
+            for sched in schedules:
+                hours = sched.subject.hours
+                starting_time = sched.starting_time
+                past_ending_time_trace = ending_time_trace % 12
+
+                if ending_time_trace == -1:
+                    past_ending_time_trace = -1
+                    
+                future_ending_time_trace = sched.starting_time + sched.subject.hours
+
+                if past_ending_time_trace == 0:
+                    past_ending_time_trace = 12
+
+
+                if past_ending_time_trace == starting_time or first_time:
+                    ending_time_trace = int(future_ending_time_trace)
+                    time_checker = time_checker + hours
+                    if time_checker > 4:
+
+                        
+                        if restriction == 'ADD':
+                            Schedule.objects.filter(
+                                day = day,
+                                section_id = section_pk,    
+                                starting_time = starting_time,
+                            ).delete()
+                        
+                        if restriction == 'UPDATE':
+                            print(past_day,past_time, ' WAT HADF')
+
+                            update_schedule = Schedule.objects.get(
+                                pk=schedule_pk
+                            )
+                            update_schedule.day = past_day
+                            update_schedule.starting_time = past_time
+                            update_schedule.save()
+
+                        return JsonResponse({
+                            'status': False,
+                            'error': '5 hours or more are not allowed!',
+                            
+                        })
+                else:
+                    time_checker = 0
+                first_time = False
                 
 
-
-
-
-
-        #     return JsonResponse({'status':  True})
+            return JsonResponse({'status':  True})
 
         if add_schedule:
             prof_pk = request.POST.get('prof_pk', None)
