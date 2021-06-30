@@ -14,7 +14,7 @@
 				{% if subject.scheduled == False %}
 				<div style="width: 100%; height: calc({{ subject.subject_object.hours }} * 75px); padding-left: 15%;" class="filter section-body">
 					
-					<div  data-index='{{forloop.counter}}' class="flex flex-col draggable-paper section-tile" style="line-height: 1; width: 120px; height: calc({{ subject.subject_object.hours }} * 65px);">
+					<div  class="flex flex-col draggable-paper section-tile" style="line-height: 1; width: 120px; height: calc({{ subject.subject_object.hours }} * 65px);">
 
 						<div class="relative">
 							<div class="absolute z-10 prof-image-container" style="left: -0.7rem; top: -0.7rem">
