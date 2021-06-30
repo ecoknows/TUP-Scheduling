@@ -8,7 +8,6 @@ from TUPScheduling.accounts.models import Professors
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
 
-
 class Schedule(models.Model):
     prof = models.ForeignKey(
         Professors,
@@ -106,7 +105,6 @@ class SchedulePage(Page):
             starting_time = request.POST.get('starting_time', None)
             subject_hours = request.POST.get('subject_hours', None)
             room_pk = request.POST.get('room_pk', None)
-            print('subject_hours' ,subject_hours)
             
             schedule_pk = request.POST.get('schedule_pk', None)
             past_time = request.POST.get('past_time', None)
@@ -124,11 +122,10 @@ class SchedulePage(Page):
             current_ending_time = current_starting_time + int(float(subject_hours))
 
             # RESTRICTION SAME TIME IN  ROOM
-            print('EXCLUDE ' ,schedules.exclude(room_id = room_pk))
             for sched in schedules.exclude(room_id = room_pk):
 
                 sched_starting_time = sched.starting_time
-                sched_ending_time = int(float(sched.starting_time + sched.subject.hours))
+                sched_ending_time = int(float(sched.starting_time + sched.subject.hours)) - 1
                 if (current_starting_time >= sched_starting_time and current_starting_time <= sched_ending_time) or (sched_starting_time >= current_starting_time and sched_starting_time <= current_ending_time):
                     
                     if restriction == 'ADD':
@@ -140,7 +137,6 @@ class SchedulePage(Page):
                         ).delete()
                     
                     if restriction == 'UPDATE':
-
                         update_schedule = Schedule.objects.get(
                             pk=schedule_pk
                         )
@@ -158,23 +154,34 @@ class SchedulePage(Page):
 
             time_checker = 0 
             ending_time_trace = -1
+            starting_time_trace = -1
             first_time = True
             for sched in schedules:
                 hours = sched.subject.hours
                 starting_time = sched.starting_time
                 past_ending_time_trace = ending_time_trace % 12
+                past_starting_time_trace = starting_time_trace % 12 
 
                 if ending_time_trace == -1:
                     past_ending_time_trace = -1
+
+                if starting_time_trace == -1:
+                    past_ending_time_trace = -1
                     
-                future_ending_time_trace = sched.starting_time + sched.subject.hours
+                future_ending_time_trace = sched.starting_time + int(sched.subject.hours)
 
                 if past_ending_time_trace == 0:
                     past_ending_time_trace = 12
+                    
+                if past_starting_time_trace == 0:
+                    past_starting_time_trace = 12
 
 
-                if past_ending_time_trace == starting_time or first_time:
+                print('CHECKER: ', past_starting_time_trace, future_ending_time_trace)
+                
+                if past_ending_time_trace == starting_time or first_time or past_starting_time_trace == future_ending_time_trace:
                     ending_time_trace = int(future_ending_time_trace)
+                    starting_time_trace = int(starting_time)
                     time_checker = time_checker + hours
                     if time_checker > 4:
 
@@ -187,8 +194,7 @@ class SchedulePage(Page):
                             ).delete()
                         
                         if restriction == 'UPDATE':
-                            print(past_day,past_time, ' WAT HADF')
-
+                            
                             update_schedule = Schedule.objects.get(
                                 pk=schedule_pk
                             )

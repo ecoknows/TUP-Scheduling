@@ -445,7 +445,7 @@ function add_schedule(
       const elementBoundingBox = section_bodies[body_cnt].getBoundingClientRect()
       const section_body = convertDraggable(elementBoundingBox);
 
-      if(checkCollision(convertedDragable,section_body)){
+      if(checkCollision(convertedDragable,section_body) && draggableSection.in_main_table){
 
         
         remove_schedule(
@@ -478,6 +478,7 @@ function add_schedule(
         draggableSection.tileAssigned = null;
         draggableSection.style.position = null
         newSectionBody.appendChild(draggableSection);
+        newSectionBody.className = 'filter section-body'
         let section_wrapper = section_container.querySelector('#section-wrapper')
         section_wrapper.insertBefore(newSectionBody, section_wrapper.children[body_cnt].nextSibling);
         
@@ -487,47 +488,6 @@ function add_schedule(
       body_cnt++
     }
 
-    // const convertedSectionContainer = convertDraggable(section_container.getBoundingClientRect());
-
-    // if(checkCollision(convertedDragable,convertedSectionContainer) && draggableSection.in_main_table ){
-
-    //   remove_schedule(
-    //     draggableSection.querySelector('#schedule_pk').value,
-    //     draggableSection.querySelector('#prof_pk'),
-    //     draggableSection.querySelector('#subject_units').value,
-    //   );
-
-    //   let schedule_pk = draggableSection.querySelector('#schedule_pk')
-    //   if(schedule_pk){
-    //     schedule_pk.remove()
-    //   }
-    //   if (draggableSection.tileAssigned != null){ 
-    //     let x = 0;     
-    //     while(x < paper_hours*6){
-    //       tiles[draggableSection.tileAssigned+x].occupied = undefined;
-    //       x+=6;
-    //     } 
-    //   }
-    //   let newSectionBody = document.createElement('div');
-
-    //   // let unit_container = document.getElementById('professor-section-container').querySelector('#prof-4')
-    //   // unit_container.innerText = parseInt(unit_container.innerText) -  parseInt(draggableSection.querySelector('#subject_units').value)
-
-    //   newSectionBody.style.width = '100%';
-    //   newSectionBody.style.height = paper_hours * 75 + 'px';
-    //   draggableSection.is_dragged = false
-    //   draggableSection.in_main_table = false
-    //   draggableSection.tileAssigned = null;
-    //   draggableSection.style.position = null
-    //   newSectionBody.appendChild(draggableSection);
-    //   let section_wrapper = section_container.querySelector('#section-wrapper')
-    //   // section_wrapper.insertBefore(newSectionBody, section_wrapper.children[1]);
-    //   section_wrapper.appendChild(newSectionBody);
-    // }
-
-    
-
-    
 
 
   }
