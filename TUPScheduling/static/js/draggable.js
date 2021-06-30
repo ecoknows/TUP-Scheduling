@@ -477,7 +477,6 @@ function add_schedule(
         draggableSection.in_main_table = false
         draggableSection.tileAssigned = null;
         draggableSection.style.position = null
-        draggableSection.setAttribute('data-index',body_cnt+1)
         newSectionBody.appendChild(draggableSection);
         let section_wrapper = section_container.querySelector('#section-wrapper')
         section_wrapper.insertBefore(newSectionBody, section_wrapper.children[body_cnt].nextSibling);
