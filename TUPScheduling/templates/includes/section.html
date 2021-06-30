@@ -7,13 +7,14 @@
 	}
 </style>
 
-<section id='section-container' class="h-full border-b-2 border-l-2 border-r-2 border-black" style="width: 200px; height: 772px; padding-left: 15%; padding-bottom: 15%;">
-	<div id='section-wrapper' class="pt-4 space-y-4"> 
+<section id='section-container' class="h-full border-b-2 border-l-2 border-r-2 border-black" style="width: 200px; height: 772px; padding-bottom: 15%;">
+	<div id='section-wrapper' class="pt-4 "> 
 		{% for section in section_entries %}
 			{% for subject in section.subjects %}
 				{% if subject.scheduled == False %}
-				<div style="width: 100%; height: calc({{ subject.subject_object.hours }} * 65px);" class="filter">
-					<div  class="flex flex-col draggable-paper section-tile" style="line-height: 1; width: 120px; height: calc({{ subject.subject_object.hours }} * 65px);">
+				<div style="width: 100%; height: calc({{ subject.subject_object.hours }} * 75px); padding-left: 15%;" class="filter section-body">
+					
+					<div  data-index='{{forloop.counter}}' class="flex flex-col draggable-paper section-tile" style="line-height: 1; width: 120px; height: calc({{ subject.subject_object.hours }} * 65px);">
 
 						<div class="relative">
 							<div class="absolute z-10 prof-image-container" style="left: -0.7rem; top: -0.7rem">

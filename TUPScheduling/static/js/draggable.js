@@ -1,5 +1,6 @@
 let tiles = document.getElementsByClassName('tile');
 let section_container = document.getElementById('section-container');
+let section_bodies = document.getElementsByClassName('section-body');
 
 function show_description(container, text){
   container.innerText = text
@@ -241,7 +242,6 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
               draggableSection.parentElement.remove()
               draggableSection.in_main_table=true
             }
-
             container.appendChild(draggableSection);
             draggableSection.style.top = null;
             draggableSection.style.left = null;
@@ -253,6 +253,7 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
                 x+=6;
               } 
             }
+            console.log(draggableSection.getAttribute("data-index"));
 
             
             // restriction_checker(
@@ -302,42 +303,96 @@ function section_onmousedown(draggableSectionPaper, height, temp_top, temp_heigh
       draggableSection.is_dragged = false
       filterDiv.classList.add('filter')
     }
-    const convertedSectionContainer = convertDraggable(section_container.getBoundingClientRect());
 
 
-    if(checkCollision(convertedDragable,convertedSectionContainer) && draggableSection.in_main_table ){
+    let body_cnt = 0
+    while(body_cnt < section_bodies.length){
+      const elementBoundingBox = section_bodies[body_cnt].getBoundingClientRect()
+      const section_body = convertDraggable(elementBoundingBox);
 
-      remove_schedule(
-        draggableSection.querySelector('#schedule_pk').value,
-        draggableSection.querySelector('#prof_pk'),
-        draggableSection.querySelector('#subject_units').value,
-      );
+      if(checkCollision(convertedDragable,section_body)){
 
-      let schedule_pk = draggableSection.querySelector('#schedule_pk')
-      if(schedule_pk){
-        schedule_pk.remove()
+        
+        remove_schedule(
+          draggableSection.querySelector('#schedule_pk').value,
+          draggableSection.querySelector('#prof_pk'),
+          draggableSection.querySelector('#subject_units').value,
+        );
+
+        let schedule_pk = draggableSection.querySelector('#schedule_pk')
+        if(schedule_pk){
+          schedule_pk.remove()
+        }
+        if (draggableSection.tileAssigned != null){ 
+          let x = 0;     
+          while(x < paper_hours*6){
+            tiles[draggableSection.tileAssigned+x].occupied = undefined;
+            x+=6;
+          } 
+        }
+        let newSectionBody = document.createElement('div');
+
+        // let unit_container = document.getElementById('professor-section-container').querySelector('#prof-4')
+        // unit_container.innerText = parseInt(unit_container.innerText) -  parseInt(draggableSection.querySelector('#subject_units').value)
+
+        newSectionBody.style.width = '100%';
+        newSectionBody.style.height = paper_hours * 75 + 'px';
+        newSectionBody.style.paddingLeft = '15%';
+        draggableSection.is_dragged = false
+        draggableSection.in_main_table = false
+        draggableSection.tileAssigned = null;
+        draggableSection.style.position = null
+        draggableSection.setAttribute('data-index',body_cnt+1)
+        newSectionBody.appendChild(draggableSection);
+        let section_wrapper = section_container.querySelector('#section-wrapper')
+        section_wrapper.insertBefore(newSectionBody, section_wrapper.children[body_cnt].nextSibling);
+        
+        return;
       }
-      if (draggableSection.tileAssigned != null){ 
-        let x = 0;     
-        while(x < paper_hours*6){
-          tiles[draggableSection.tileAssigned+x].occupied = undefined;
-          x+=6;
-        } 
-      }
-      let newSectionBody = document.createElement('div');
-
-      // let unit_container = document.getElementById('professor-section-container').querySelector('#prof-4')
-      // unit_container.innerText = parseInt(unit_container.innerText) -  parseInt(draggableSection.querySelector('#subject_units').value)
-
-      newSectionBody.style.width = '100%';
-      newSectionBody.style.height = paper_hours * 65 + 'px';
-      draggableSection.is_dragged = false
-      draggableSection.in_main_table = false
-      draggableSection.tileAssigned = null;
-      draggableSection.style.position = null
-      newSectionBody.appendChild(draggableSection);
-      section_container.querySelector('#section-wrapper').appendChild(newSectionBody);
+      
+      body_cnt++
     }
+
+    // const convertedSectionContainer = convertDraggable(section_container.getBoundingClientRect());
+
+    // if(checkCollision(convertedDragable,convertedSectionContainer) && draggableSection.in_main_table ){
+
+    //   remove_schedule(
+    //     draggableSection.querySelector('#schedule_pk').value,
+    //     draggableSection.querySelector('#prof_pk'),
+    //     draggableSection.querySelector('#subject_units').value,
+    //   );
+
+    //   let schedule_pk = draggableSection.querySelector('#schedule_pk')
+    //   if(schedule_pk){
+    //     schedule_pk.remove()
+    //   }
+    //   if (draggableSection.tileAssigned != null){ 
+    //     let x = 0;     
+    //     while(x < paper_hours*6){
+    //       tiles[draggableSection.tileAssigned+x].occupied = undefined;
+    //       x+=6;
+    //     } 
+    //   }
+    //   let newSectionBody = document.createElement('div');
+
+    //   // let unit_container = document.getElementById('professor-section-container').querySelector('#prof-4')
+    //   // unit_container.innerText = parseInt(unit_container.innerText) -  parseInt(draggableSection.querySelector('#subject_units').value)
+
+    //   newSectionBody.style.width = '100%';
+    //   newSectionBody.style.height = paper_hours * 75 + 'px';
+    //   draggableSection.is_dragged = false
+    //   draggableSection.in_main_table = false
+    //   draggableSection.tileAssigned = null;
+    //   draggableSection.style.position = null
+    //   newSectionBody.appendChild(draggableSection);
+    //   let section_wrapper = section_container.querySelector('#section-wrapper')
+    //   // section_wrapper.insertBefore(newSectionBody, section_wrapper.children[1]);
+    //   section_wrapper.appendChild(newSectionBody);
+    // }
+
+    
+
     
 
 
