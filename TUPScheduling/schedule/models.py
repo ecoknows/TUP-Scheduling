@@ -6,7 +6,7 @@ from TUPScheduling import _DAY, _TIME, _TIME_DAY
 from TUPScheduling.base.models import CourseCurriculum, Sections, Rooms, BasePage, Subjects, SubjectsOrderable
 from TUPScheduling.accounts.models import Professors
 from django.http import JsonResponse
-
+from django.http import HttpResponseRedirect
 
 class Schedule(models.Model):
     prof = models.ForeignKey(
@@ -45,8 +45,11 @@ class Schedule(models.Model):
         choices=tuple([(day, day) for day in _DAY])
     )
 
-    # def subject_description(self):
-    #     return self.subject.description
+    def subject_description(self):
+        return self.subject.description
+
+    def subject_units(self):
+        return self.subject.units
 
     def starting_time_display(self):
         return dict(_TIME_DAY).get(int(self.starting_time))
@@ -55,7 +58,8 @@ class Schedule(models.Model):
         ending_time = int((int(self.starting_time) +  int(self.subject.hours)) % 12)
         if ending_time == 0:
             ending_time = 12
-        return  dict(_TIME_DAY).get(ending_time)
+        return dict(_TIME_DAY).get(ending_time)
+        
     # def __str__(self):
     #     ending_time = int((int(self.starting_time) +  int(self.subject.hours)) % 12)
     #     if ending_time == 0:
@@ -71,12 +75,144 @@ class SchedulePage(Page):
     parent_page_types = [BasePage]
 
     def serve(self, request):
+
+        if request.user.professors.is_scheduler is False:
+            return HttpResponseRedirect('/class-schedule/')
+            
         add_schedule = request.POST.get('add_schedule', None)
         remove_schedule = request.POST.get('remove_schedule', None)
         update_schedule = request.POST.get('update_schedule', None)
         update_remove_schedule = request.POST.get(
             'update_remove_schedule', None)
         update_add_schedule = request.POST.get('update_add_schedule', None)
+
+        button_reset = request.POST.get('button_reset', None)
+        reset_all = request.POST.get('reset_all', None)
+
+
+        if button_reset:
+            Schedule.objects.filter(room_id = button_reset).delete()
+        
+        if reset_all:
+            Schedule.objects.all().delete()
+
+        restriction = request.POST.get('restriction', None)
+    
+        if restriction:
+            section_pk = request.POST.get('section_pk', None)
+            day = request.POST.get('day', None)
+            subject_pk = request.POST.get('subject', None)
+            starting_time = request.POST.get('starting_time', None)
+            subject_hours = request.POST.get('subject_hours', None)
+            room_pk = request.POST.get('room_pk', None)
+            
+            schedule_pk = request.POST.get('schedule_pk', None)
+            past_time = request.POST.get('past_time', None)
+            past_day = request.POST.get('past_day', None)
+
+
+
+            schedules = Schedule.objects.filter(
+                day = day,
+                section_id = section_pk,    
+            )
+
+
+            current_starting_time = int(starting_time)
+            current_ending_time = current_starting_time + int(float(subject_hours))
+
+            # RESTRICTION SAME TIME IN  ROOM
+            for sched in schedules.exclude(room_id = room_pk):
+
+                sched_starting_time = sched.starting_time
+                sched_ending_time = int(float(sched.starting_time + sched.subject.hours)) - 1
+                if (current_starting_time >= sched_starting_time and current_starting_time <= sched_ending_time) or (sched_starting_time >= current_starting_time and sched_starting_time <= current_ending_time):
+                    
+                    if restriction == 'ADD':
+                        Schedule.objects.filter(
+                            day = day,
+                            section_id = section_pk,    
+                            starting_time=starting_time,
+                            room_id=room_pk
+                        ).delete()
+                    
+                    if restriction == 'UPDATE':
+                        update_schedule = Schedule.objects.get(
+                            pk=schedule_pk
+                        )
+                        update_schedule.day = past_day
+                        update_schedule.starting_time = past_time
+                        update_schedule.save()
+
+                    return JsonResponse({
+                        'status': False,
+                        'error': 'Overlapping Schedule',
+                    })
+            
+                   
+
+
+            time_checker = 0 
+            ending_time_trace = -1
+            starting_time_trace = -1
+            first_time = True
+            for sched in schedules:
+                hours = sched.subject.hours
+                starting_time = sched.starting_time
+                past_ending_time_trace = ending_time_trace % 12
+                past_starting_time_trace = starting_time_trace % 12 
+
+                if ending_time_trace == -1:
+                    past_ending_time_trace = -1
+
+                if starting_time_trace == -1:
+                    past_ending_time_trace = -1
+                    
+                future_ending_time_trace = sched.starting_time + int(sched.subject.hours)
+
+                if past_ending_time_trace == 0:
+                    past_ending_time_trace = 12
+                    
+                if past_starting_time_trace == 0:
+                    past_starting_time_trace = 12
+
+
+                print('CHECKER: ', past_starting_time_trace, future_ending_time_trace)
+                
+                if past_ending_time_trace == starting_time or first_time or past_starting_time_trace == future_ending_time_trace:
+                    ending_time_trace = int(future_ending_time_trace)
+                    starting_time_trace = int(starting_time)
+                    time_checker = time_checker + hours
+                    if time_checker > 4:
+
+                        
+                        if restriction == 'ADD':
+                            Schedule.objects.filter(
+                                day = day,
+                                section_id = section_pk,    
+                                starting_time = starting_time,
+                            ).delete()
+                        
+                        if restriction == 'UPDATE':
+                            
+                            update_schedule = Schedule.objects.get(
+                                pk=schedule_pk
+                            )
+                            update_schedule.day = past_day
+                            update_schedule.starting_time = past_time
+                            update_schedule.save()
+
+                        return JsonResponse({
+                            'status': False,
+                            'error': '5 hours or more are not allowed!',
+                            
+                        })
+                else:
+                    time_checker = 0
+                first_time = False
+                
+
+            return JsonResponse({'status':  True})
 
         if add_schedule:
             prof_pk = request.POST.get('prof_pk', None)
@@ -85,11 +221,11 @@ class SchedulePage(Page):
             day = request.POST.get('day', None)
             subject_pk = request.POST.get('subject', None)
             starting_time = request.POST.get('starting_time', None)
-            units = request.POST.get('units', None)
+            # units = request.POST.get('units', None)
             professor = None
             if prof_pk:
                 professor = Professors.objects.get(pk=prof_pk)
-                professor.units = int(units)
+                # professor.units = int(units)
                 professor.save()
 
             room = Rooms.objects.get(pk=room_pk)
@@ -113,41 +249,40 @@ class SchedulePage(Page):
             schedule = Schedule.objects.get(pk=schedule_pk)
             schedule.day = day
             schedule.starting_time = starting_time
-            print(schedule)
             schedule.save()
 
         if remove_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
             prof_pk = request.POST.get('prof_pk', None)
-            units = request.POST.get('units', None)
+            # units = request.POST.get('units', None)
 
             if prof_pk:
                 professor = Professors.objects.get(pk=prof_pk)
-                professor.units = professor.units - int(units)
+                # professor.units = professor.units - int(units)
                 professor.save()
 
             Schedule.objects.get(pk=schedule_pk).delete()
 
         if update_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
-            units = request.POST.get('units', None)
+            # units = request.POST.get('units', None)
 
             prof_pk = request.POST.get('prof_pk', None)
             professor = Professors.objects.get(pk=prof_pk)
 
             schedule = Schedule.objects.get(pk=schedule_pk)
             schedule.prof = professor
-            professor.units = professor.units + int(units)
+            # professor.units = professor.units + int(units)
             professor.save()
             schedule.save()
 
         if update_remove_schedule:
             schedule_pk = request.POST.get('schedule_pk', None)
-            units = request.POST.get('units', None)
+            # units = request.POST.get('units', None)
 
             prof_pk = request.POST.get('prof_pk', None)
             professor = Professors.objects.get(pk=prof_pk)
-            professor.units = professor.units - int(units)
+            # professor.units = professor.units - int(units)
             professor.save()
 
             schedule = Schedule.objects.get(pk=schedule_pk)
@@ -158,13 +293,14 @@ class SchedulePage(Page):
 
     def get_context(self, request):
         context = super().get_context(request)
+
         
 
         department = 24
         profs = Professors.objects.filter(
             choose_department_id=department)
 
-        context['professor_entries'] = profs
+        
 
         temp_rooms = Rooms.objects.filter(
             choose_department_id=department)
@@ -239,8 +375,40 @@ class SchedulePage(Page):
                         'scheduled': scheduled
                     }
                 )
+        
+        list_of_schedules = Schedule.objects.all()
+        list_of_professors = []
+        units = []
+
+        for schedule in list_of_schedules:
+            if schedule.prof == None:
+                continue
+
+            if schedule.prof not in list_of_professors:
+                list_of_professors.append(schedule.prof)
+                units.append(0)
+
+        i = 0
+        for schedule in list_of_schedules:
+            for i in range(len(list_of_professors)):
+                if list_of_professors[i] == schedule.prof:
+                    units[i] += schedule.subject.units
+            i += 1
+        
+       
+        for professor in profs:
+            flag = 1
+            for i in range(len(units)):
+                if professor == list_of_professors[i]:
+                    professor.units = units[i]
+                    flag = 0
+            if flag:
+                professor.units = 0
+        
+
 
         context['already_schedule_object'] = Schedule.objects.all()
         context['section_entries'] = sections
+        context['professor_entries'] = profs
 
         return context

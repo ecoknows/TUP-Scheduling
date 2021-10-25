@@ -44,7 +44,6 @@ class InstructorSchedule(Page):
             
             
             temp_prof = []
-            print(list_of_professor_names_without_select)
             for professor in list_of_professor_names_without_select:
                 professor_object = {}
                 i = 0
@@ -81,7 +80,9 @@ class InstructorSchedule(Page):
                 if schedule.section == None:
                     continue
                 if schedule.section not in list_of_sections:
-                    list_of_sections.append(schedule.section)
+                    if schedule.prof == request.user.professors:
+
+                        list_of_sections.append(schedule.section)
 
                 if schedule.starting_time < 7:
                     schedule.new_time = str(schedule.starting_time) + " PM"
@@ -89,6 +90,9 @@ class InstructorSchedule(Page):
                     schedule.new_time = str(schedule.starting_time) + " PM"
                 else:
                     schedule.new_time = str(schedule.starting_time) + " AM"
+            
+
+
 
             list_of_section_names = []
             for section in list_of_sections:
@@ -113,18 +117,17 @@ class InstructorSchedule(Page):
                         section_object['subjects'].append(schedule.subject)
                         section_object['colors'].append(_COLOR[i])
                         i += 1
+  
                         
                 section_object['subjects'] = list(dict.fromkeys(section_object['subjects']))
                 temp_sec.append(section_object)
-                        
-            print(list_of_sections)
+            
 
 
+            
             context['list_of_professors'] = list_of_sections
             context['list_of_professor_names'] = list_of_section_names
             context['professor_objects'] = temp_sec
-
-
             context['schedules'] = final_schedule
             context['class_schedule'] = _CLASS_SCHEDULE
             context['days'] = _DAY

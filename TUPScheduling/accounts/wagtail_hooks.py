@@ -24,10 +24,11 @@ class Students(ModelAdmin):
 class Professors(ModelAdmin):
     model = Professors
     create_view_class = ProfessorCreateView
+    index_template_name = 'account/professor_index_view.html'
     menu_label = 'Professors'
     list_display = ('full_name', 'preferred_time', 'status', 'profile_image')
     list_filter = ('status',)
-    search_fields = ('first_name', 'middle_name', 'last_name', 'full_name',)
+    search_fields = ('first_name', 'middle_name', 'last_name',)
 
 
 class AccountsGroup(ModelAdminGroup):

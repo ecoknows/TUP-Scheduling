@@ -17,7 +17,6 @@ from wagtail.core import hooks
 from django.utils.html import format_html
 from django.templatetags.static import static
 
-
 @hooks.register("insert_global_admin_css")
 def global_admin_css():
     return format_html('<link rel="stylesheet" href="{}">', static("css/admin.css"))
@@ -149,9 +148,9 @@ class ScheduleAdmin(ModelAdmin):
     model = Schedule
     menu_icon = 'tick'
     menu_label = 'Schedule'
-    # list_display = ('subject', 'subject_description', 'section', 'subject_units', 'day', 'starting_time_display', 'ending_time_display')
-    # search_fields = ('subject', 'subject_description', 'section', 'subject_units', 'day', 'starting_time_display', 'ending_time_display')
-    # list_filter = ('day', 'starting_time')
+    list_display = ('subject', 'subject_description', 'section', 'subject_units', 'day', 'starting_time_display', 'ending_time_display')
+    search_fields = ('subject', 'subject_description', 'section', 'subject_units', 'day', 'starting_time_display', 'ending_time_display')
+    list_filter = ('day', 'starting_time')
 
 
 modeladmin_register(ScheduleAdmin)

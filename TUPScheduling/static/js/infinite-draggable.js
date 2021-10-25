@@ -8,7 +8,7 @@ function update_schedule(schedule_pk, prof_pk, units){
         update_schedule: true,
         schedule_pk,
         prof_pk,
-        units: units,
+        // units: units,
         csrfmiddlewaretoken: csrftoken
       },
       success: function (response) {
@@ -25,7 +25,7 @@ function remove_prof_schedule(schedule_pk, prof_pk, units){
         update_remove_schedule: true,
         schedule_pk,
         prof_pk,
-        units: units ? units.value : null,
+        // units: units ? units.value : null,
         csrfmiddlewaretoken: csrftoken
       },
       success: function (response) {
@@ -40,13 +40,12 @@ function professor_onmousedown(dragableProfessor, units){
     let pos3 = 0;
     let pos4 = 0;
     let event = window.event;
-    // let unit = document.getElementById('units');
+    let unit = document.getElementById('units');
     
     if (!dragableProfessor.units_container){
 
       let units_prof = professor_container.querySelector('#prof-'+dragableProfessor.querySelector('#prof_pk').value)
       dragableProfessor.units_container= units_prof
-      console.log(units_prof);
     }
     
     dragableProfessor.style.position = 'absolute'
@@ -199,7 +198,6 @@ function professor_onmousedown(dragableProfessor, units){
           dragableProfessor.units_container.innerText = new_unit;
         }
       }
-      console.log('REMOVEEE!');
       dragableProfessor.remove()
     }
   
